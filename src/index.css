@@ -1,0 +1,28 @@
+@import "tailwindcss";
+@custom-variant hover (&:hover);
+@custom-variant focus (&:focus);
+@custom-variant active (&:active);
+@custom-variant disabled (&:disabled);
+
+/*
+	Make interactive elements show the pointer cursor by default so users
+	can tell what is clickable across the app. Disabled controls are excluded.
+*/
+button:not(:disabled),
+a[href],
+input[type="button"]:not(:disabled),
+input[type="submit"]:not(:disabled),
+input[type="checkbox"],
+input[type="radio"],
+label[for],
+[role="button"],
+summary,
+select {
+  cursor: pointer;
+}
+
+/* Keep data-disabled and aria-disabled from showing pointer */
+[aria-disabled="true"],
+[data-disabled="true"] {
+  cursor: default !important;
+}
