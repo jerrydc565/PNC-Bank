@@ -1,23 +1,24 @@
 import React, { useState } from "react";
+import { transactionAPI } from "../services/api";
 
 const initialAccounts = [
   {
     id: "checking",
     name: "Premium Checking",
     number: "****4832",
-    balance: 5289,
+    balance: 1,
   },
   {
     id: "savings",
     name: "High-Yield Savings",
     number: "****7232",
-    balance: 15289,
+    balance: 1,
   },
   {
     id: "rewards",
     name: "Platinum Rewards",
     number: "****3214",
-    balance: 8289,
+    balance: 1,
   },
 ];
 const contacts = [
@@ -44,97 +45,133 @@ function Payment() {
     setTimeout(() => setToast({ text: "", visible: false }), duration);
   };
   const [error, setError] = useState("");
-  const [scheduledPayments, setScheduledPayments] = useState([]);
+  
+  // Initialize scheduled payments from localStorage
+  const [scheduledPayments, setScheduledPayments] = useState(() => {
+    const userId = localStorage.getItem("userId");
+    const saved = localStorage.getItem(`scheduledPayments_${userId}`);
+    return saved ? JSON.parse(saved) : [];
+  });
 
-  const handleTransfer = (e) => {
+  // Save scheduled payments to localStorage whenever they change
+  React.useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      localStorage.setItem(`scheduledPayments_${userId}`, JSON.stringify(scheduledPayments));
+    }
+  }, [scheduledPayments]);
+
+  const handleTransfer = async (e) => {
     e.preventDefault();
     setError("");
-    setMessage("");
-    if (!from || !to || !amount || isNaN(amount) || Number(amount) <= 0) {
-      setError("Please fill all fields with valid values.");
-      return;
-    }
-    const amt = Number(amount);
-    // Schedule the payment
-    if (when === "Schedule") {
-      if (!scheduledDate)
-        return setError("Please choose a date for the scheduled payment");
-      const id = `s${Date.now()}`;
-      setScheduledPayments((s) => [
-        ...s,
-        { id, from, to, amount: amt, date: scheduledDate, memo },
-      ]);
-      showToast("Payment scheduled");
-      setAmount("");
-      setMemo("");
-      setTo("");
-      setScheduledDate("");
-      return;
-    }
-
-    // Immediate transfer: update account balances (if internal)
     setLoading(true);
-    const fromAcc = accounts.find((a) => a.id === from);
-    if (fromAcc && fromAcc.balance < amt) {
-      setLoading(false);
-      setError("Insufficient funds");
-      return;
-    }
-    setTimeout(() => {
-      setAccounts((prev) => {
-        const fromIdx = prev.findIndex((a) => a.id === from);
-        const toIdx = prev.findIndex((a) => a.id === to);
-        const next = prev.map((a) => ({ ...a }));
-        if (fromIdx >= 0) {
-          next[fromIdx].balance = Math.max(0, next[fromIdx].balance - amt);
+
+    try {
+      if (!from || !to || !amount || isNaN(amount) || Number(amount) <= 0) {
+        throw new Error("Please fill all fields with valid values.");
+      }
+      const amt = Number(amount);
+
+      const currentBalance = await transactionAPI.getBalance();
+      if (currentBalance < amt) {
+        throw new Error("Insufficient funds");
+      }
+      let transactionType;
+      let description;
+      // Schedule the payment
+      if (when === "Schedule") {
+        if (!scheduledDate) {
+          throw new Error("Please choose a date for the scheduled payment");
         }
-        if (toIdx >= 0) {
-          // credit internal account
-          next[toIdx].balance = next[toIdx].balance + amt;
+
+        const id = `s${Date.now()}`;
+        setScheduledPayments((s) => [
+          ...s,
+          { id, from, to, amount: amt, date: scheduledDate, memo },
+        ]);
+        showToast("Payment scheduled");
+        setAmount("");
+        setMemo("");
+        setTo("");
+        setScheduledDate("");
+        return;
+      }
+
+      const toAccount = accounts.find((a) => a.id === to);
+      const toContact = contacts.find((c) => c.id === to);
+
+      if (toAccount) {
+        transactionType = "TRANSFER";
+        description = `Transfer to ${toAccount.name} (${toAccount.number})${
+          memo ? " - " + memo : ""
+        }`;
+      } else if (toContact) {
+        transactionType = "TRANSFER";
+        description = `Transfer to ${toContact.name}${
+          memo ? " - " + memo : ""
+        }`;
+      } else {
+        transactionType = "WITHDRAW";
+        description = `Payment to ${to}${memo ? " - " + memo : ""}`;
+      }
+
+      await transactionAPI.createTransaction(transactionType, amt, description);
+
+      const newBalance = await transactionAPI.getBalance();
+      setAccounts((prev) => {
+        const next = prev.map((a) => ({ ...a }));
+        const fromIdx = next.findIndex((a) => a.id === from);
+        if (fromIdx >= 0) {
+          next[fromIdx].balance = newBalance;
         }
         return next;
       });
-      setLoading(false);
+
       showToast("Transfer successful");
       setAmount("");
       setMemo("");
       setTo("");
-    }, 900);
+    } catch (err) {
+      setError(err.message || "Transaction failed");
+    } finally {
+      setLoading(false);
+    }
   };
-
-  const handleBillPay = (e) => {
+  const handleBillPay = async (e) => {
     e && e.preventDefault();
     setError("");
-    setMessage("");
-    if (!from || !to || !amount || isNaN(amount) || Number(amount) <= 0) {
-      setError("Please select from, payee and enter a valid amount.");
-      return;
-    }
-    const amt = Number(amount);
-    const fromAcc = accounts.find((a) => a.id === from);
-    if (fromAcc && fromAcc.balance < amt) {
-      return setError("Insufficient funds");
-    }
     setLoading(true);
-    setTimeout(() => {
+    try {
+      if (!from || !to || !amount || isNaN(amount) || Number(amount) <= 0) {
+        throw new Error("Please select from, payee and enter a valid amount.");
+      }
+      const amt = Number(amount);
+      const currentBalance = await transactionAPI.getBalance();
+      if (currentBalance < amt) {
+        throw new Error("Insufficient funds");
+      }
+
+      const description = `Bill payment to ${to}${memo ? " - " + memo : ""}`;
+      await transactionAPI.createTransaction("WITHDRAW", amt, description);
+
+      const newBalance = await transactionAPI.getBalance();
       setAccounts((prev) => {
-        const fromIdx = prev.findIndex((a) => a.id === from);
         const next = prev.map((a) => ({ ...a }));
-        if (fromIdx >= 0)
-          next[fromIdx].balance = Math.max(0, next[fromIdx].balance - amt);
-        // if paying a credit account (rewards), reduce its balance (treat as payment)
-        const toIdx = prev.findIndex((a) => a.id === to);
-        if (toIdx >= 0 && prev[toIdx].id === "rewards") {
-          next[toIdx].balance = Math.max(0, next[toIdx].balance - amt);
+        const fromIdx = next.findIndex((a) => a.id === from);
+        if (fromIdx >= 0) {
+          next[fromIdx].balance = newBalance;
         }
         return next;
       });
-      setLoading(false);
       showToast("Payment completed");
       setAmount("");
       setMemo("");
       setTo("");
-    }, 900);
+    } catch (err) {
+      setError(err.message || "Payment failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const cancelScheduled = (id) => {
@@ -200,26 +237,7 @@ function Payment() {
                 Transfer Money
               </h3>
 
-              <h5 className="text-[16px] font-medium mb-1 mx-3">From</h5>
-              <div className="rounded-lg border border-[#8b8b8b] p-2 w-full flex justify-between items-center ">
-                <select
-                  className="bg-transparent outline-none w-full"
-                  value={from}
-                  onChange={(e) => setFrom(e.target.value)}
-                  aria-label="From account"
-                >
-                  {accounts.map((a) => (
-                    <option key={a.id} value={a.id}>
-                      {a.name} ({a.number}) - ${a.balance.toLocaleString()}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex items-center justify-center w-full my-4">
-                <i className="fa-solid fa-arrow-right-arrow-left text-2xl text-[#9d9d9d]"></i>
-              </div>
-
-              <h5 className="text-[16px] font-medium mb-1 ">To</h5>
+              <h5 className="text-[16px] font-medium mb-1 mx-3">To</h5>
               <div className="rounded-lg border border-[#8b8b8b] p-2 w-full flex justify-between items-center ">
                 <select
                   className="bg-transparent outline-none w-full"
@@ -323,20 +341,6 @@ function Payment() {
           {tab === "Bill Pay" && (
             <form onSubmit={handleBillPay} className="p-3">
               <h3 className="font-semibold text-xl my-3">Pay a Bill / Card</h3>
-              <label className="text-sm">From</label>
-              <div className="rounded-lg border p-2 mb-3">
-                <select
-                  className="w-full outline-none bg-transparent"
-                  value={from}
-                  onChange={(e) => setFrom(e.target.value)}
-                >
-                  {accounts.map((a) => (
-                    <option key={a.id} value={a.id}>
-                      {a.name} ({a.number}) - ${a.balance.toLocaleString()}
-                    </option>
-                  ))}
-                </select>
-              </div>
               <label className="text-sm">Payee</label>
               <div className="rounded-lg border p-2 mb-3">
                 <select
@@ -474,23 +478,7 @@ function Payment() {
             </button>
           </section>
 
-          <h3 className="text-[#595959] font-medium mt-2 mb-3 ">
-            YOUR ACCOUNTS
-          </h3>
-          <section>
-            {accounts.map((a) => (
-              <div
-                key={a.id}
-                className="p-2 border border-[#b4b4b4] rounded-lg mb-3"
-              >
-                <h4 className="font-semibold text-lg mb-1">{a.name}</h4>
-                <p className="text-[#595959] mb-3">{a.number}</p>
-                <h4 className="font-semibold text-lg">
-                  ${a.balance.toLocaleString()}
-                </h4>
-              </div>
-            ))}
-          </section>
+          {/* Hidden: Mock accounts section - user has one real account balance */}
         </section>
       </section>
     </main>

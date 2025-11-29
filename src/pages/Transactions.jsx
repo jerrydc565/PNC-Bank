@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
+import { transactionAPI } from "../services/api";
 
 const mockTransactions = [
   {
@@ -91,10 +92,13 @@ function getCategoryIcon(category) {
 }
 
 export default function Transactions() {
-  const [query, setQuery] = useState("");
-  const [sort, setSort] = useState("date_desc");
   const [showDetails, setShowDetails] = useState(false);
   const [selectedTx, setSelectedTx] = useState(null);
+
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [query, setQuery] = useState("");
+  const [sort, setSort] = useState("date_desc");
 
   const openDetails = (tx) => {
     setSelectedTx(tx);
@@ -105,10 +109,73 @@ export default function Transactions() {
     setShowDetails(false);
     setSelectedTx(null);
   };
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const data = await transactionAPI.getTransactions();
+        // Transform backend data to frontend format
+        const formatted = data.map((tx) => {
+          // Safely parse date - handle null/invalid dates
+          let dateStr;
+          try {
+            dateStr = tx.createdAt
+              ? new Date(tx.createdAt).toISOString().split("T")[0]
+              : new Date().toISOString().split("T")[0];
+          } catch (e) {
+            dateStr = new Date().toISOString().split("T")[0];
+          }
+
+          // Determine icon based on transaction type and description
+          let icon = "fa-solid fa-money-bill-transfer";
+          let iconColor = "#0064de";
+          const desc = (tx.description || "").toLowerCase();
+
+          if (tx.transactionType === "DEPOSIT") {
+            icon = "fa-solid fa-arrow-down";
+            iconColor = "#00dc3b";
+          } else if (desc.includes("bill")) {
+            icon = "fa-regular fa-file";
+            iconColor = "#ff6600";
+          } else if (desc.includes("transfer")) {
+            icon = "fa-solid fa-arrow-right-arrow-left";
+            iconColor = "#0064de";
+          } else if (
+            desc.includes("goal") ||
+            desc.includes("contribution") ||
+            desc.includes("savings")
+          ) {
+            icon = "fa-solid fa-piggy-bank";
+            iconColor = "#ff0000";
+          } else {
+            icon = "fa-solid fa-arrow-up";
+            iconColor = "#dc0000";
+          }
+
+          return {
+            id: tx.id.toString(),
+            date: dateStr,
+            description: tx.description || "Transaction",
+            category: tx.transactionType,
+            amount: tx.transactionType === "DEPOSIT" ? tx.amount : -tx.amount,
+            balance: tx.balanceAfter || 0,
+            icon: icon,
+            iconColor: iconColor,
+          };
+        });
+        setTransactions(formatted);
+      } catch (error) {
+        console.error("Failed to fetch transactions:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTransactions();
+  }, []);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    let list = mockTransactions.filter(
+    let list = transactions.filter(
       (t) =>
         t.description.toLowerCase().includes(q) ||
         t.category.toLowerCase().includes(q)
@@ -122,7 +189,11 @@ export default function Transactions() {
     if (sort === "amount_asc") list = list.sort((a, b) => a.amount - b.amount);
 
     return list;
-  }, [query, sort]);
+  }, [transactions, query, sort]);
+
+  if (loading) {
+    return <div className="p-6">Loading transactions...</div>;
+  }
 
   return (
     <div className="p-6">
@@ -213,12 +284,11 @@ export default function Transactions() {
                 className="grid grid-cols-4 items-center gap-4 border-b border-[#e6e6e6] py-4 cursor-pointer hover:bg-[#fafafa]"
               >
                 <div className="flex items-center gap-4">
-                  <button className="w-9 h-9 rounded-full flex items-center justify-center p-1 bg-[#0064de44]">
-                    <i
-                      className={`${getCategoryIcon(
-                        t.category
-                      )} text-[#0064de]`}
-                    ></i>
+                  <button
+                    className="w-9 h-9 rounded-full flex items-center justify-center p-1"
+                    style={{ backgroundColor: `${t.iconColor}22` }}
+                  >
+                    <i className={t.icon} style={{ color: t.iconColor }}></i>
                   </button>
                   <div>
                     <h5 className="font-semibold text-[15px]">

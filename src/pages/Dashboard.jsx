@@ -6,10 +6,12 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import view from "../assets/image/view.png";
 import hide from "../assets/image/hide.png";
+import { transactionAPI } from "../services/api";
 function Dashboard() {
   const navigate = useNavigate();
 
-  // ✅ NEW: Fetch user profile from backend
+  const [balance, setBalance] = useState(0);
+  const [recentTransactions, setRecentTransactions] = useState([]);
   const [userProfile, setUserProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -19,84 +21,13 @@ function Dashboard() {
   const [showDetails, setShowDetails] = useState(false);
   const [selectedTx, setSelectedTx] = useState(null);
   const [hideValue, setHideValue] = useState("Show");
-  const [hideValue2, setHideValue2] = useState("Show");
-  const [hideValue3, setHideValue3] = useState("Show");
-  const [transactions] = useState([
-    {
-      id: "t1",
-      title: "Jason Walker",
-      date: "22 Jun 2025, 09:15 AM",
-      amount: "+$513.00",
-      amountValue: 513.0,
-      type: "received",
-      category: "Received",
-      icon: "fa-solid fa-user",
-      note: "Salary reimbursement",
-      ts: new Date("2025-06-22T09:15:00"),
-    },
-    {
-      id: "t2",
-      title: "Netflix",
-      date: "20 Jun 2025, 12:15 PM",
-      amount: "-$50.00",
-      amountValue: -50.0,
-      type: "subscription",
-      category: "Subscription",
-      icon: "fa-solid fa-clapperboard",
-      note: "Monthly plan",
-      ts: new Date("2025-06-20T12:15:00"),
-    },
-    {
-      id: "t3",
-      title: "Sandra Micheal",
-      date: "17 Jun 2025, 09:15 AM",
-      amount: "+$1,000.00",
-      amountValue: 1000.0,
-      type: "received",
-      category: "Received",
-      icon: "fa-solid fa-user",
-      note: "Invoice payment",
-      ts: new Date("2025-06-17T09:15:00"),
-    },
-    {
-      id: "t4",
-      title: "Sandra Micheal",
-      date: "16 Jun 2025, 01:15 PM",
-      amount: "-$1,000.00",
-      amountValue: -1000.0,
-      type: "debit",
-      category: "Debit",
-      icon: "fa-solid fa-user",
-      note: "Refund",
-      ts: new Date("2025-06-16T13:15:00"),
-    },
-    {
-      id: "t5",
-      title: "Uber",
-      date: "10 Jun 2025, 08:15 AM",
-      amount: "-$24.34",
-      amountValue: -24.34,
-      type: "debit",
-      category: "Debit",
-      icon: "fa-solid fa-taxi",
-      note: "Ride",
-      ts: new Date("2025-06-10T08:15:00"),
-    },
-    {
-      id: "t6",
-      title: "Whole Foods",
-      date: "6 Jun 2025, 09:15 AM",
-      amount: "-$313.00",
-      amountValue: -313.0,
-      type: "debit",
-      category: "Debit",
-      icon: "fa-solid fa-basket-shopping",
-      note: "Groceries",
-      ts: new Date("2025-06-06T09:15:00"),
-    },
-  ]);
+  const [showDepositModal, setShowDepositModal] = useState(false);
+  const [depositAmount, setDepositAmount] = useState("");
+  const [depositMemo, setDepositMemo] = useState("");
+  const [depositError, setDepositError] = useState("");
+
   const filteredTransactions = useMemo(() => {
-    let list = transactions.slice();
+    let list = recentTransactions.slice();
     // search
     if (search.trim()) {
       const q = search.toLowerCase();
@@ -111,44 +42,9 @@ function Dashboard() {
     if (filterType !== "all") {
       list = list.filter((t) => t.type === filterType);
     }
-    // sort
-    if (sortBy === "newest") {
-      list.sort((a, b) => b.ts - a.ts);
-    } else if (sortBy === "oldest") {
-      list.sort((a, b) => a.ts - b.ts);
-    } else if (sortBy === "amountDesc") {
-      list.sort((a, b) => b.amountValue - a.amountValue);
-    } else if (sortBy === "amountAsc") {
-      list.sort((a, b) => a.amountValue - b.amountValue);
-    }
     return list;
-  }, [transactions, search, filterType, sortBy]);
-  const [bills, setBills] = useState([
-    {
-      id: "b1",
-      title: "Rent Payment",
-      dueIn: 2,
-      dueDate: "In 2 days",
-      amount: 1345.0,
-      paid: false,
-    },
-    {
-      id: "b2",
-      title: "Electric Bill",
-      dueIn: 5,
-      dueDate: "In 5 days",
-      amount: 95.72,
-      paid: false,
-    },
-    {
-      id: "b3",
-      title: "Credit Card Payment",
-      dueIn: 8,
-      dueDate: "In 8 days",
-      amount: 345.0,
-      paid: false,
-    },
-  ]);
+  }, [recentTransactions, search, filterType]);
+  const [bills, setBills] = useState([]);
   const [showPayModal, setShowPayModal] = useState(false);
   const [payTarget, setPayTarget] = useState(null);
   const [payFrom, setPayFrom] = useState("checking");
@@ -165,11 +61,11 @@ function Dashboard() {
   const [fundFrom, setFundFrom] = useState("checking");
 
   const [toast, setToast] = useState({ text: "", visible: false });
-  const [goals, setGoals] = useState([
-    { id: "g1", title: "Vacation Fund", saved: 3250, target: 5000 },
-    { id: "g2", title: "New Car", saved: 5000, target: 20000 },
-    { id: "g3", title: "Emergency Fund", saved: 8000, target: 10000 },
-  ]);
+  const [goals, setGoals] = useState(() => {
+    const userId = localStorage.getItem("userId");
+    const savedGoals = localStorage.getItem(`goals_${userId}`);
+    return savedGoals ? JSON.parse(savedGoals) : [];
+  });
 
   const [notice, setNotice] = useState("");
 
@@ -183,6 +79,88 @@ function Dashboard() {
   console.log("📖 Reading secondName:", secondName);
   console.log("📖 Reading email:", email);
   const fullName = `${firstName} ${secondName}`;
+
+  // Save goals to localStorage whenever they change
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      localStorage.setItem(`goals_${userId}`, JSON.stringify(goals));
+    }
+  }, [goals]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch balance
+        const userBalance = await transactionAPI.getBalance();
+        setBalance(userBalance || 0);
+
+        // Fetch recent transactions (last 4) from backend
+        const allTransactions = await transactionAPI.getTransactions();
+
+        // Transform backend data to match frontend format
+        const formatted = allTransactions.slice(0, 4).map((tx) => {
+          // Safely parse date
+          let dateStr;
+          try {
+            dateStr = tx.createdAt
+              ? new Date(tx.createdAt).toISOString().split("T")[0]
+              : new Date().toISOString().split("T")[0];
+          } catch (e) {
+            dateStr = new Date().toISOString().split("T")[0];
+          }
+
+          // Determine icon based on transaction type and description
+          let icon = "fa-solid fa-money-bill-transfer";
+          let iconColor = "#0064de";
+          const desc = (tx.description || "").toLowerCase();
+
+          if (tx.transactionType === "DEPOSIT") {
+            icon = "fa-solid fa-arrow-down";
+            iconColor = "#00dc3b";
+          } else if (desc.includes("bill")) {
+            icon = "fa-regular fa-file";
+            iconColor = "#ff6600";
+          } else if (desc.includes("transfer")) {
+            icon = "fa-solid fa-arrow-right-arrow-left";
+            iconColor = "#0064de";
+          } else if (
+            desc.includes("goal") ||
+            desc.includes("contribution") ||
+            desc.includes("savings")
+          ) {
+            icon = "fa-solid fa-piggy-bank";
+            iconColor = "#ff0000";
+          } else {
+            icon = "fa-solid fa-arrow-up";
+            iconColor = "#dc0000";
+          }
+
+          return {
+            id: tx.id.toString(),
+            title: tx.description || "Transaction",
+            date: dateStr,
+            amount:
+              tx.transactionType === "DEPOSIT"
+                ? `+$${tx.amount.toFixed(2)}`
+                : `-$${tx.amount.toFixed(2)}`,
+            type: tx.transactionType === "DEPOSIT" ? "received" : "debit",
+            category: tx.transactionType,
+            note: tx.description,
+            icon: icon,
+            iconColor: iconColor,
+          };
+        });
+
+        setRecentTransactions(formatted);
+        console.log("🎨 Recent transactions with icons:", formatted);
+      } catch (error) {
+        console.error("Failed to fetch dashboard data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   // ✅ NEW: Fetch user data on component mount
   useEffect(() => {
@@ -317,6 +295,88 @@ function Dashboard() {
     setTimeout(() => setToast({ text: "", visible: false }), duration);
   };
 
+  const handleDeposit = async () => {
+    setDepositError("");
+    if (!depositAmount || isNaN(depositAmount) || Number(depositAmount) <= 0) {
+      setDepositError("Please enter a valid amount");
+      return;
+    }
+
+    try {
+      const description = `Deposit${depositMemo ? " - " + depositMemo : ""}`;
+      await transactionAPI.createTransaction(
+        "DEPOSIT",
+        Number(depositAmount),
+        description
+      );
+
+      // Refresh balance and transactions after deposit
+      const newBalance = await transactionAPI.getBalance();
+      setBalance(newBalance);
+
+      // Refresh recent transactions
+      const allTransactions = await transactionAPI.getTransactions();
+      const formatted = allTransactions.slice(0, 4).map((tx) => {
+        let dateStr;
+        try {
+          dateStr = tx.createdAt
+            ? new Date(tx.createdAt).toISOString().split("T")[0]
+            : new Date().toISOString().split("T")[0];
+        } catch (e) {
+          dateStr = new Date().toISOString().split("T")[0];
+        }
+
+        // Determine icon based on transaction type and description
+        let icon = "fa-solid fa-money-bill-transfer";
+        let iconColor = "#0064de";
+        const desc = (tx.description || "").toLowerCase();
+
+        if (tx.transactionType === "DEPOSIT") {
+          icon = "fa-solid fa-arrow-down";
+          iconColor = "#00dc3b";
+        } else if (desc.includes("bill")) {
+          icon = "fa-regular fa-file";
+          iconColor = "#ff6600";
+        } else if (desc.includes("transfer")) {
+          icon = "fa-solid fa-arrow-right-arrow-left";
+          iconColor = "#0064de";
+        } else if (
+          desc.includes("goal") ||
+          desc.includes("contribution") ||
+          desc.includes("savings")
+        ) {
+          icon = "fa-solid fa-piggy-bank";
+          iconColor = "#ff0000";
+        } else {
+          icon = "fa-solid fa-arrow-up";
+          iconColor = "#dc0000";
+        }
+
+        return {
+          id: tx.id.toString(),
+          title: tx.description || "Transaction",
+          date: dateStr,
+          amount:
+            tx.transactionType === "DEPOSIT"
+              ? `+$${tx.amount.toFixed(2)}`
+              : `-$${tx.amount.toFixed(2)}`,
+          type: tx.transactionType === "DEPOSIT" ? "received" : "debit",
+          category: tx.transactionType,
+          note: tx.description,
+          icon: icon,
+          iconColor: iconColor,
+        };
+      });
+      setRecentTransactions(formatted);
+
+      showToast("Deposit successful");
+      setShowDepositModal(false);
+      setDepositAmount("");
+      setDepositMemo("");
+    } catch (error) {
+      setDepositError(error.message || "Deposit failed");
+    }
+  };
   const addToGoal = (id, amount) => {
     setGoals((s) =>
       s.map((g) =>
@@ -344,17 +404,99 @@ function Dashboard() {
     showToast("Goal added");
   };
 
-  const confirmAddFunds = () => {
+  const confirmAddFunds = async () => {
     const amt = Number(fundAmount);
     if (!fundGoalId) return showToast("No goal selected");
     if (!amt || isNaN(amt) || amt <= 0)
       return showToast("Enter a valid amount");
-    addToGoal(fundGoalId, amt);
-    setShowAddFundsModal(false);
-    setFundAmount("");
-    setFundGoalId(null);
-    setFundFrom("checking");
-    showToast("Amount added to goal");
+
+    try {
+      // Check if user has sufficient balance
+      const currentBalance = await transactionAPI.getBalance();
+      if (currentBalance < amt) {
+        showToast("Insufficient funds");
+        return;
+      }
+
+      // Create a WITHDRAW transaction for the goal contribution
+      const goalName =
+        goals.find((g) => g.id === fundGoalId)?.title || "Savings Goal";
+      await transactionAPI.createTransaction(
+        "WITHDRAW",
+        amt,
+        `Contribution to ${goalName}`
+      );
+
+      // Update balance
+      const newBalance = await transactionAPI.getBalance();
+      setBalance(newBalance);
+
+      // Refresh recent transactions
+      const allTransactions = await transactionAPI.getTransactions();
+      const formatted = allTransactions.slice(0, 4).map((tx) => {
+        let dateStr;
+        try {
+          dateStr = tx.createdAt
+            ? new Date(tx.createdAt).toISOString().split("T")[0]
+            : new Date().toISOString().split("T")[0];
+        } catch (e) {
+          dateStr = new Date().toISOString().split("T")[0];
+        }
+
+        // Determine icon based on transaction type and description
+        let icon = "fa-solid fa-money-bill-transfer";
+        let iconColor = "#0064de";
+        const desc = (tx.description || "").toLowerCase();
+
+        if (tx.transactionType === "DEPOSIT") {
+          icon = "fa-solid fa-arrow-down";
+          iconColor = "#00dc3b";
+        } else if (desc.includes("bill")) {
+          icon = "fa-regular fa-file";
+          iconColor = "#ff6600";
+        } else if (desc.includes("transfer")) {
+          icon = "fa-solid fa-arrow-right-arrow-left";
+          iconColor = "#0064de";
+        } else if (
+          desc.includes("goal") ||
+          desc.includes("contribution") ||
+          desc.includes("savings")
+        ) {
+          icon = "fa-solid fa-piggy-bank";
+          iconColor = "#ff0000";
+        } else {
+          icon = "fa-solid fa-arrow-up";
+          iconColor = "#dc0000";
+        }
+
+        return {
+          id: tx.id.toString(),
+          title: tx.description || "Transaction",
+          date: dateStr,
+          amount:
+            tx.transactionType === "DEPOSIT"
+              ? `+$${tx.amount.toFixed(2)}`
+              : `-$${tx.amount.toFixed(2)}`,
+          type: tx.transactionType === "DEPOSIT" ? "received" : "debit",
+          category: tx.transactionType,
+          note: tx.description,
+          icon: icon,
+          iconColor: iconColor,
+        };
+      });
+      setRecentTransactions(formatted);
+
+      // Add funds to goal
+      addToGoal(fundGoalId, amt);
+
+      setShowAddFundsModal(false);
+      setFundAmount("");
+      setFundGoalId(null);
+      setFundFrom("checking");
+      showToast("Amount added to goal");
+    } catch (error) {
+      showToast(error.message || "Failed to add funds");
+    }
   };
 
   return (
@@ -365,11 +507,7 @@ function Dashboard() {
           <p className="text-[14px] text-[#595959]">
             Last login: Today, 10:32 AM
           </p>
-          {userProfile && (
-            <p className="text-[12px] text-[#888]">
-              User ID: #{userProfile.userId}
-            </p>
-          )}
+       
         </div>
       </section>
 
@@ -413,7 +551,11 @@ function Dashboard() {
                 hideValue == "Hide" ? "hidden" : "block"
               } `}
             >
-              $5,289.00
+              $
+              {(balance || 0).toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
             </p>
             <p
               className={`text-xl font-bold text-white mb-3 ${
@@ -429,7 +571,11 @@ function Dashboard() {
                 hideValue == "Hide" ? "hidden" : "block"
               } `}
             >
-              $5,289.00
+              $
+              {balance.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
             </p>
             <p
               className={`text-l font-semibold text-white mb-5  ${
@@ -447,138 +593,7 @@ function Dashboard() {
             </Link>
           </div>
 
-          <div className="bg-[#008504] w-full rounded-lg p-5 ">
-            <p className="text-[10px] text-[#ffffff]">Saving Account</p>
-            <p className="text-xl font-semibold text-white ">
-              High-Yield Savings
-            </p>
-            <p className="text-l text-[#ffffff] mb-3">****7232</p>
-            <p className="flex items-center justify-between text-[10px] text-[#ffffff]  ">
-              Current Balance{" "}
-              <span onClick={handleChange2}>
-                <img
-                  src={view}
-                  alt=""
-                  className={` w-5  ${
-                    hideValue2 == "Hide" ? "hidden" : "block"
-                  }`}
-                />
-                <img
-                  src={hide}
-                  alt=""
-                  className={` w-5  ${
-                    hideValue2 == "Hide" ? "block" : "hidden"
-                  }`}
-                />
-              </span>
-            </p>
-            <p
-              className={`text-xl font-bold text-white mb-3 ${
-                hideValue2 == "Hide" ? "hidden" : "block"
-              } `}
-            >
-              $15,289.00
-            </p>
-            <p
-              className={`text-xl font-bold text-white mb-3 ${
-                hideValue2 == "Hide" ? "block" : "hidden"
-              } `}
-            >
-              {" "}
-              ••••••
-            </p>
-
-            <p className="text-[10px] text-[#ffffff]">Available Balance</p>
-            <p
-              className={`text-l font-semibold text-white mb-5  ${
-                hideValue2 == "Hide" ? "hidden" : "block"
-              } `}
-            >
-              $15,289.00
-            </p>
-            <p
-              className={`text-l font-semibold text-white mb-5  ${
-                hideValue2 == "Hide" ? "block" : "hidden"
-              } `}
-            >
-              {" "}
-              ••••••
-            </p>
-
-            <Link to={"/saving-details"}>
-              {" "}
-              <p className="text-[14px]  text-white text-right">
-                View details <i className="fa-solid fa-angle-right "></i>
-              </p>
-            </Link>
-          </div>
-          <div className="bg-[#660085] w-full rounded-lg p-5 ">
-            <p className="text-[10px] text-[#ffffff]">Credit Card</p>
-            <p className="text-xl font-semibold text-white ">
-              Platinum Rewards
-            </p>
-            <p className="text-l text-[#ffffff] mb-3">****3214</p>
-            <p className="flex items-center justify-between text-[10px] text-[#ffffff]  ">
-              Current Balance{" "}
-              <span onClick={handleChange3}>
-                <img
-                  src={view}
-                  alt=""
-                  className={` w-5  ${
-                    hideValue3 == "Hide" ? "hidden" : "block"
-                  }`}
-                />
-                <img
-                  src={hide}
-                  alt=""
-                  className={` w-5  ${
-                    hideValue3 == "Hide" ? "block" : "hidden"
-                  }`}
-                />
-              </span>
-            </p>
-            <p
-              className={`text-xl font-bold text-white mb-3 ${
-                hideValue3 == "Hide" ? "hidden" : "block"
-              } `}
-            >
-              $1,289.00
-            </p>
-            <p
-              className={`text-xl font-bold text-white mb-3 ${
-                hideValue3 == "Hide" ? "block" : "hidden"
-              } `}
-            >
-              {" "}
-              ••••••
-            </p>
-
-            <p className="text-[10px] text-[#ffffff]">Available Balance</p>
-            <p
-              className={`text-l font-semibold text-white mb-5  ${
-                hideValue3 == "Hide" ? "hidden" : "block"
-              } `}
-            >
-              $8,289.00
-            </p>
-            <p
-              className={`text-l font-semibold text-white mb-5  ${
-                hideValue3 == "Hide" ? "block" : "hidden"
-              } `}
-            >
-              {" "}
-              ••••••
-            </p>
-            <div className="w-full rounded-2xl  bg-[#ffffff2c] mb-5  ">
-              <div className="rounded p-1 bg-white w-[20%]"></div>
-            </div>
-            <Link to={"/credit-details"}>
-              {" "}
-              <p className="text-[14px]  text-white text-right">
-                View details <i className="fa-solid fa-angle-right "></i>
-              </p>
-            </Link>
-          </div>
+          {/* Hidden: Mock Savings and Credit accounts - user has one real account */}
         </section>
         <section className="w-[30%] flex flex-col gap-7 ">
           <div className="p-5 bg-white rounded-lg shadow grid grid-cols-3 gap-4 ">
@@ -612,15 +627,16 @@ function Dashboard() {
               </section>
             </Link>
 
-            <Link to={"/account"}>
-              <section className="w-full p-4 flex flex-col items-center justify-center rounded-lg hover:bg-[#bababa73] cursor-pointer">
-                <button className="w-11 cursor-pointer h-11 rounded-full bg-[#04ff0043] mb-2">
-                  {" "}
-                  <i className="fa-solid fa-dollar-sign text-xl text-[#04ff00]"></i>
-                </button>
-                <p className="text-[10px] text-[#595959]">Deposit</p>
-              </section>
-            </Link>
+            <section
+              className="w-full p-4 flex flex-col items-center justify-center rounded-lg hover:bg-[#bababa73] cursor-pointer"
+              onClick={() => setShowDepositModal(true)}
+            >
+              <button className="w-11 cursor-pointer h-11 rounded-full bg-[#04ff0043] mb-2">
+                {" "}
+                <i className="fa-solid fa-dollar-sign text-xl text-[#04ff00]"></i>
+              </button>
+              <p className="text-[10px] text-[#595959]">Deposit</p>
+            </section>
             <Link to={"/account"}>
               <section className="w-full p-4 flex flex-col items-center justify-center rounded-lg hover:bg-[#bababa73] cursor-pointer">
                 <button className="w-11 cursor-pointer h-11 rounded-full bg-[#ff000043] mb-2">
@@ -819,7 +835,21 @@ function Dashboard() {
           />
         </div>
 
-        <section className="flex flex-col gap-2">
+        {/* Table Header */}
+        <section className="grid grid-cols-3 gap-4 px-5 pb-3 border-b border-[#cecece]">
+          <div>
+            <h4 className="text-[#595959] font-bold text-sm">DESCRIPTION</h4>
+          </div>
+          <div>
+            <h4 className="text-[#595959] font-bold text-sm">DATE</h4>
+          </div>
+          <div className="flex items-center justify-end">
+            <h4 className="text-[#595959] font-bold text-sm">AMOUNT</h4>
+          </div>
+        </section>
+
+        {/* Transaction Rows */}
+        <section className="flex flex-col">
           {filteredTransactions.length === 0 && (
             <div className="p-4 text-center text-sm text-[#595959]">
               No transactions found
@@ -828,27 +858,22 @@ function Dashboard() {
           {filteredTransactions.map((tx) => (
             <div
               key={tx.id}
-              className="p-2 px-3 border-t border-[#ececec] flex items-center justify-between cursor-pointer hover:bg-[#fafafa]"
+              className="grid grid-cols-3 gap-4 px-5 py-4 border-b border-[#e6e6e6] cursor-pointer hover:bg-[#fafafa]"
               onClick={() => openDetails(tx)}
             >
-              <div className="flex  gap-3 items-center">
+              <div className="flex items-center gap-3">
                 <button
-                  className={`w-9 h-9 rounded-full p-1 ${
-                    tx.type === "received"
-                      ? "bg-[#0064de44]"
-                      : tx.type === "subscription"
-                      ? "bg-[#dc00004a]"
-                      : "bg-[#0064de44]"
-                  }`}
+                  className="w-9 h-9 rounded-full flex items-center justify-center p-1"
+                  style={{ backgroundColor: `${tx.iconColor || '#0064de'}22` }}
                 >
-                  {tx.icon && <i className={tx.icon}></i>}
+                  <i className={tx.icon || "fa-solid fa-money-bill-transfer"} style={{ color: tx.iconColor || '#0064de' }}></i>
                 </button>
-                <section className="flex flex-col gap-1 ">
-                  <h5 className="font-semibold text-[15px] ">{tx.title}</h5>
-                  <p className="text-[#595959] text-[11px]">{tx.date}</p>
-                </section>
+                <h5 className="font-semibold text-[15px]">{tx.title}</h5>
               </div>
-              <div className="flex flex-col gap-1 items-center">
+              <div>
+                <p className="text-[#595959] text-[13px]">{tx.date}</p>
+              </div>
+              <div className="flex items-center justify-end">
                 <h5
                   className={`font-semibold text-[15px] ${
                     tx.type === "received" ? "text-[#00dc3b]" : "text-[#dc0000]"
@@ -856,7 +881,6 @@ function Dashboard() {
                 >
                   {tx.amount}
                 </h5>
-                <p className="text-[#595959] text-[11px]">{tx.category}</p>
               </div>
             </div>
           ))}
@@ -1079,6 +1103,73 @@ function Dashboard() {
           </div>
         </div>
       </div>
+
+      {/* Deposit Modal */}
+      {showDepositModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-[90%] max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h4 className="font-semibold text-lg">Make a Deposit</h4>
+              <button
+                className="text-[#595959]"
+                onClick={() => {
+                  setShowDepositModal(false);
+                  setDepositError("");
+                }}
+              >
+                <i className="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <div className="mt-4">
+              <label className="text-sm">Amount</label>
+              <div className="w-full border p-2 rounded mb-3">
+                <input
+                  className="w-full outline-none"
+                  value={depositAmount}
+                  onChange={(e) => setDepositAmount(e.target.value)}
+                  placeholder="0.00"
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                />
+              </div>
+
+              <label className="text-sm">Memo (optional)</label>
+              <div className="w-full border p-2 rounded mb-4">
+                <input
+                  className="w-full outline-none"
+                  value={depositMemo}
+                  onChange={(e) => setDepositMemo(e.target.value)}
+                  placeholder="Add a note"
+                />
+              </div>
+
+              {depositError && (
+                <div className="text-red-600 text-sm mb-3">{depositError}</div>
+              )}
+
+              <div className="flex justify-end gap-3">
+                <button
+                  className="px-4 py-2 border rounded"
+                  onClick={() => {
+                    setShowDepositModal(false);
+                    setDepositError("");
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="px-4 py-2 bg-[#c64c00] text-white rounded"
+                  onClick={handleDeposit}
+                >
+                  Deposit
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

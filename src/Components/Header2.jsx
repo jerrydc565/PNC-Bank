@@ -7,6 +7,7 @@ function Header2() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const [userProfile, setUserProfile] = useState(null);
+  const [profilePicture, setProfilePicture] = useState(null);
 
   const firstName =
     userProfile?.firstName || localStorage.getItem("firstName") || "User";
@@ -39,6 +40,29 @@ function Header2() {
     };
 
     fetchUserProfile();
+
+    // Load profile picture from localStorage
+    const userId = localStorage.getItem("userId");
+    const savedPicture = localStorage.getItem(`profilePicture_${userId}`);
+    if (savedPicture) {
+      setProfilePicture(savedPicture);
+    }
+
+    // Listen for profile picture updates
+    const handleStorageChange = () => {
+      const updatedPicture = localStorage.getItem(`profilePicture_${userId}`);
+      setProfilePicture(updatedPicture);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    // Also listen for custom event for same-window updates
+    window.addEventListener("profilePictureUpdated", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("profilePictureUpdated", handleStorageChange);
+    };
   }, []);
 
   return (
@@ -48,8 +72,18 @@ function Header2() {
         <div className="flex gap-2 items-center text-[#dfdfdf] relative">
           <div className="flex gap-3 items-center ">
             <i className="fa-regular fa-bell text-[#ffffff] text-xl"></i>
-            <div className="w-8 flex items-center justify-center h-8 rounded-full bg-[#0008ff] bg-cover bg-center">
-              {initials}
+            <div className="w-8 flex items-center justify-center h-8 rounded-full bg-[#0008ff] bg-cover bg-center overflow-hidden">
+              {profilePicture ? (
+                <img
+                  src={profilePicture}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-white font-semibold text-sm">
+                  {initials}
+                </span>
+              )}
             </div>
           </div>
 

@@ -53,11 +53,12 @@ function Login() {
         setMessageType("success");
 
         localStorage.clear();
-
+        console.log("userId:", localStorage.getItem("userId"));
         console.log("💾 Storing firstName:", data.firstName); // ✅ Debug
         console.log("💾 Storing secondName:", data.secondName); // ✅ Debug
         console.log("💾 Storing email:", data.email); // ✅ Debug
         localStorage.setItem("firstName", data.firstName);
+        localStorage.setItem("userId", data.userId);
         localStorage.setItem("secondName", data.secondName);
         localStorage.setItem("email", data.email);
 

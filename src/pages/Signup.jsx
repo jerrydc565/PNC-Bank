@@ -71,7 +71,8 @@ function Signup() {
           const loginData = await loginResponse.json();
 
           if (loginData.success) {
-            // store minimal user info in localStorage (same as Login.jsx)
+            // store
+            //  minimal user info in localStorage (same as Login.jsx)
             localStorage.clear();
             localStorage.setItem("firstName", loginData.firstName);
             localStorage.setItem("secondName", loginData.secondName);
