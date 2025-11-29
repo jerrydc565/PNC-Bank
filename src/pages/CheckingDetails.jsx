@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { transactionAPI } from "../services/api";
 import view from "../assets/image/view.png";
 import hide from "../assets/image/hide.png";
@@ -253,4 +253,4 @@ function CheckingDetails() {
   );
 }
 
-export default CheckingDetails
+export default CheckingDetails;
