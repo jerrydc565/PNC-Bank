@@ -237,23 +237,23 @@ function Settings() {
   };
 
   return (
-    <main className="bg-[#f3f3f3] min-h-screen p-6">
-      <header className="mb-6">
-        <h2 className="text-2xl font-bold">Settings</h2>
-        <p className="text-sm text-[#595959]">
+    <main className="bg-[#f3f3f3] min-h-screen p-3 sm:p-6">
+      <header className="mb-4 sm:mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold">Settings</h2>
+        <p className="text-xs sm:text-sm text-[#595959]">
           Manage your account settings and preferences
         </p>
       </header>
 
-      <section className="flex gap-8">
+      <section className="flex flex-col lg:flex-row gap-4 sm:gap-8">
         {/* Left navigation */}
-        <aside className="w-[28%]">
-          <div className="bg-white rounded-lg shadow p-6 sticky top-6">
-            <nav className="flex flex-col gap-2">
+        <aside className="w-full lg:w-[28%]">
+          <div className="bg-white rounded-lg shadow p-3 sm:p-6 lg:sticky lg:top-6">
+            <nav className="grid grid-cols-2 sm:grid-cols-3 lg:flex lg:flex-col gap-2">
               <button
                 onClick={() => setSelectedTab("profile")}
                 aria-current={selectedTab === "profile"}
-                className={`text-left py-3 px-4 rounded-lg hover:bg-[#f5f5f5] flex items-center gap-3 font-medium ${
+                className={`text-left py-2 sm:py-3 px-3 sm:px-4 rounded-lg hover:bg-[#f5f5f5] flex items-center gap-2 sm:gap-3 font-medium text-sm sm:text-base ${
                   selectedTab === "profile"
                     ? "bg-[#fffefc] border border-[#e6d1c7]"
                     : ""
@@ -329,16 +329,16 @@ function Settings() {
           </div>
         </aside>
 
-        <div className="w-[72%] flex flex-col gap-6">
+        <div className="w-full lg:w-[72%] flex flex-col gap-4 sm:gap-6">
           {/* Right content switches based on selectedTab */}
           {selectedTab === "profile" && (
-            <section className="bg-white rounded-lg shadow p-6">
-              <div className="flex items-center justify-between mb-6">
+            <section className="bg-white rounded-lg shadow p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-4">
                 <div>
-                  <h3 className="font-semibold text-lg">
+                  <h3 className="font-semibold text-base sm:text-lg">
                     Personal information
                   </h3>
-                  <p className="text-sm text-[#595959]">
+                  <p className="text-xs sm:text-sm text-[#595959]">
                     Update your public profile and contact details
                   </p>
                 </div>
@@ -397,8 +397,8 @@ function Settings() {
                 </div>
               </div>
 
-              <form className="mt-6">
-                <div className="grid grid-cols-2 gap-4">
+              <form className="mt-4 sm:mt-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
                     <label className="text-sm font-medium text-[#595959] mb-1 block">
                       First name

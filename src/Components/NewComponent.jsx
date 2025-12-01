@@ -12,13 +12,7 @@ function NewComponent() {
           We can help you get a clear picture of where you are today and help
           you plan for the future you want with manageable, actionable steps.
         </p>
-        <Link to={"/financial-wellness"}>
-          <p className="font-bold mt-10 text-[#c07d00] cursor-pointer hover:underline w-fit flex items-center gap-2">
-            Learn more and schedule your Financial Wellness conversation today
-            <i className="fa-solid fa-arrow-right"></i>
-          </p>
-        </Link>
-       
+        
       </div>
       <div>
         <img src={mobile} alt="Mobile Bank Phone" className="w-80" />

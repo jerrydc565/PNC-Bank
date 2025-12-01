@@ -1,20 +1,19 @@
-import React from 'react'
-import support from '../assets/image/support.jpg'
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-
+import React from "react";
+import support from "../assets/image/support.jpg";
+import { useState } from "react";
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 function Support() {
-const [showMap, setSetMap] = useState(false)
+  const [showMap, setSetMap] = useState(false);
 
-    const handleShowMap = () => {
-      if (showMap === false) {
-        setSetMap(true);
-      } else {
-        setSetMap(false);
-      }
-  }; 
+  const handleShowMap = () => {
+    if (showMap === false) {
+      setSetMap(true);
+    } else {
+      setSetMap(false);
+    }
+  };
 
   const handleHideMap = () => {
     if (showMap === true) {
@@ -25,44 +24,47 @@ const [showMap, setSetMap] = useState(false)
   };
 
   useEffect(() => {
-  
     if (showMap === true) {
-      document.body.style.overflow = "hidden"
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "unset"
+      document.body.style.overflow = "unset";
     }
-    
-} , [showMap])
-
+  }, [showMap]);
 
   return (
     <main className="bg-white">
       <section className="bg-linear-to-r from-[#563800] to-[#1d1300]">
-        <section className="p-10 pt-30 h-130 flex items-center justify-between max-w-5xl 2xl:max-w-7xl mx-auto  w-full ">
-          <div className="w-[50%]">
+        <section className="p-4 sm:p-6 lg:p-10 pt-10 sm:pt-20 lg:pt-30 min-h-[400px] sm:h-130 flex flex-col lg:flex-row items-center justify-between gap-6 max-w-5xl 2xl:max-w-7xl mx-auto w-full">
+          <div className="w-full lg:w-[50%]">
             {" "}
-            <h1 className="text-white font-bold text-4xl  mb-4 2xl:text-5xl">
+            <h1 className="text-white font-bold text-2xl sm:text-3xl lg:text-4xl mb-3 sm:mb-4 2xl:text-5xl">
               We're here to help
             </h1>
-            <p className=" text-[#bebebe] w-130 text-lg">
+            <p className="text-[#bebebe] text-sm sm:text-base lg:text-lg max-w-xl">
               Get the support you need, when you need it. Our customer service
               team is available 24/7 to assist you.
             </p>
           </div>
-          <div>
+          <div className="hidden lg:block">
             {" "}
-            <img src={support} alt="" className=" w-100 2xl:w-130 rounded-2xl " />
+            <img
+              src={support}
+              alt=""
+              className="w-full max-w-md lg:w-100 2xl:w-130 rounded-2xl"
+            />
           </div>
         </section>
       </section>
 
-      <section className="pt-20 relative">
-        <h1 className="font-black text-2xl mb-3 text-center">Contact us </h1>
-        <p className="text-center text-[#595959]">
+      <section className="pt-10 sm:pt-20 relative">
+        <h1 className="font-black text-xl sm:text-2xl mb-2 sm:mb-3 text-center">
+          Contact us{" "}
+        </h1>
+        <p className="text-center text-sm sm:text-base text-[#595959]">
           Choose the best way to reach us
         </p>
 
-        <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 p-10 max-w-6xl mx-auto">
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10 p-4 sm:p-6 lg:p-10 max-w-6xl mx-auto">
           <div className="bg-white hover:shadow-2xl rounded-2xl p-10 text-center w-full">
             <button className="w-15 h-15 p-2 rounded-full bg-[#c781006e]">
               <i className="fa-regular fa-comment text-3xl text-[#c78100] "></i>
@@ -101,7 +103,7 @@ const [showMap, setSetMap] = useState(false)
         </section>
         <div
           className={` flex justify-center items-center w-full h-screen  absolute top-0 bg-[#000000c1] cursor-pointer ${
-            showMap === false? "hidden" : "block"
+            showMap === false ? "hidden" : "block"
           } `}
           onClick={handleHideMap}
         >
@@ -119,15 +121,15 @@ const [showMap, setSetMap] = useState(false)
         </div>
       </section>
       <section>
-        <h2 className="font-black text-2xl text-center mt-20 mb-4">
+        <h2 className="font-black text-xl sm:text-2xl text-center mt-10 sm:mt-20 mb-3 sm:mb-4">
           Frequently Asked Questions
         </h2>
-        <p className="text-[#595959] text-center  ">
+        <p className="text-[#595959] text-center text-sm sm:text-base">
           Quick answers to common questions
         </p>
       </section>
-      <section className="mt-9 flex flex-col gap-5 max-w-3xl mx-auto">
-        <div className="shadow-md rounded-xl p-10 pr-20 w-full">
+      <section className="mt-6 sm:mt-9 flex flex-col gap-4 sm:gap-5 max-w-3xl mx-auto px-4 sm:px-6">
+        <div className="shadow-md rounded-xl p-6 sm:p-10 w-full">
           <p className="font-semibold text-xl mb-2">
             How do I reset my password?
           </p>
@@ -173,7 +175,6 @@ const [showMap, setSetMap] = useState(false)
             requirements.
           </p>
         </div>
-     
       </section>
 
       <section className="p-10 m-20 flex flex-col gap-7 rounded-2xl  bg-[#c781001d] ">
@@ -196,4 +197,4 @@ const [showMap, setSetMap] = useState(false)
   );
 }
 
-export default Support
+export default Support;

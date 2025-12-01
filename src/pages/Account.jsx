@@ -21,11 +21,11 @@ function Account() {
     fetchBalance();
   }, []);
   return (
-    <main className="bg-[#efefef] p-5">
-      <section className="flex justify-between items-center mb-5">
+    <main className="bg-[#efefef] p-3 sm:p-5">
+      <section className="flex justify-between items-center mb-4 sm:mb-5">
         <div>
-          <h3 className="font-bold text-xl">Accounts</h3>
-          <p className="text-[#595959] text-[13px] mt-1">
+          <h3 className="font-bold text-lg sm:text-xl">Accounts</h3>
+          <p className="text-[#595959] text-xs sm:text-[13px] mt-1">
             View and manage your account
           </p>
         </div>
@@ -36,7 +36,7 @@ function Account() {
       ) : (
         <Link to={"/checking-details"} className="block">
           <section className="rounded-lg pt-2 bg-[#c78100] shadow hover:shadow-md cursor-pointer overflow-hidden">
-            <div className="bg-white p-7 flex justify-between">
+            <div className="bg-white p-4 sm:p-7 flex flex-col sm:flex-row justify-between gap-4 sm:gap-0">
               <div>
                 <p className="text-[#595959] text-[13px] mb-1">
                   Checking Account

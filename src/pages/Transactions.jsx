@@ -196,24 +196,24 @@ export default function Transactions() {
   }
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="p-3 sm:p-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-3">
         <div>
-          <h2 className="text-2xl font-bold">Transactions</h2>
-          <p className="text-sm text-gray-600">
+          <h2 className="text-xl sm:text-2xl font-bold">Transactions</h2>
+          <p className="text-xs sm:text-sm text-gray-600">
             Recent activity on your accounts
           </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
           <input
             aria-label="Search transactions"
-            className="border rounded p-2"
+            className="border rounded p-2 text-sm sm:text-base w-full sm:w-auto"
             placeholder="Search description or category"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
           <select
-            className="border rounded p-2"
+            className="border rounded p-2 text-sm sm:text-base w-full sm:w-auto"
             value={sort}
             onChange={(e) => setSort(e.target.value)}
           >
@@ -226,28 +226,28 @@ export default function Transactions() {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="text-center py-16">
-          <p className="text-lg mb-3">No transactions found</p>
-          <p className="text-sm text-gray-600">
+        <div className="text-center py-12 sm:py-16">
+          <p className="text-base sm:text-lg mb-3">No transactions found</p>
+          <p className="text-xs sm:text-sm text-gray-600">
             Try a different search or date range.
           </p>
         </div>
       ) : (
-        <section className="bg-white rounded-lg p-6 shadow">
-          <section className="flex items-center justify-between mb-4">
-            <div className="flex gap-3 items-center">
-              <div className="rounded-lg border border-[#b3b3b3]">
+        <section className="bg-white rounded-lg p-3 sm:p-6 shadow">
+          <section className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
+            <div className="flex gap-2 sm:gap-3 items-center w-full sm:w-auto">
+              <div className="rounded-lg border border-[#b3b3b3] flex-1 sm:flex-initial">
                 <input
                   type="search"
                   aria-label="Search transactions"
                   placeholder="Search Transactions"
-                  className="border-none outline-none p-2 px-6 text-left"
+                  className="border-none outline-none p-2 px-3 sm:px-6 text-left text-sm sm:text-base w-full"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                 />
               </div>
               <select
-                className="border rounded p-2"
+                className="border rounded p-2 text-sm sm:text-base"
                 value={sort}
                 onChange={(e) => setSort(e.target.value)}
               >
@@ -259,18 +259,18 @@ export default function Transactions() {
             </div>
           </section>
 
-          <section className="grid grid-cols-4 gap-4 mt-4 border-b pb-3 border-[#cecece]">
+          <section className="hidden md:grid grid-cols-4 gap-4 mt-4 border-b pb-3 border-[#cecece]">
             <div>
-              <h4 className="text-[#595959] font-bold">DESCRIPTION</h4>
+              <h4 className="text-[#595959] font-bold text-sm">DESCRIPTION</h4>
             </div>
             <div>
-              <h4 className="text-[#595959] font-bold">DATE</h4>
+              <h4 className="text-[#595959] font-bold text-sm">DATE</h4>
             </div>
             <div>
-              <h4 className="text-[#595959] font-bold">TYPE</h4>
+              <h4 className="text-[#595959] font-bold text-sm">TYPE</h4>
             </div>
             <div className="flex items-center justify-end">
-              <h4 className="text-[#595959] font-bold">AMOUNT</h4>
+              <h4 className="text-[#595959] font-bold text-sm">AMOUNT</h4>
             </div>
           </section>
 
@@ -281,41 +281,54 @@ export default function Transactions() {
                 onClick={() => openDetails(t)}
                 role="button"
                 tabIndex={0}
-                className="grid grid-cols-4 items-center gap-4 border-b border-[#e6e6e6] py-4 cursor-pointer hover:bg-[#fafafa]"
+                className="flex flex-col md:grid md:grid-cols-4 items-start md:items-center gap-3 md:gap-4 border-b border-[#e6e6e6] py-4 px-3 md:px-0 cursor-pointer hover:bg-[#fafafa]"
               >
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 md:gap-4 w-full md:w-auto">
                   <button
-                    className="w-9 h-9 rounded-full flex items-center justify-center p-1"
+                    className="w-10 h-10 md:w-9 md:h-9 rounded-full flex items-center justify-center p-1 shrink-0"
                     style={{ backgroundColor: `${t.iconColor}22` }}
                   >
                     <i className={t.icon} style={{ color: t.iconColor }}></i>
                   </button>
-                  <div>
-                    <h5 className="font-semibold text-[15px]">
+                  <div className="flex-1 md:flex-initial">
+                    <h5 className="font-semibold text-sm md:text-[15px]">
                       {t.description}
                     </h5>
-                    <p className="text-[#595959] text-sm">{t.category}</p>
+                    <p className="text-[#595959] text-xs md:text-sm">
+                      {t.category}
+                    </p>
                   </div>
                 </div>
-                <div>
-                  <p className="text-[#595959]">{formatDate(t.date)}</p>
+                <div className="flex justify-between w-full md:w-auto md:block">
+                  <span className="text-xs text-[#595959] md:hidden">
+                    Date:
+                  </span>
+                  <p className="text-[#595959] text-sm">{formatDate(t.date)}</p>
                 </div>
-                <div>
-                  <p className="text-[15px]">
+                <div className="flex justify-between w-full md:w-auto md:block">
+                  <span className="text-xs text-[#595959] md:hidden">
+                    Type:
+                  </span>
+                  <p className="text-sm md:text-[15px]">
                     {t.amount < 0 ? "Debit" : "Received"}
                   </p>
                 </div>
-                <div className="flex items-center justify-between">
-                  <p
-                    className={`${
-                      t.amount < 0 ? "text-[#c70000]" : "text-[#2ec700]"
-                    } font-semibold`}
-                  >
-                    {formatCurrency(t.amount)}
-                  </p>
-                  <button className="rounded-2xl p-1 bg-[#2ec7003d] text-[#2ec700]">
-                    Completed
-                  </button>
+                <div className="flex items-center justify-between w-full md:w-auto">
+                  <span className="text-xs text-[#595959] md:hidden">
+                    Amount:
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <p
+                      className={`${
+                        t.amount < 0 ? "text-[#c70000]" : "text-[#2ec700]"
+                      } font-semibold text-sm md:text-base`}
+                    >
+                      {formatCurrency(t.amount)}
+                    </p>
+                    <button className="rounded-2xl px-2 py-1 bg-[#2ec7003d] text-[#2ec700] text-xs">
+                      Completed
+                    </button>
+                  </div>
                 </div>
               </section>
             ))}

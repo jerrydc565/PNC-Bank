@@ -501,32 +501,37 @@ function Dashboard() {
 
   return (
     <main className="bg-[#f3f3f3] pb-20">
-      <section className="flex justify-between px-10 p-5">
+      <section className="flex justify-between px-3 sm:px-5 lg:px-10 p-3 sm:p-5">
         <div>
-          <h2 className="font-bold text-2xl">Welcome back, {firstName}!</h2>
-          <p className="text-[14px] text-[#595959]">
+          <h2 className="font-bold text-xl sm:text-2xl">
+            Welcome back, {firstName}!
+          </h2>
+          <p className="text-[12px] sm:text-[14px] text-[#595959]">
             Last login: Today, 10:32 AM
           </p>
-       
         </div>
       </section>
 
-      <section className="flex gap-8 px-10">
-        <section className="bg-white rounded-lg shadow p-10 w-[70%] flex flex-col gap-6  ">
-          <div className="flex justify-between items-center ">
-            <h3 className="font-semibold text-lg"> Your Accounts </h3>
+      <section className="flex flex-col md:flex-row gap-5 md:gap-8 px-2 sm:px-5 lg:px-10">
+        <section className="bg-white rounded-lg shadow p-5 sm:p-8 lg:p-10 md:w-[70%] flex flex-col gap-6">
+          <div className="flex justify-between items-center">
+            <h3 className="font-semibold text-base sm:text-lg">
+              Your Accounts
+            </h3>
             <Link to={"/account"}>
               <h4 className="text-[14px] hover:text-[#b14400] font-medium text-[#c64c00] ">
                 View All <i className="fa-solid fa-angle-right text-lg"></i>
               </h4>
             </Link>
           </div>
-          <div className="bg-[#c78100] w-full rounded-lg p-5 ">
-            <p className="text-[10px] text-[#ffffff]">Checking Account</p>
-            <p className="text-xl font-semibold text-white  ">
+          <div className="bg-[#c78100] w-full rounded-lg p-4 sm:p-5">
+            <p className="text-[10px] sm:text-[11px] text-[#ffffff]">
+              Checking Account
+            </p>
+            <p className="text-lg sm:text-xl font-semibold text-white">
               Premium Checking
             </p>
-            <p className="text-l text-[#ffffff] mb-3">****4832</p>
+            <p className="text-base sm:text-lg text-[#ffffff] mb-3">****4832</p>
             <p className="flex items-center justify-between text-[10px] text-[#ffffff]  ">
               Current Balance{" "}
               <span onClick={handleChange}>
@@ -595,71 +600,85 @@ function Dashboard() {
 
           {/* Hidden: Mock Savings and Credit accounts - user has one real account */}
         </section>
-        <section className="w-[30%] flex flex-col gap-7 ">
-          <div className="p-5 bg-white rounded-lg shadow grid grid-cols-3 gap-4 ">
+        <section className="md:w-[30%] mt-5 md:mt-0 flex flex-col gap-5 md:gap-7">
+          <div className="p-3 sm:p-5 bg-white rounded-lg shadow grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
             <Link to={"/payment"}>
               {" "}
-              <section className="w-full p-4 flex flex-col items-center justify-center rounded-lg hover:bg-[#bababa73] cursor-pointer">
-                <button className="w-11 cursor-pointer h-11 rounded-full bg-[#0022ff43] mb-2">
-                  <i className="fa-solid fa-arrow-right-arrow-left text-xl text-[#0022ff]"></i>
+              <section className="w-full p-2 sm:p-4 flex flex-col items-center justify-center rounded-lg hover:bg-[#bababa73] cursor-pointer">
+                <button className="w-9 sm:w-11 cursor-pointer h-9 sm:h-11 rounded-full bg-[#0022ff43] mb-1 sm:mb-2">
+                  <i className="fa-solid fa-arrow-right-arrow-left text-lg sm:text-xl text-[#0022ff]"></i>
                 </button>
-                <p className="text-[10px] text-[#595959]">Transfer</p>
+                <p className="text-[9px] sm:text-[10px] text-[#595959]">
+                  Transfer
+                </p>
               </section>
             </Link>
 
             <Link to={"/payment"}>
               {" "}
-              <section className="w-full p-4 flex flex-col items-center justify-center rounded-lg hover:bg-[#bababa73] cursor-pointer">
-                <button className="w-11 cursor-pointer h-11 rounded-full bg-[#7700ff43] mb-2">
+              <section className="w-full p-2 sm:p-4 flex flex-col items-center justify-center rounded-lg hover:bg-[#bababa73] cursor-pointer">
+                <button className="w-9 sm:w-11 cursor-pointer h-9 sm:h-11 rounded-full bg-[#7700ff43] mb-1 sm:mb-2">
                   {" "}
-                  <i className="fa-regular fa-credit-card text-xl text-[#7700ff]"></i>
+                  <i className="fa-regular fa-credit-card text-lg sm:text-xl text-[#7700ff]"></i>
                 </button>
-                <p className="text-[10px] text-[#595959]">Pay cards</p>
+                <p className="text-[9px] sm:text-[10px] text-[#595959]">
+                  Pay cards
+                </p>
               </section>
             </Link>
             <Link to={"/payment"}>
-              <section className="w-full p-4 flex flex-col items-center justify-center rounded-lg hover:bg-[#bababa73] cursor-pointer">
-                <button className="w-11 cursor-pointer h-11 rounded-full bg-[#ffc40043] mb-2">
+              <section className="w-full p-2 sm:p-4 flex flex-col items-center justify-center rounded-lg hover:bg-[#bababa73] cursor-pointer">
+                <button className="w-9 sm:w-11 cursor-pointer h-9 sm:h-11 rounded-full bg-[#ffc40043] mb-1 sm:mb-2">
                   {" "}
-                  <i className="fa-regular fa-file text-xl text-[#ffc400]"></i>
+                  <i className="fa-regular fa-file text-lg sm:text-xl text-[#ffc400]"></i>
                 </button>
-                <p className="text-[10px] text-[#595959]">Pay bills</p>
+                <p className="text-[9px] sm:text-[10px] text-[#595959]">
+                  Pay bills
+                </p>
               </section>
             </Link>
 
             <section
-              className="w-full p-4 flex flex-col items-center justify-center rounded-lg hover:bg-[#bababa73] cursor-pointer"
+              className="w-full p-2 sm:p-4 flex flex-col items-center justify-center rounded-lg hover:bg-[#bababa73] cursor-pointer"
               onClick={() => setShowDepositModal(true)}
             >
-              <button className="w-11 cursor-pointer h-11 rounded-full bg-[#04ff0043] mb-2">
+              <button className="w-9 sm:w-11 cursor-pointer h-9 sm:h-11 rounded-full bg-[#04ff0043] mb-1 sm:mb-2">
                 {" "}
-                <i className="fa-solid fa-dollar-sign text-xl text-[#04ff00]"></i>
+                <i className="fa-solid fa-dollar-sign text-lg sm:text-xl text-[#04ff00]"></i>
               </button>
-              <p className="text-[10px] text-[#595959]">Deposit</p>
+              <p className="text-[9px] sm:text-[10px] text-[#595959]">
+                Deposit
+              </p>
             </section>
             <Link to={"/account"}>
-              <section className="w-full p-4 flex flex-col items-center justify-center rounded-lg hover:bg-[#bababa73] cursor-pointer">
-                <button className="w-11 cursor-pointer h-11 rounded-full bg-[#ff000043] mb-2">
+              <section className="w-full p-2 sm:p-4 flex flex-col items-center justify-center rounded-lg hover:bg-[#bababa73] cursor-pointer">
+                <button className="w-9 sm:w-11 cursor-pointer h-9 sm:h-11 rounded-full bg-[#ff000043] mb-1 sm:mb-2">
                   {" "}
-                  <i className="fa-solid fa-piggy-bank text-xl text-[#ff0000]"></i>
+                  <i className="fa-solid fa-piggy-bank text-lg sm:text-xl text-[#ff0000]"></i>
                 </button>
-                <p className="text-[10px] text-[#595959]">Savings</p>
+                <p className="text-[9px] sm:text-[10px] text-[#595959]">
+                  Savings
+                </p>
               </section>
             </Link>
             <Link to={"/card"}>
               {" "}
-              <section className="w-full p-4 flex flex-col items-center justify-center rounded-lg hover:bg-[#bababa73] cursor-pointer">
-                <button className="w-11 cursor-pointer h-11 rounded-full bg-[#0022ff43] mb-2">
+              <section className="w-full p-2 sm:p-4 flex flex-col items-center justify-center rounded-lg hover:bg-[#bababa73] cursor-pointer">
+                <button className="w-9 sm:w-11 cursor-pointer h-9 sm:h-11 rounded-full bg-[#0022ff43] mb-1 sm:mb-2">
                   {" "}
-                  <i className="fa-solid fa-gift text-xl text-[#0022ff]"></i>
+                  <i className="fa-solid fa-gift text-lg sm:text-xl text-[#0022ff]"></i>
                 </button>
-                <p className="text-[10px] text-[#595959]">Rewards</p>
+                <p className="text-[9px] sm:text-[10px] text-[#595959]">
+                  Rewards
+                </p>
               </section>
             </Link>
           </div>
-          <div className="p-5 bg-white rounded-lg shadow grid grid-cols-1 gap-4">
+          <div className="p-3 sm:p-5 bg-white rounded-lg shadow grid grid-cols-1 gap-3 sm:gap-4">
             <section className="flex justify-between items-center">
-              <h3 className="font-semibold text-lg">Upcoming Bills</h3>
+              <h3 className="font-semibold text-base sm:text-lg">
+                Upcoming Bills
+              </h3>
               <Link to={"/payment"}>
                 <h4 className="text-[14px] font-medium text-[#c64c00] hover:text-[#803100] ">
                   View All <i className="fa-solid fa-angle-right"></i>
@@ -670,7 +689,7 @@ function Dashboard() {
             {bills.map((b) => (
               <section
                 key={b.id}
-                className={`flex p-3 rounded-lg items-center justify-between ${
+                className={`flex flex-col sm:flex-row p-2 sm:p-3 rounded-lg items-start sm:items-center justify-between gap-2 sm:gap-0 ${
                   b.paid
                     ? "bg-[#e6ffe6]"
                     : b.dueIn <= 2
@@ -678,7 +697,7 @@ function Dashboard() {
                     : "bg-[#f5f5f5]"
                 }`}
               >
-                <div className="flex gap-3 items-center">
+                <div className="flex gap-2 sm:gap-3 items-center">
                   <button
                     className={`w-10 h-10 rounded-lg ${
                       b.paid ? "bg-[#cceccc]" : "bg-[#ff00002e]"
@@ -714,9 +733,11 @@ function Dashboard() {
               </section>
             ))}
           </div>
-          <div className="p-5 bg-white rounded-lg shadow grid grid-cols-1 gap-4 ">
+          <div className="p-3 sm:p-5 bg-white rounded-lg shadow grid grid-cols-1 gap-3 sm:gap-4">
             <section className="flex justify-between items-center">
-              <h4 className="font-semibold text-l ">Savings Goals</h4>
+              <h4 className="font-semibold text-base sm:text-lg">
+                Savings Goals
+              </h4>
               <button
                 className="font-medium text-[12px] bg-[#c64c00] text-white rounded-2xl px-3 p-1"
                 onClick={() => setShowAddGoalModal(true)}
@@ -767,21 +788,23 @@ function Dashboard() {
         </section>
       </section>
       {/* Recent Transactions: functional list with search, filters and details modal */}
-      <section className="bg-white rounded-lg shadow pb-4  w-[65%] m-10">
-        <div className="flex justify-between pb-5 p-10 border-b border-[#ececec]">
-          <h3 className="font-semibold text-lg">Recent Transactions</h3>
-          <div className="flex items-center gap-3 relative">
+      <section className="bg-white rounded-lg shadow pb-4 w-full md:w-[65%] m-2 sm:m-5 mt-5 md:m-10">
+        <div className="flex flex-col sm:flex-row justify-between gap-3 pb-3 sm:pb-5 p-3 sm:p-5 lg:p-10 border-b border-[#ececec]">
+          <h3 className="font-semibold text-base sm:text-lg">
+            Recent Transactions
+          </h3>
+          <div className="flex items-center gap-2 sm:gap-3 relative">
             <button
-              className="p-1 px-4 rounded-lg bg-[#ffffff] border border-[#e3e3e3] flex items-center gap-2"
+              className="p-1 px-3 sm:px-4 rounded-lg bg-[#ffffff] border border-[#e3e3e3] flex items-center gap-1 sm:gap-2 text-sm"
               onClick={() => setShowFilters((s) => !s)}
               aria-expanded={showFilters}
               aria-controls="tx-filters"
             >
               <i className="fa-solid fa-filter"></i>
-              <span className="capitalize">filter</span>
+              <span className="capitalize hidden sm:inline">filter</span>
             </button>
             <Link to={"/transaction"}>
-              <h4 className="font-medium text-l text-[#c64c00] hover:text-[#833200]">
+              <h4 className="font-medium lg:text-lg text-[14px]  text-[#c64c00] hover:text-[#833200]">
                 View all <i className="fa-solid fa-angle-right"></i>
               </h4>
             </Link>
@@ -836,7 +859,7 @@ function Dashboard() {
         </div>
 
         {/* Table Header */}
-        <section className="grid grid-cols-3 gap-4 px-5 pb-3 border-b border-[#cecece]">
+        <section className="hidden md:grid grid-cols-3 gap-4 px-5 pb-3 border-b border-[#cecece]">
           <div>
             <h4 className="text-[#595959] font-bold text-sm">DESCRIPTION</h4>
           </div>
@@ -858,22 +881,39 @@ function Dashboard() {
           {filteredTransactions.map((tx) => (
             <div
               key={tx.id}
-              className="grid grid-cols-3 gap-4 px-5 py-4 border-b border-[#e6e6e6] cursor-pointer hover:bg-[#fafafa]"
+              className="flex flex-col md:grid md:grid-cols-3 gap-2 md:gap-4 px-3 sm:px-5 py-3 md:py-4 border-b border-[#e6e6e6] cursor-pointer hover:bg-[#fafafa]"
               onClick={() => openDetails(tx)}
             >
               <div className="flex items-center gap-3">
                 <button
-                  className="w-9 h-9 rounded-full flex items-center justify-center p-1"
-                  style={{ backgroundColor: `${tx.iconColor || '#0064de'}22` }}
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center p-1 flex-shrink-0"
+                  style={{ backgroundColor: `${tx.iconColor || "#0064de"}22` }}
                 >
-                  <i className={tx.icon || "fa-solid fa-money-bill-transfer"} style={{ color: tx.iconColor || '#0064de' }}></i>
+                  <i
+                    className={tx.icon || "fa-solid fa-money-bill-transfer"}
+                    style={{ color: tx.iconColor || "#0064de" }}
+                  ></i>
                 </button>
-                <h5 className="font-semibold text-[15px]">{tx.title}</h5>
+                <div className="flex-1">
+                  <h5 className="font-semibold text-[14px] sm:text-[15px]">
+                    {tx.title}
+                  </h5>
+                  <p className="text-[#595959] text-[12px] md:hidden">
+                    {tx.date}
+                  </p>
+                </div>
+                <h5
+                  className={`font-semibold text-[14px] sm:text-[15px] md:hidden ${
+                    tx.type === "received" ? "text-[#00dc3b]" : "text-[#dc0000]"
+                  }`}
+                >
+                  {tx.amount}
+                </h5>
               </div>
-              <div>
+              <div className="hidden md:block">
                 <p className="text-[#595959] text-[13px]">{tx.date}</p>
               </div>
-              <div className="flex items-center justify-end">
+              <div className="hidden md:flex items-center justify-end">
                 <h5
                   className={`font-semibold text-[15px] ${
                     tx.type === "received" ? "text-[#00dc3b]" : "text-[#dc0000]"

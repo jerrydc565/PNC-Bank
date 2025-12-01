@@ -3,9 +3,9 @@ import React from "react";
 function Career() {
   return (
     <main className="bg-[#eaeaea] pb-10">
-      <section className="bg-linear-to-r from-[#a76d00] to-[#1d1300] p-20 flex justify-center items-center pt-30">
+      <section className="bg-linear-to-r from-[#a76d00] to-[#1d1300] p-10 sm:p-20 flex justify-center items-center pt-16 sm:pt-30">
         <div>
-          <h2 className="font-bold text-3xl text-white text-center">
+          <h2 className="font-bold text-2xl sm:text-3xl text-white text-center">
             Career At
           </h2>
           <h3 className="font-semibold text-xl text-white text-center mt-4">
@@ -13,9 +13,11 @@ function Career() {
           </h3>
         </div>
       </section>
-      <section className="bg-white rounded shadow max-w-5xl mx-auto p-10 my-10 ">
-        <h2 className="font-bold text-4xl mb-3">Why Work at PNC Bank?</h2>
-        <p className="text-[#595959] mb-9">
+      <section className="bg-white rounded shadow max-w-5xl mx-auto p-6 sm:p-10 my-6 sm:my-10 mx-4">
+        <h2 className="font-bold text-2xl sm:text-3xl lg:text-4xl mb-2 sm:mb-3">
+          Why Work at PNC Bank?
+        </h2>
+        <p className="text-sm sm:text-base text-[#595959] mb-6 sm:mb-9">
           At PNC Bank, we're building more than just a bank—we're creating a
           company where talented people can grow, innovate, and make a real
           impact on millions of customers' lives.

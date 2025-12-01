@@ -4,14 +4,16 @@ import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <section className=" bg-[#1e1400] p-15">
-      <section className=" flex justify-center items-center gap-7 pb-8 border-b border-[#303030] ">
+    <section className="bg-[#1e1400] p-6 sm:p-10 lg:p-15">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 pb-8 border-b border-[#303030]">
         <div className="flex flex-col gap-4 w-full">
-          <h3 className="text-xl font-bold md-5 text-white">PRODUCTS</h3>
+          <h3 className="text-lg sm:text-xl font-bold md-5 text-white">
+            PRODUCTS
+          </h3>
           <ul className="flex flex-col gap-4 ">
             <Link to={"/checking-account"}>
               <li className="text-[#9f9f9f]  hover:text-white cursor-pointer duration-300 translate-all w-fit ">
-               Checking
+                Checking
               </li>
             </Link>
 
@@ -31,7 +33,9 @@ function Footer() {
         </div>
         <div className="flex flex-col gap-4 w-full">
           {" "}
-          <h3 className="text-xl font-bold md-5 text-white">Company</h3>
+          <h3 className="text-lg sm:text-xl font-bold md-5 text-white">
+            Company
+          </h3>
           <ul className="flex flex-col gap-4 ">
             <Link to={"/about-us"}>
               {" "}
@@ -53,7 +57,10 @@ function Footer() {
         </div>
         <div className="flex flex-col gap-4 w-full">
           {" "}
-          <h3 className="text-xl font-bold md-5 text-white"> LEGAL </h3>
+          <h3 className="text-lg sm:text-xl font-bold md-5 text-white">
+            {" "}
+            LEGAL{" "}
+          </h3>
           <ul className="flex flex-col gap-4 ">
             <Link to={"/privacy"}>
               {" "}
@@ -63,7 +70,7 @@ function Footer() {
             </Link>
             <Link to={"/terms"}>
               <li className="text-[#9f9f9f]  hover:text-white cursor-pointer duration-300 translate-all w-fit ">
-              Terms of Service
+                Terms of Service
               </li>
             </Link>
             <Link to={"/security"}>
@@ -73,13 +80,13 @@ function Footer() {
             </Link>
           </ul>
         </div>
-        
+
         <div className="flex flex-col gap-4 w-full">
           <Link to={"/"}>
-            <img src={logo} alt="" className="w-25" />
+            <img src={logo} alt="" className="w-16 sm:w-20 lg:w-25" />
           </Link>
 
-          <p className="text-white">
+          <p className="text-white text-sm sm:text-base">
             Making banking smarter, faster, and more secure for millions of
             customers worldwide.
           </p>
@@ -91,7 +98,7 @@ function Footer() {
           </div>
         </div>
       </section>
-      <p className="text-center text-[#959595] mt-12">
+      <p className="text-center text-[#959595] mt-8 sm:mt-12 text-xs sm:text-sm">
         ©2025 The PNC Financial Services Group, Inc. All rights reserved.
       </p>
     </section>

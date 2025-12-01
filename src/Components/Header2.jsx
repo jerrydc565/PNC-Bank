@@ -67,12 +67,18 @@ function Header2() {
 
   return (
     <>
-      <header className="flex justify-between p-5 px-10 items-center bg-[#291b00] shadow-md">
-        <img src={Logo} alt="" className="w-20" />
+      <header className="flex justify-between p-3 sm:p-5 px-4 sm:px-10 items-center bg-[#291b00] shadow-md">
+        <img src={Logo} alt="" className="w-16 sm:w-20" />
         <div className="flex gap-2 items-center text-[#dfdfdf] relative">
-          <div className="flex gap-3 items-center ">
-            <i className="fa-regular fa-bell text-[#ffffff] text-xl"></i>
-            <div className="w-8 flex items-center justify-center h-8 rounded-full bg-[#0008ff] bg-cover bg-center overflow-hidden">
+          <div className="flex gap-2 sm:gap-3 items-center ">
+            <button
+              onClick={() => navigate("/notifications")}
+              className="hover:opacity-80 transition-opacity"
+              aria-label="Notifications"
+            >
+              <i className="fa-regular fa-bell text-[#ffffff] text-lg sm:text-xl"></i>
+            </button>
+            <div className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full bg-[#0008ff] bg-cover bg-center overflow-hidden">
               {profilePicture ? (
                 <img
                   src={profilePicture}
@@ -105,27 +111,29 @@ function Header2() {
             </button>
 
             {open && (
-              <div className="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow z-50">
-                <nav className="flex flex-col">
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-[9999]">
+                <nav className="flex flex-col py-1">
                   <NavLink
                     to="/user-home"
-                    className="px-4 py-2 text-sm hover:bg-[#f5f5f5] border-b"
+                    className="px-4 py-3 text-sm text-gray-700 hover:bg-[#f5f5f5] border-b transition-colors"
                     role="menuitem"
                     onClick={() => setOpen(false)}
                   >
+                    <i className="fa-solid fa-user mr-2 text-gray-600"></i>
                     Profile
                   </NavLink>
                   <NavLink
                     to="/setting"
-                    className="px-4 py-2 text-sm hover:bg-[#f5f5f5] border-b"
+                    className="px-4 py-3 text-sm text-gray-700 hover:bg-[#f5f5f5] border-b transition-colors"
                     role="menuitem"
                     onClick={() => setOpen(false)}
                   >
+                    <i className="fa-solid fa-gear mr-2 text-gray-600"></i>
                     Settings
                   </NavLink>
                   <button
                     type="button"
-                    className="text-left px-4 py-2 text-sm hover:bg-[#f5f5f5]"
+                    className="text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"
                     role="menuitem"
                     onClick={() => {
                       localStorage.removeItem("firstName");
@@ -136,6 +144,7 @@ function Header2() {
                       navigate("/login");
                     }}
                   >
+                    <i className="fa-solid fa-right-from-bracket mr-2"></i>
                     Logout
                   </button>
                 </nav>
@@ -144,16 +153,13 @@ function Header2() {
           </div>
         </div>
       </header>
-      <section
-        className=" 
-       px-10 pb-4 pt-4  bg-white shadow"
-      >
-        <ul className="flex gap-8">
+      <section className="px-3 sm:px-6 lg:px-10 pb-3 sm:pb-4 pt-3 sm:pt-4 bg-white shadow overflow-x-auto">
+        <ul className="flex gap-4 sm:gap-6 lg:gap-8 min-w-max sm:min-w-0">
           <li>
             <NavLink
               to="/user-home"
               className={({ isActive }) =>
-                `pb-4 border-b-2 font-medium cursor-pointer ${
+                `pb-3 sm:pb-4 border-b-2 font-medium cursor-pointer text-sm sm:text-base whitespace-nowrap ${
                   isActive
                     ? "border-[#c64c00] text-[#c64c00]"
                     : "border-transparent hover:border-[#c64c00] hover:text-[#c64c00]"

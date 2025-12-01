@@ -1,22 +1,25 @@
-import React from 'react'
+import React from "react";
 
 function Privacy() {
   return (
     <main className="bg-[#efefef] pb-10">
-      <section className="bg-[#ffffffce] bg-[url('/image/pri.jpg')] bg-blend-overlay bg-cover bg-center p-20 flex justify-center items-center pt-30">
+      <section className="bg-[#ffffffce] bg-[url('/image/pri.jpg')] bg-blend-overlay bg-cover bg-center p-6 sm:p-10 lg:p-20 flex justify-center items-center pt-20 sm:pt-24 lg:pt-30">
         <div>
-          <h2 className="font-bold text-3xl text-black text-center">
+          <h2 className="font-bold text-2xl sm:text-3xl text-black text-center">
             Pivacy Policy
           </h2>
-          <hr className="w-65 mt-1 border-2 border-[#915e00]" />
-          <h3 className=" text-xl text-[#915e00] text-center mt-4">
+          <hr className="w-40 sm:w-52 lg:w-65 mt-1 border-2 border-[#915e00] mx-auto" />
+          <h3 className="text-base sm:text-lg lg:text-xl text-[#915e00] text-center mt-4">
             Last updated: January 6, 2025
           </h3>
         </div>
       </section>
-      <section className="p-10 max-w-5xl mx-auto bg-white rounded shadow flex flex-col gap-10 m-10">
+      <section className="p-4 sm:p-6 lg:p-10 max-w-5xl mx-auto bg-white rounded shadow flex flex-col gap-6 sm:gap-8 lg:gap-10 m-4 sm:m-6 lg:m-10">
         <div>
-          <h3 className="font-bold text-2xl mb-5"> Introduction</h3>
+          <h3 className="font-bold text-xl sm:text-2xl mb-3 sm:mb-5">
+            {" "}
+            Introduction
+          </h3>
           <p className="text-[#595959] ">
             At PNCBank, we take your privacy seriously. This Privacy Policy
             explains how we collect, use, disclose, and safeguard your
@@ -24,7 +27,9 @@ function Privacy() {
           </p>
         </div>
         <div>
-          <h2 className="font-bold text-2xl mb-5">Information We Collect</h2>
+          <h2 className="font-bold text-xl sm:text-2xl mb-3 sm:mb-5">
+            Information We Collect
+          </h2>
           <p className="text-[#595959] mb-3">
             We collect information that you provide directly to us, including:
           </p>
@@ -43,7 +48,7 @@ function Privacy() {
           </li>
         </div>
         <div>
-          <h2 className="font-bold text-2xl mb-5">
+          <h2 className="font-bold text-xl sm:text-2xl mb-3 sm:mb-5">
             How We Use Your Information
           </h2>
           <p className="text-[#595959] mb-3">
@@ -66,7 +71,9 @@ function Privacy() {
           </li>
         </div>
         <div>
-          <h2 className="font-bold text-2xl mb-5">Information Sharing</h2>
+          <h2 className="font-bold text-xl sm:text-2xl mb-3 sm:mb-5">
+            Information Sharing
+          </h2>
           <p className="text-[#595959] mb-3">
             We do not sell your personal information. We may share your
             information only in the following circumstances: with your consent,
@@ -75,7 +82,9 @@ function Privacy() {
           </p>
         </div>
         <div>
-          <h2 className="font-bold text-2xl mb-5">Data Security</h2>
+          <h2 className="font-bold text-xl sm:text-2xl mb-3 sm:mb-5">
+            Data Security
+          </h2>
 
           <p className="text-[#595959] mb-3">
             We implement appropriate technical and organizational measures to
@@ -85,7 +94,9 @@ function Privacy() {
           </p>
         </div>
         <div>
-          <h2 className="font-bold text-2xl mb-5">Your Rights</h2>
+          <h2 className="font-bold text-xl sm:text-2xl mb-3 sm:mb-5">
+            Your Rights
+          </h2>
           <p>You have the right to:</p>
           <li className="text-[#595959] mb-2">
             Access and receive a copy of your personal information
@@ -105,7 +116,9 @@ function Privacy() {
           </li>
         </div>
         <div>
-          <h2 className="font-bold text-2xl mb-5">Contact Us</h2>
+          <h2 className="font-bold text-xl sm:text-2xl mb-3 sm:mb-5">
+            Contact Us
+          </h2>
           <p className="text-[#595959] mb-3">
             If you have questions about this Privacy Policy, please contact us
             at privacy@pncbank.com .
@@ -116,4 +129,4 @@ function Privacy() {
   );
 }
 
-export default Privacy
+export default Privacy;

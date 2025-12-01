@@ -1,18 +1,23 @@
-import React from 'react'
+import React from "react";
 
 function AboutUs() {
   return (
     <main className="bg-[#f3f3f3] pb-10">
-      <section className="bg-linear-to-r from-[#a76d00] to-[#1d1300] p-20 flex justify-center items-center pt-30">
+      <section className="bg-linear-to-r from-[#a76d00] to-[#1d1300] p-10 sm:p-20 flex justify-center items-center pt-16 sm:pt-30">
         <div>
-          <h2 className="font-bold text-3xl text-white text-center">About</h2>
-          <h3 className="font-semibold text-xl text-white text-center mt-4">
+          <h2 className="font-bold text-2xl sm:text-3xl text-white text-center">
+            About
+          </h2>
+          <h3 className="font-semibold text-lg sm:text-xl text-white text-center mt-3 sm:mt-4">
             PNC Bank
           </h3>
         </div>
       </section>
-      <section className="m-10 p-10  mx-20 bg-white rounded shadow ">
-        <h1 className="font-bold text-4xl mb-6  "> Our Story</h1>
+      <section className="m-4 sm:m-6 lg:m-10 p-6 sm:p-10 mx-4 sm:mx-10 lg:mx-20 bg-white rounded shadow">
+        <h1 className="font-bold text-2xl sm:text-3xl lg:text-4xl mb-4 sm:mb-6">
+          {" "}
+          Our Story
+        </h1>
         <p className="text-[#595959] mb-7">
           Founded in 2015, PNC was created with a simple mission: to make
           banking easier, faster, and more accessible for everyone. We
@@ -30,10 +35,7 @@ function AboutUs() {
           helping you achieve your goals and secure your future.
         </p>
       </section>
-      <section
-        className="mt-7 grid grid-cols-1 
-       items-center sm:grid-cols-2 md:grid-cols-4 gap-7 p-10 px-20 "
-      >
+      <section className="mt-6 sm:mt-7 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-7 p-4 sm:p-6 lg:p-10 px-4 sm:px-10 lg:px-20">
         <div className="bg-white rounded-xl p-5 shadow w-full flex flex-col gap-5 items-center justify-center">
           <button className="w-15 h-15 p-2 rounded-full bg-[#c782005e]">
             <i className="fa-solid fa-users text-3xl text-[#c78100]"></i>
@@ -63,9 +65,11 @@ function AboutUs() {
           <p className="text-[#595959] ">Assets Under Management</p>
         </div>
       </section>
-      <section className="mt-10  mx-20 p-10 rounded bg-white">
-        <h2 className="font-bold text-3xl mt-2 mb-5">Our Values</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+      <section className="mt-6 sm:mt-10 mx-4 sm:mx-10 lg:mx-20 p-6 sm:p-10 rounded bg-white">
+        <h2 className="font-bold text-2xl sm:text-3xl mt-2 mb-4 sm:mb-5">
+          Our Values
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           <section>
             <h3 className="font-bold text-xl mb-3">Customer First</h3>
             <p className="text-[#595959]">
@@ -93,4 +97,4 @@ function AboutUs() {
   );
 }
 
-export default AboutUs
+export default AboutUs;
