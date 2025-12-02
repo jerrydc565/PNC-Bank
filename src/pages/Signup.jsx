@@ -77,6 +77,10 @@ function Signup() {
             localStorage.setItem("firstName", loginData.firstName);
             localStorage.setItem("secondName", loginData.secondName);
             localStorage.setItem("email", loginData.email);
+            localStorage.setItem("userId", loginData.userId);
+            if (loginData.accountNumber) {
+              localStorage.setItem("accountNumber", loginData.accountNumber);
+            }
 
             // Clear form UI and navigate to dashboard
             setFormData({
@@ -85,7 +89,7 @@ function Signup() {
               email: "",
               password: "",
             });
-            setTimeout(() => navigate("/user-home"), 800);
+            setTimeout(() => (window.location.href = "/user-home"), 800);
             return;
           }
 
@@ -125,12 +129,12 @@ function Signup() {
 
   return (
     <main className="w-full min-h-screen flex flex-col md:flex-row gap-0 md:gap-10">
-      <section className="bg-[url('/image/abstractbg.png')] bg-blend-overlay bg-[#000000c4] w-full md:w-[50%] bg-cover h-40 md:h-full bg-center"></section>
-      <section className="w-full md:w-[50%] flex flex-col justify-center items-center position-relative gap-3 sm:gap-5 overflow-y-auto p-4 sm:p-6 py-8">
-        <h2 className="font-bold text-xl sm:text-2xl text-[#5d2700] mt-0 sm:mt-130 mb-3 sm:mb-5">
+      <section className="bg-[url('/image/abstractbg.png')] md:hidden bg-blend-overlay bg-[#000000c4] w-full md:w-[50%] bg-cover h-40 md:h-full bg-center"></section>
+      <section className="w-full md:w-full md:bg-[url('/image/abstractbg.png')] md:bg-blend-overlay md:bg-[#000000c4] md:bg-cover md:bg-center flex flex-col justify-center items-center relative gap-3 sm:gap-5 overflow-y-auto p-4 sm:p-6 py-8">
+        <h2 className="font-bold text-xl sm:text-2xl md:text-white text-[#5d2700] mt-0 sm:mt-10 mb-3 sm:mb-5">
           PNC Bank{" "}
         </h2>
-        <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl text-[#cb8400] mb-3 sm:mb-5">
+        <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl md:text-white text-[#cb8400] mb-3 sm:mb-5">
           Signup
         </h1>
         <form
@@ -140,7 +144,7 @@ function Signup() {
           <div className="mb-4 sm:mb-5 flex gap-1 flex-col">
             <label
               htmlFor="firstName"
-              className="font-bold text-[#453926] mb-1 text-sm sm:text-base"
+              className="font-bold md:text-white text-[#453926] mb-1 text-sm sm:text-base"
             >
               First Name
             </label>
@@ -162,7 +166,7 @@ function Signup() {
           <div className="mb-4 sm:mb-5 flex gap-1 flex-col">
             <label
               htmlFor="lastName"
-              className="font-bold text-[#453926] mb-1 text-sm sm:text-base"
+              className="font-bold md:text-white text-[#453926] mb-1 text-sm sm:text-base"
             >
               Last Name
             </label>
@@ -184,7 +188,7 @@ function Signup() {
           <div className="mb-4 sm:mb-5 flex gap-1 flex-col">
             <label
               htmlFor="email"
-              className="font-bold text-[#453926] mb-1 text-sm sm:text-base"
+              className="font-bold md:text-white text-[#453926] mb-1 text-sm sm:text-base"
             >
               Email
             </label>
@@ -206,10 +210,10 @@ function Signup() {
 
           <div className="mb-4 sm:mb-5 flex gap-1 flex-col">
             <label
-              htmlFor="email"
-              className="font-bold text-[#453926] mb-1 text-sm sm:text-base"
+              htmlFor="phone"
+              className="font-bold md:text-white text-[#453926] mb-1 text-sm sm:text-base"
             >
-              phone
+              Phone
             </label>
             <div className="border bg-white border-[#727272] rounded focus:border-[#cb8400] flex items-center">
               <i className="fa-solid fa-phone text-[#595959] text-base sm:text-lg m-2 sm:m-3"></i>
@@ -229,7 +233,7 @@ function Signup() {
           <div className="mb-4 sm:mb-5 flex gap-1 flex-col">
             <label
               htmlFor="password"
-              className="font-bold text-[#371E30] mb-1 text-sm sm:text-base"
+              className="font-bold md:text-white text-[#371E30] mb-1 text-sm sm:text-base"
             >
               Password
             </label>
@@ -249,22 +253,22 @@ function Signup() {
             </div>
           </div>
           <div>
-            <h4 className="font-semibold text-base sm:text-lg">
+            <h4 className="font-semibold md:text-white text-base sm:text-lg">
               Password requirements:
             </h4>
-            <li className="text-[#595959] mb-1 list-none text-sm sm:text-base">
+            <li className="md:text-white text-[#595959] mb-1 list-none text-sm sm:text-base">
               <span>{passwordError}</span> At least 8 characters
             </li>
-            <li className="text-[#595959] mb-1 list-none text-sm sm:text-base">
+            <li className="md:text-white text-[#595959] mb-1 list-none text-sm sm:text-base">
               <span>{passwordError2}</span> Contains uppercase and lowercase
               letters
             </li>
-            <li className="text-[#595959] list-none text-sm sm:text-base">
+            <li className="md:text-white text-[#595959] list-none text-sm sm:text-base">
               <span>{passwordError3}</span> contains at least one number
             </li>
           </div>
 
-          <div className="mt-3 sm:mt-5 text-sm sm:text-base">
+          <div className="mt-3 sm:mt-5 md:text-white text-sm sm:text-base">
             <input type="checkbox" name="terms" className="mr-2" /> I agree to
             the Terms , Conditions and Privacy Policy.
           </div>
@@ -275,9 +279,12 @@ function Signup() {
           >
             {isLoading ? "Registering.. " : "Register"}
           </button>
-          <p className="text-center mb-3 sm:mb-15 mt-3 sm:mt-5 text-sm sm:text-base">
+          <p className="text-center md:text-white mb-3 sm:mb-15 mt-3 sm:mt-5 text-sm sm:text-base">
             Already have an account{" "}
-            <Link to="/login" className="text-[#cb8400] font-bold">
+            <Link
+              to="/login"
+              className="md:text-[#ffa600] text-[#cb8400] font-bold"
+            >
               Login
             </Link>
           </p>
@@ -288,16 +295,17 @@ function Signup() {
           </div>
         )}
 
-        <img
-          src={addimg}
-          alt=""
-          className="absolute bottom-0 right-0 opacity-25 w-70"
-        />
-        <Link to={"/"}>
-          <button className="hover:text-[#595959] cursor-pointer p-1 px-6 sm:px-9 z-100 rounded-xl bg-[#d3cfad] mb-4 text-sm sm:text-base">
+        <Link to={"/"} className="flex justify-center z-50 relative">
+          <button className="hover:text-[#595959] cursor-pointer p-1 px-6 sm:px-9 rounded-xl bg-[#d3cfad] mb-4 text-sm sm:text-base">
             Back to home
           </button>
         </Link>
+
+        <img
+          src={addimg}
+          alt=""
+          className="absolute bottom-0 right-0 opacity-25 w-70 z-0"
+        />
       </section>
     </main>
   );

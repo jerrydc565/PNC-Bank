@@ -61,6 +61,9 @@ function Login() {
         localStorage.setItem("userId", data.userId);
         localStorage.setItem("secondName", data.secondName);
         localStorage.setItem("email", data.email);
+        if (data.accountNumber) {
+          localStorage.setItem("accountNumber", data.accountNumber);
+        }
 
         console.log("✅ Stored in localStorage");
         console.log(
@@ -91,7 +94,7 @@ function Login() {
   return (
     <main className="w-full min-h-screen flex flex-col md:flex-row gap-0 md:gap-10">
       <section className="bg-[url('/image/abstractbg.png')] md:hidden bg-blend-overlay bg-[#000000c4] w-full md:w-[50%] bg-cover h-40 md:h-full bg-center"></section>
-      <section className="w-full md:w-[50%] md:bg-[url('/image/abstractbg.png')] md:bg-blend-overlay md:bg-[#000000c4] md:bg-cover md:bg-center md:w-full flex flex-col justify-center items-center relative gap-3 sm:gap-5 p-4 sm:p-6">
+      <section className="w-full  md:bg-[url('/image/abstractbg.png')] md:bg-blend-overlay md:bg-[#000000c4] md:bg-cover md:bg-center md:w-full flex flex-col justify-center items-center relative gap-3 sm:gap-5 p-4 sm:p-6">
         <h2 className="font-bold text-xl sm:text-2xl text-[#5d2700] mb-2 sm:mb-5">
           PNC Bank{" "}
         </h2>
@@ -156,7 +159,7 @@ function Login() {
             </Link>
           </p>
           <button
-            className="w-full bg-[#cb8400] mt-3 text-white font-bold p-2 sm:p-3 rounded hover:bg-[#b36e00] active:bg-[#9c5f00] text-sm sm:text-base"
+            className="w-full bg-[#cb8400] mt-3 text-white font-bold p-2 sm:p-3 z-50 rounded hover:bg-[#b36e00] active:bg-[#9c5f00] text-sm sm:text-base"
             type="submit"
             disabled={isLoading}
           >
@@ -168,15 +171,17 @@ function Login() {
               Register
             </Link>
           </p>
+          {message && (
+            <div className="message text-sm sm:text-base flex items-center justify-center mt-4  ">
+              {message}
+            </div>
+          )}
+          <Link to={"/"} className="flex justify-center">
+            <button className="hover:text-[#595959] mt-3 cursor-pointer p-1 px-6 sm:px-9 z-50 rounded-xl bg-[#d3cfad] text-sm sm:text-base">
+              Back to home
+            </button>
+          </Link>
         </form>
-        {message && (
-          <div className="message text-sm sm:text-base">{message}</div>
-        )}
-        <Link to={"/"}>
-          <button className="hover:text-[#595959] cursor-pointer p-1 px-6 sm:px-9 z-50 rounded-xl bg-[#d3cfad] text-sm sm:text-base">
-            Back to home
-          </button>
-        </Link>
 
         <img
           src={addimg}

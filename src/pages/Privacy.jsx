@@ -1,9 +1,21 @@
 import React from "react";
+import { motion } from "framer-motion";
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
 
 function Privacy() {
   return (
     <main className="bg-[#efefef] pb-10">
-      <section className="bg-[#ffffffce] bg-[url('/image/pri.jpg')] bg-blend-overlay bg-cover bg-center p-6 sm:p-10 lg:p-20 flex justify-center items-center pt-20 sm:pt-24 lg:pt-30">
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={fadeInUp}
+        className="bg-[#ffffffce] bg-[url('/image/pri.jpg')] bg-blend-overlay bg-cover bg-center p-6 sm:p-10 lg:p-20 flex justify-center items-center pt-20 sm:pt-24 lg:pt-30"
+      >
         <div>
           <h2 className="font-bold text-2xl sm:text-3xl text-black text-center">
             Pivacy Policy
@@ -13,8 +25,14 @@ function Privacy() {
             Last updated: January 6, 2025
           </h3>
         </div>
-      </section>
-      <section className="p-4 sm:p-6 lg:p-10 max-w-5xl mx-auto bg-white rounded shadow flex flex-col gap-6 sm:gap-8 lg:gap-10 m-4 sm:m-6 lg:m-10">
+      </motion.section>
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={fadeInUp}
+        className="p-4 sm:p-6 lg:p-10 max-w-5xl mx-auto bg-white rounded shadow flex flex-col gap-6 sm:gap-8 lg:gap-10 m-4 sm:m-6 lg:m-10"
+      >
         <div>
           <h3 className="font-bold text-xl sm:text-2xl mb-3 sm:mb-5">
             {" "}
@@ -124,7 +142,7 @@ function Privacy() {
             at privacy@pncbank.com .
           </p>
         </div>
-      </section>
+      </motion.section>
     </main>
   );
 }

@@ -4,11 +4,30 @@ import { transactionAPI } from "../services/api";
 
 function Account() {
   const [balance, setBalance] = useState(0);
+  const [accountNumber, setAccountNumber] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchBalance = async () => {
       try {
+        // Get account number
+        const storedAccountNumber = localStorage.getItem("accountNumber");
+        if (storedAccountNumber) {
+          setAccountNumber(storedAccountNumber);
+        } else {
+          const userId = localStorage.getItem("userId");
+          if (userId) {
+            const response = await fetch(
+              `http://localhost:8080/api/user/${userId}/account`
+            );
+            const data = await response.json();
+            if (data.accountNumber) {
+              setAccountNumber(data.accountNumber);
+              localStorage.setItem("accountNumber", data.accountNumber);
+            }
+          }
+        }
+
         const userBalance = await transactionAPI.getBalance();
         setBalance(userBalance || 0);
       } catch (error) {
@@ -42,7 +61,11 @@ function Account() {
                   Checking Account
                 </p>
                 <h3 className="font-semibold text-xl mb-1">Premium Checking</h3>
-                <p className="text-[#595959] text-[13px] mb-6">****4832</p>
+                <p className="text-[#595959] text-[13px] mb-6">
+                  {accountNumber
+                    ? `****${accountNumber.slice(-4)}`
+                    : "****----"}
+                </p>
 
                 <p className="text-[#595959] text-[13px] mb-1">
                   Available Balance

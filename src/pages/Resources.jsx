@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import resources from "../assets/image/resources.webp";
 import smartPhone from "../assets/image/smartphone.png";
 import security from "../assets/image/verified.png";
@@ -8,11 +9,30 @@ import insights from "../assets/image/trend.png";
 import fraud from "../assets/image/padlock.png";
 import { Link } from "react-router-dom";
 
+const fadeInUp = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.2 },
+  },
+};
+
 function Resources() {
   return (
     <main className="">
-      <section className="bg-linear-to-r from-[#563800] to-[#1d1300]">
-        <section className="pb-6 sm:pb-10 pt-10 sm:pt-20 lg:pt-30 min-h-[400px] sm:h-130 flex flex-col lg:flex-row items-center justify-between gap-6 max-w-5xl 2xl:max-w-7xl mx-auto w-full px-4 sm:px-6">
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={fadeInUp}
+        className="bg-linear-to-r from-[#563800] to-[#1d1300]"
+      >
+        <section className="pb-10 sm:pb-10 pt-25 sm:pt-20 lg:pt-30 min-h-[200px] sm:h-130 flex flex-col lg:flex-row items-center justify-between gap-6 max-w-5xl 2xl:max-w-7xl mx-auto w-full px-4 sm:px-6">
           <div className="w-full lg:w-[50%]">
             {" "}
             <h1 className="text-white font-bold text-2xl sm:text-3xl lg:text-4xl mb-3 sm:mb-4 2xl:text-5xl">
@@ -32,8 +52,14 @@ function Resources() {
             />
           </div>
         </section>
-      </section>
-      <section className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mt-6 sm:mt-10 p-4 sm:p-6 lg:p-10">
+      </motion.section>
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={staggerContainer}
+        className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mt-6 sm:mt-10 p-4 sm:p-6 lg:p-10"
+      >
         {" "}
         <div className="bg-[#fcfaf6] p-6 w-full rounded-lg hover:shadow-md">
           <button className="bg-[#c07d0031] text-white py-4 px-4 rounded">
@@ -114,9 +140,15 @@ function Resources() {
             Learn about protecting your accounts and staying safe from fraud.
           </p>
         </div>
-      </section>
+      </motion.section>
 
-      <section className="mt-6 sm:mt-10 max-w-6xl mx-auto p-4 sm:p-6 lg:p-10">
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={fadeInUp}
+        className="mt-6 sm:mt-10 max-w-6xl mx-auto p-4 sm:p-6 lg:p-10"
+      >
         <h2 className="font-bold text-black text-2xl sm:text-3xl text-center mb-2 sm:mb-3">
           Popular Topics
         </h2>
@@ -178,7 +210,7 @@ function Resources() {
             </p>
           </div>
         </section>
-      </section>
+      </motion.section>
     </main>
   );
 }

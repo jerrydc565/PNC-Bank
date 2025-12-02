@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 function Settings() {
   const [selectedTab, setSelectedTab] = useState("profile");
   const [userProfile, setUserProfile] = useState(null);
+  const [accountNumber, setAccountNumber] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState("");
@@ -65,6 +66,24 @@ function Settings() {
 
     const fetchUserProfile = async () => {
       try {
+        // Get account number
+        const storedAccountNumber = localStorage.getItem("accountNumber");
+        if (storedAccountNumber) {
+          setAccountNumber(storedAccountNumber);
+        } else {
+          const userId = localStorage.getItem("userId");
+          if (userId) {
+            const accountResponse = await fetch(
+              `http://localhost:8080/api/user/${userId}/account`
+            );
+            const accountData = await accountResponse.json();
+            if (accountData.accountNumber) {
+              setAccountNumber(accountData.accountNumber);
+              localStorage.setItem("accountNumber", accountData.accountNumber);
+            }
+          }
+        }
+
         const response = await fetch(`http://localhost:8080/api/user/${email}`);
         const data = await response.json();
         if (data.success) {
@@ -689,7 +708,10 @@ function Settings() {
                     </div>
                     <div>
                       <div className="font-semibold">
-                        Premium Checking ****4832
+                        Premium Checking{" "}
+                        {accountNumber
+                          ? `****${accountNumber.slice(-4)}`
+                          : "****----"}
                       </div>
                       <div className="text-sm text-[#595959]">
                         Primary checking account

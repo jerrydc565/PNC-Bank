@@ -1,11 +1,32 @@
 import React from "react";
+import { motion } from "framer-motion";
 import saving from "../assets/image/saving.avif";
 import { Link } from "react-router-dom";
 import check from "../assets/image/checked.png";
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.2 },
+  },
+};
+
 function SavingAccounts() {
   return (
     <main className="bg-white">
-      <section className="flex flex-col lg:flex-row bg-[url('/image/lady.svg')] max-h-6xl bg-cover bg-center bg-blend-overlay gap-6 lg:gap-30 justify-center p-6 sm:p-10 w-full min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] lg:h-[80vh] bg-[#040c00eb] items-center px-4 sm:px-10 lg:px-20">
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={fadeInUp}
+        className="flex flex-col lg:flex-row bg-[url('/image/lady.svg')] max-h-6xl bg-cover bg-center bg-blend-overlay gap-6 lg:gap-30 justify-center p-6 sm:p-10 w-full min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] lg:h-[80vh] bg-[#040c00eb] items-center px-4 sm:px-10 lg:px-20"
+      >
         <div className="text-white w-full lg:w-[50%] max-w-2xl">
           <h1 className="font-bold mb-4 sm:mb-5 text-3xl sm:text-4xl lg:text-5xl 2xl:text-6xl">
             Grow your savings with competitive rates
@@ -29,8 +50,14 @@ function SavingAccounts() {
             className="w-full max-w-md xl:w-150 rounded-2xl shadow-md"
           />
         </div>
-      </section>
-      <section className="max-w-5xl mx-auto p-4 sm:p-6 lg:p-10">
+      </motion.section>
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={fadeInUp}
+        className="max-w-5xl mx-auto p-4 sm:p-6 lg:p-10"
+      >
         <h2 className="font-black text-black text-xl sm:text-2xl mb-3 sm:mb-4 text-center">
           Choose your savings account
         </h2>
@@ -38,7 +65,13 @@ function SavingAccounts() {
           All accounts are FDIC insured up to $250,000
         </p>
 
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={staggerContainer}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10"
+        >
           <div className="w-full p-6 sm:p-8 lg:p-10 border-2 border-[#cdcdcd] rounded py-15 hover:border-[#06c000] bg-white">
             <h3 className="text-xl sm:text-2xl font-bold text-black">
               Standard Savings
@@ -122,13 +155,19 @@ function SavingAccounts() {
               </button>
             </Link>
 
-            <button className="px-8 rounded-2xl py-1 text-white bg-[#06c000] absolute -top-4 left-1/2">
+            <button className="px-8 rounded-2xl py-1 text-white bg-[#06c000] absolute -top-4 left-1/2 -translate-x-1/2">
               Best Rate
             </button>
           </div>
-        </section>
-      </section>
-      <section className="max-w-6xl mb-10  mx-auto gap-4  p-10">
+        </motion.section>
+      </motion.section>
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={fadeInUp}
+        className="max-w-6xl mb-10  mx-auto gap-4  p-10"
+      >
         <h2 className="text-center font-black text-2xl">
           Why save with BankSmart?
         </h2>
@@ -162,7 +201,7 @@ function SavingAccounts() {
             </p>
           </div>
         </section>
-      </section>
+      </motion.section>
     </main>
   );
 }

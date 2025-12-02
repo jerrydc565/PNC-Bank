@@ -35,73 +35,132 @@ function AdminChat() {
     };
   }, []);
 
-  const loadChatQueue = () => {
-    const queue = JSON.parse(localStorage.getItem("adminChatQueue") || "[]");
-    // Sort by most recent message first
-    const sortedQueue = queue.sort(
-      (a, b) => new Date(b.lastMessageTime) - new Date(a.lastMessageTime)
-    );
-    setChatQueue(sortedQueue);
+  const loadChatQueue = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/chat/sessions");
+      const sessions = await response.json();
 
-    // Update selected chat if it exists
-    if (selectedChat) {
-      const updated = sortedQueue.find(
-        (chat) => chat.userId === selectedChat.userId
+      console.log("📥 Loading chat queue:", sessions.length, "chats");
+      console.log(
+        "Chat users:",
+        sessions.map((c) => c.userName || c.userEmail)
       );
-      if (updated) {
-        setSelectedChat(updated);
+
+      // Convert backend format to frontend format
+      const formattedSessions = sessions.map((session) => ({
+        userId: session.userId,
+        userEmail: session.userEmail,
+        userName: session.userName,
+        lastMessage: session.lastMessage,
+        lastMessageTime: session.lastMessageTime,
+        unreadCount: session.unreadCount,
+        messages: [], // Messages will be loaded when chat is selected
+      }));
+
+      setChatQueue(formattedSessions);
+
+      // Update selected chat if it exists
+      if (selectedChat) {
+        loadChatMessages(selectedChat.userId);
       }
+    } catch (error) {
+      console.error("Error loading chat sessions:", error);
     }
   };
 
-  const selectChat = (chat) => {
-    setSelectedChat(chat);
-    // Mark as read
-    const queue = JSON.parse(localStorage.getItem("adminChatQueue") || "[]");
-    const chatIndex = queue.findIndex((c) => c.userId === chat.userId);
-    if (chatIndex !== -1) {
-      queue[chatIndex].unreadCount = 0;
-      localStorage.setItem("adminChatQueue", JSON.stringify(queue));
-      setChatQueue(queue);
+  const loadChatMessages = async (userId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/chat/messages/${userId}`
+      );
+      const messages = await response.json();
+
+      const formattedMessages = messages.map((msg) => ({
+        id: msg.id,
+        text: msg.messageText,
+        sender: msg.sender,
+        timestamp: msg.timestamp,
+        read: msg.isRead,
+      }));
+
+      if (selectedChat && selectedChat.userId === userId) {
+        setSelectedChat((prev) => ({ ...prev, messages: formattedMessages }));
+      }
+    } catch (error) {
+      console.error("Error loading messages:", error);
     }
   };
 
-  const sendReply = () => {
+  const selectChat = async (chat) => {
+    // Load messages for this chat
+    await loadChatMessages(chat.userId);
+
+    // Mark as read in backend
+    try {
+      await fetch(`http://localhost:8080/api/chat/markRead/${chat.userId}`, {
+        method: "POST",
+      });
+
+      // Update local state
+      const updatedQueue = chatQueue.map((c) =>
+        c.userId === chat.userId ? { ...c, unreadCount: 0 } : c
+      );
+      setChatQueue(updatedQueue);
+
+      // Set selected chat after messages are loaded
+      setSelectedChat({ ...chat, unreadCount: 0 });
+    } catch (error) {
+      console.error("Error marking as read:", error);
+      setSelectedChat(chat);
+    }
+  };
+
+  const sendReply = async () => {
     if (replyMessage.trim() === "" || !selectedChat) return;
 
-    const adminMessage = {
-      id: Date.now(),
-      text: replyMessage,
-      sender: "admin",
-      timestamp: new Date().toISOString(),
-      read: false,
-    };
+    try {
+      // Send message to backend
+      const response = await fetch("http://localhost:8080/api/chat/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: selectedChat.userId,
+          sender: "admin",
+          message: replyMessage,
+          userName: selectedChat.userName,
+          userEmail: selectedChat.userEmail,
+        }),
+      });
 
-    // Update the selected chat's messages
-    const updatedMessages = [...selectedChat.messages, adminMessage];
+      if (response.ok) {
+        const savedMessage = await response.json();
 
-    // Update chat queue
-    const queue = JSON.parse(localStorage.getItem("adminChatQueue") || "[]");
-    const chatIndex = queue.findIndex((c) => c.userId === selectedChat.userId);
+        const adminMessage = {
+          id: savedMessage.id,
+          text: savedMessage.messageText,
+          sender: "admin",
+          timestamp: savedMessage.timestamp,
+          read: false,
+        };
 
-    if (chatIndex !== -1) {
-      queue[chatIndex].messages = updatedMessages;
-      queue[chatIndex].lastMessage = replyMessage;
-      queue[chatIndex].lastMessageTime = new Date().toISOString();
-      localStorage.setItem("adminChatQueue", JSON.stringify(queue));
+        // Update the selected chat's messages locally
+        const updatedMessages = [
+          ...(selectedChat.messages || []),
+          adminMessage,
+        ];
+        setSelectedChat({ ...selectedChat, messages: updatedMessages });
+        setReplyMessage("");
 
-      // Update user's chat messages
-      localStorage.setItem(
-        `chatMessages_${selectedChat.userId}`,
-        JSON.stringify(updatedMessages)
-      );
+        // Trigger event to notify user
+        window.dispatchEvent(new Event("chatMessageReceived"));
 
-      // Trigger event to notify user
-      window.dispatchEvent(new Event("chatMessageReceived"));
-
-      setSelectedChat({ ...selectedChat, messages: updatedMessages });
-      setChatQueue(queue);
-      setReplyMessage("");
+        // Reload queue to update last message
+        loadChatQueue();
+      }
+    } catch (error) {
+      console.error("Error sending reply:", error);
     }
   };
 
@@ -112,12 +171,21 @@ function AdminChat() {
     }
   };
 
-  const deleteChat = (userId) => {
-    const queue = chatQueue.filter((chat) => chat.userId !== userId);
-    localStorage.setItem("adminChatQueue", JSON.stringify(queue));
-    setChatQueue(queue);
-    if (selectedChat && selectedChat.userId === userId) {
-      setSelectedChat(null);
+  const deleteChat = async (userId) => {
+    try {
+      await fetch(`http://localhost:8080/api/chat/session/${userId}`, {
+        method: "DELETE",
+      });
+
+      // Update local state
+      const queue = chatQueue.filter((chat) => chat.userId !== userId);
+      setChatQueue(queue);
+
+      if (selectedChat && selectedChat.userId === userId) {
+        setSelectedChat(null);
+      }
+    } catch (error) {
+      console.error("Error deleting chat:", error);
     }
   };
 
@@ -218,7 +286,7 @@ function AdminChat() {
             {selectedChat ? (
               <>
                 {/* Chat Header */}
-                <div className="p-4 bg-gradient-to-r from-[#c64c00] to-[#a33d00] text-white flex items-center justify-between">
+                <div className="p-4 bg-linear-to-r from-[#c64c00] to-[#a33d00] text-white flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-[#c64c00] font-bold text-lg">
                       {selectedChat.userName?.charAt(0) || "U"}

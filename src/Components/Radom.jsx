@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 function Radom() {
   return (
     <section className="p-10 bg-[#c07d00] mt-20 py-15">
-      <section className="flex justify-between max-w-6xl mx-auto">
-        <div className="w-[50%]">
+      <section className="flex md:flex-row flex-col justify-between max-w-6xl mx-auto">
+        <div className="md:w-[50%] mb-10 md:mb-0">
           <h2 className="font-bold text-4xl text-white ">
             Ready to get started? <br />
             <span className="text-[#ffe6b7]">Open an account in minutes</span>

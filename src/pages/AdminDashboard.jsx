@@ -247,7 +247,7 @@ const AdminDashboard = () => {
       <header className="bg-white shadow-md">
         <div className="px-3 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
           <div className="flex items-center gap-3 sm:gap-4">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-[#c64c00] to-[#a33d00] rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-linear-to-br from-[#c64c00] to-[#a33d00] rounded-lg flex items-center justify-center">
               <i className="fas fa-shield-halved text-white text-base sm:text-lg"></i>
             </div>
             <div>
@@ -648,7 +648,7 @@ const AdminDashboard = () => {
           <div className="grid grid-cols-3 gap-6 h-[calc(100vh-250px)]">
             {/* Chat List */}
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="bg-gradient-to-r from-[#c64c00] to-[#a33d00] text-white p-4">
+              <div className="bg-linear-to-r from-[#c64c00] to-[#a33d00] text-white p-4">
                 <h3 className="font-semibold text-lg">User Messages</h3>
                 <p className="text-sm text-white/80">
                   Click to view conversation
@@ -695,7 +695,7 @@ const AdminDashboard = () => {
             <div className="col-span-2 bg-white rounded-lg shadow-md flex flex-col">
               {selectedChat ? (
                 <>
-                  <div className="bg-gradient-to-r from-[#c64c00] to-[#a33d00] text-white p-4">
+                  <div className="bg-linear-to-r from-[#c64c00] to-[#a33d00] text-white p-4">
                     <h3 className="font-semibold text-lg">
                       {selectedChat.userName}
                     </h3>

@@ -91,10 +91,21 @@ function Footer() {
             customers worldwide.
           </p>
           <div className="flex gap-4 items-center mt-4">
+            <a href="https://www.facebook.com/pncbank" target="_blank" rel="noopener noreferrer">
             <i className="fa-brands fa-facebook-f text-[#9f9f9f] hover:text-white cursor-pointer duration-300 translate-all text-lg"></i>
+            </a>
+          
+            <a href="https://www.instagram.com/pncbank" target="_blank" rel="noopener noreferrer">
             <i className="fa-brands fa-instagram  text-[#9f9f9f] hover:text-white cursor-pointer duration-300 translate-all text-lg "></i>
+            </a>
+            
+            <a href="https://www.linkedin.com/company/pnc-bank" target="_blank" rel="noopener noreferrer">
             <i className="fa-brands fa-linkedin-in  text-[#9f9f9f] hover:text-white cursor-pointer duration-300 translate-all text-lg"></i>
+            </a>
+            
+            <a href="https://twitter.com/pncbank" target="_blank" rel="noopener noreferrer">
             <i className="fa-brands fa-x-twitter  text-[#9f9f9f] hover:text-white cursor-pointer duration-300 translate-all text-lg"></i>
+            </a>
           </div>
         </div>
       </section>

@@ -1,9 +1,29 @@
 import React from "react";
+import { motion } from "framer-motion";
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15 },
+  },
+};
 
 function Security() {
   return (
     <main className="bg-[#f8f8f8] pb-10">
-      <section className="bg-[#ffffff6b] bg-[url('/image/pri.jpg')] bg-blend-overlay bg-cover bg-center p-6 sm:p-10 lg:p-20 flex justify-center items-center pt-20 sm:pt-24 lg:pt-30">
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={fadeInUp}
+        className="bg-[#ffffff6b] bg-[url('/image/pri.jpg')] bg-blend-overlay bg-cover bg-center p-6 sm:p-10 lg:p-20 flex justify-center items-center pt-20 sm:pt-24 lg:pt-30"
+      >
         <div>
           <h2 className="font-bold text-2xl sm:text-3xl text-black text-center">
             Security Center
@@ -13,9 +33,15 @@ function Security() {
             Your security is our top priority
           </h3>
         </div>
-      </section>
+      </motion.section>
 
-      <section className="flex flex-col lg:flex-row gap-6 sm:gap-8 lg:gap-10 items-start p-4 sm:p-6 lg:p-10 w-full">
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={fadeInUp}
+        className="flex flex-col lg:flex-row gap-6 sm:gap-8 lg:gap-10 items-start p-4 sm:p-6 lg:p-10 w-full"
+      >
         <section className="w-full lg:w-[80%] rounded bg-white shadow p-6 sm:p-8 lg:p-10">
           <h2 className="font-bold text-xl sm:text-2xl mb-6 sm:mb-9">
             How We Protect You
@@ -112,8 +138,14 @@ function Security() {
             </li>
           </div>
         </section>
-      </section>
-      <section className="bg-white rounded p-6 sm:p-8 lg:p-10 shadow mx-4 sm:mx-6 lg:mx-10 mt-6 sm:mt-8 lg:mt-10">
+      </motion.section>
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={staggerContainer}
+        className="bg-white rounded p-6 sm:p-8 lg:p-10 shadow mx-4 sm:mx-6 lg:mx-10 mt-6 sm:mt-8 lg:mt-10"
+      >
         <h3 className="font-bold text-xl sm:text-2xl mb-6 sm:mb-8">
           Security Tips
         </h3>
@@ -158,7 +190,7 @@ function Security() {
             Always use the latest version of our mobile app and web browser.
           </p>
         </div>
-      </section>
+      </motion.section>
     </main>
   );
 }

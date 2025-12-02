@@ -11,6 +11,7 @@ function Dashboard() {
   const navigate = useNavigate();
 
   const [balance, setBalance] = useState(0);
+  const [accountNumber, setAccountNumber] = useState("");
   const [recentTransactions, setRecentTransactions] = useState([]);
   const [userProfile, setUserProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -91,6 +92,28 @@ function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Get account number from localStorage or fetch from API
+        const storedAccountNumber = localStorage.getItem("accountNumber");
+        if (storedAccountNumber) {
+          setAccountNumber(storedAccountNumber);
+        } else {
+          const userId = localStorage.getItem("userId");
+          if (userId) {
+            try {
+              const response = await fetch(
+                `http://localhost:8080/api/user/${userId}/account`
+              );
+              const data = await response.json();
+              if (data.accountNumber) {
+                setAccountNumber(data.accountNumber);
+                localStorage.setItem("accountNumber", data.accountNumber);
+              }
+            } catch (err) {
+              console.error("Failed to fetch account number:", err);
+            }
+          }
+        }
+
         // Fetch balance
         const userBalance = await transactionAPI.getBalance();
         setBalance(userBalance || 0);
@@ -258,7 +281,12 @@ function Dashboard() {
   // Payment modal state for Upcoming Bills
 
   const accountsForPayment = [
-    { id: "checking", label: "Premium Checking (****4832) - $5,289" },
+    {
+      id: "checking",
+      label: `Premium Checking (${
+        accountNumber ? `****${accountNumber.slice(-4)}` : "****----"
+      }) - $${(balance || 0).toLocaleString()}`,
+    },
     { id: "savings", label: "High-Yield Savings (****7232) - $15,289" },
     { id: "credit", label: "Platinum Rewards (****3214) - $8,289" },
   ];
@@ -531,7 +559,9 @@ function Dashboard() {
             <p className="text-lg sm:text-xl font-semibold text-white">
               Premium Checking
             </p>
-            <p className="text-base sm:text-lg text-[#ffffff] mb-3">****4832</p>
+            <p className="text-base sm:text-lg text-[#ffffff] mb-3">
+              {accountNumber ? `****${accountNumber.slice(-4)}` : "****----"}
+            </p>
             <p className="flex items-center justify-between text-[10px] text-[#ffffff]  ">
               Current Balance{" "}
               <span onClick={handleChange}>

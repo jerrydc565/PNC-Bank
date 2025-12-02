@@ -36,7 +36,7 @@ const AdminLogin = () => {
       localStorage.setItem("adminUsername", data.username);
       localStorage.setItem("isAdmin", "true");
 
-      navigate("/admin/dashboard");
+      window.location.href = "/admin/dashboard";
     } catch (err) {
       setError(err.message || "Login failed");
     } finally {
@@ -45,11 +45,11 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#c64c00] to-[#a33d00] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-[#c64c00] to-[#a33d00] flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="w-20 h-20 bg-gradient-to-br from-[#c64c00] to-[#a33d00] rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-20 h-20 bg-linear-to-br from-[#c64c00] to-[#a33d00] rounded-full flex items-center justify-center mx-auto mb-4">
             <i className="fas fa-shield-halved text-white text-3xl"></i>
           </div>
           <h1 className="text-3xl font-bold text-gray-800">Admin Portal</h1>
@@ -110,7 +110,7 @@ const AdminLogin = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-[#c64c00] to-[#a33d00] text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-linear-to-r from-[#c64c00] to-[#a33d00] text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">

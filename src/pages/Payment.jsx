@@ -5,7 +5,7 @@ const initialAccounts = [
   {
     id: "checking",
     name: "Premium Checking",
-    number: "****4832",
+    number: "****----", // Will be replaced with user's actual account number
     balance: 1,
   },
   {
@@ -370,6 +370,48 @@ function Payment() {
   };
   const [error, setError] = useState("");
   const [isLookingUp, setIsLookingUp] = useState(false);
+
+  // Fetch user account number and balance
+  React.useEffect(() => {
+    const fetchUserAccount = async () => {
+      try {
+        const storedAccountNumber = localStorage.getItem("accountNumber");
+        const userId = localStorage.getItem("userId");
+
+        let userAccountNumber = storedAccountNumber;
+
+        if (!userAccountNumber && userId) {
+          const response = await fetch(
+            `http://localhost:8080/api/user/${userId}/account`
+          );
+          const data = await response.json();
+          if (data.accountNumber) {
+            userAccountNumber = data.accountNumber;
+            localStorage.setItem("accountNumber", data.accountNumber);
+          }
+        }
+
+        // Fetch balance
+        const balance = await transactionAPI.getBalance();
+
+        // Update accounts with real data
+        setAccounts((prevAccounts) => {
+          const updated = [...prevAccounts];
+          if (updated[0]) {
+            updated[0].number = userAccountNumber
+              ? `****${userAccountNumber.slice(-4)}`
+              : "****----";
+            updated[0].balance = balance || 0;
+          }
+          return updated;
+        });
+      } catch (error) {
+        console.error("Failed to fetch user account:", error);
+      }
+    };
+
+    fetchUserAccount();
+  }, []);
 
   // Transfer history
   const [transferHistory, setTransferHistory] = useState(() => {

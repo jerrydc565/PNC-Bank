@@ -1,9 +1,29 @@
 import React from "react";
+import { motion } from "framer-motion";
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.2 },
+  },
+};
 
 function Career() {
   return (
     <main className="bg-[#eaeaea] pb-10">
-      <section className="bg-linear-to-r from-[#a76d00] to-[#1d1300] p-10 sm:p-20 flex justify-center items-center pt-16 sm:pt-30">
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={fadeInUp}
+        className="bg-linear-to-r from-[#a76d00] to-[#1d1300] p-10 sm:p-20 flex justify-center items-center pt-16 sm:pt-30"
+      >
         <div>
           <h2 className="font-bold text-2xl sm:text-3xl text-white text-center">
             Career At
@@ -12,8 +32,14 @@ function Career() {
             PNC Bank
           </h3>
         </div>
-      </section>
-      <section className="bg-white rounded shadow max-w-5xl mx-auto p-6 sm:p-10 my-6 sm:my-10 mx-4">
+      </motion.section>
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={fadeInUp}
+        className="bg-white rounded shadow max-w-5xl mx-auto p-6 sm:p-10 my-6 sm:my-10 mx-4"
+      >
         <h2 className="font-bold text-2xl sm:text-3xl lg:text-4xl mb-2 sm:mb-3">
           Why Work at PNC Bank?
         </h2>
@@ -22,7 +48,13 @@ function Career() {
           company where talented people can grow, innovate, and make a real
           impact on millions of customers' lives.
         </p>
-        <section className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={staggerContainer}
+          className="grid grid-cols-1 sm:grid-cols-2 gap-5"
+        >
           <div className="flex gap-3 items-center">
             <button className="rounded-xl w-15 h-15 p-2 bg-[#c7810065]">
               <i className="fa-regular fa-heart text-3xl text-[#c78100]"></i>
@@ -71,9 +103,15 @@ function Career() {
               </span>
             </p>
           </div>
-        </section>
-      </section>
-      <section className="bg-white rounded shadow max-w-5xl mx-auto p-10 my-10 ">
+        </motion.section>
+      </motion.section>
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={fadeInUp}
+        className="bg-white rounded shadow max-w-5xl mx-auto p-10 my-10 "
+      >
         <h2 className="font-bold text-4xl mb-7">Open Positions</h2>
 
         <section className="flex flex-col gap-6">
@@ -127,7 +165,7 @@ function Career() {
             </p>
           </div>
         </section>
-      </section>
+      </motion.section>
     </main>
   );
 }

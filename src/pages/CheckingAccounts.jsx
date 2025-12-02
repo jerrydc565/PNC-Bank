@@ -1,12 +1,35 @@
 import React from "react";
+import { motion } from "framer-motion";
 import checking from "../assets/image/checkingg.avif";
 import check from "../assets/image/checked.png";
 import mobile from "../assets/image/smartphone.png";
 import { Link } from "react-router-dom";
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+    },
+  },
+};
+
 function CheckingAccounts() {
   return (
     <main className="bg-white">
-      <section className="flex flex-col lg:flex-row bg-[url('/image/lady.svg')] max-h-6xl bg-cover bg-center bg-blend-overlay gap-6 lg:gap-30 justify-center p-6 sm:p-10 w-full min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] lg:h-[80vh] bg-[#0c0800eb] items-center px-4 sm:px-10 lg:px-20">
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={fadeInUp}
+        className="flex flex-col lg:flex-row bg-[url('/image/lady.svg')] max-h-6xl bg-cover bg-center bg-blend-overlay gap-6 lg:gap-30 justify-center p-6 sm:p-10 w-full min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] lg:h-[80vh] bg-[#0c0800eb] items-center px-4 sm:px-10 lg:px-20"
+      >
         <div className="text-white w-full lg:w-[50%] max-w-2xl">
           <h1 className="font-bold mb-4 sm:mb-6 text-3xl sm:text-4xl lg:text-5xl 2xl:text-6xl">
             Checking accounts designed for your lifestyle
@@ -30,8 +53,14 @@ function CheckingAccounts() {
             className="w-full max-w-md xl:w-150 rounded-2xl shadow-md"
           />
         </div>
-      </section>
-      <section className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-10">
+      </motion.section>
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={staggerContainer}
+        className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-10"
+      >
         <h2 className="font-black text-black text-xl sm:text-2xl mb-3 sm:mb-4 text-center">
           Compare our checking accounts
         </h2>
@@ -124,7 +153,7 @@ function CheckingAccounts() {
               </button>
             </Link>
 
-            <button className="px-8 rounded-2xl py-1 text-white bg-[#c07d00] absolute -top-4 left-1/2">
+            <button className="px-8 rounded-2xl py-1 text-white bg-[#c07d00] absolute -top-4 left-1/2 -translate-x-1/2">
               Most Popular
             </button>
           </div>
@@ -172,8 +201,14 @@ function CheckingAccounts() {
             </Link>
           </div>
         </section>
-      </section>
-      <section className="max-w-6xl mb-6 sm:mb-10 mx-auto p-4 sm:p-6 lg:p-10">
+      </motion.section>
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={fadeInUp}
+        className="max-w-6xl mb-6 sm:mb-10 mx-auto p-4 sm:p-6 lg:p-10"
+      >
         <h2 className="text-center font-black text-xl sm:text-2xl">
           Why choose PNC checking?
         </h2>
@@ -212,7 +247,7 @@ function CheckingAccounts() {
             </p>
           </div>
         </section>
-      </section>
+      </motion.section>
     </main>
   );
 }

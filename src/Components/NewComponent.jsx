@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 
 function NewComponent() {
   return (
-    <section className="flex justify-between p-10 bg-[#fffafa] mt-10 items-center gap-10 max-w-6xl mx-auto">
-      <div className="w-[55%] ">
+    <section className="flex md:flex-row flex-col justify-between p-10 bg-[#fffafa] mt-10 items-center gap-10 max-w-6xl mx-auto">
+      <div className="md:w-[55%] mb-10 md:mb-0">
         <h2 className="text-3xl font-bold">Financial Wellness</h2>
         <hr className="w-30 border-2 mt-3 border-[#c68100]" />
         <p className="mt-6 text-2xl">

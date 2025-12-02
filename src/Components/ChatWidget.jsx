@@ -28,92 +28,134 @@ const ChatWidget = () => {
 
   // Load messages on mount
   useEffect(() => {
-    const savedMessages = localStorage.getItem(`chatMessages_${userId}`);
-    if (savedMessages) {
-      setMessages(JSON.parse(savedMessages));
-    }
-  }, [userId]);
+    if (!userId) return;
+
+    // Load messages from database
+    const fetchMessages = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/api/chat/messages/${userId}`
+        );
+        const data = await response.json();
+
+        // Convert backend format to frontend format
+        const formattedMessages = data.map((msg) => ({
+          id: msg.id,
+          text: msg.messageText,
+          sender: msg.sender,
+          userId: msg.userId,
+          userEmail: userEmail,
+          timestamp: msg.timestamp,
+          read: msg.isRead,
+        }));
+
+        setMessages(formattedMessages);
+      } catch (error) {
+        console.error("Error loading messages:", error);
+      }
+    };
+
+    fetchMessages();
+  }, [userId, userEmail]);
 
   // Save messages to localStorage whenever they change
   useEffect(() => {
-    if (userId && messages.length > 0) {
-      localStorage.setItem(`chatMessages_${userId}`, JSON.stringify(messages));
-    }
+    // Removed localStorage save - now using database
   }, [messages, userId]);
 
   // Listen for new messages from admin
   useEffect(() => {
-    const handleStorageChange = (e) => {
-      if (e.key && e.key.startsWith("chatMessages_")) {
-        const userId = localStorage.getItem("userId");
-        const savedMessages = localStorage.getItem(`chatMessages_${userId}`);
-        if (savedMessages) {
-          setMessages(JSON.parse(savedMessages));
-        }
+    if (!userId) return;
+
+    const handleNewMessage = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/api/chat/messages/${userId}`
+        );
+        const data = await response.json();
+
+        const formattedMessages = data.map((msg) => ({
+          id: msg.id,
+          text: msg.messageText,
+          sender: msg.sender,
+          userId: msg.userId,
+          userEmail: userEmail,
+          timestamp: msg.timestamp,
+          read: msg.isRead,
+        }));
+
+        setMessages(formattedMessages);
+      } catch (error) {
+        console.error("Error refreshing messages:", error);
       }
     };
 
-    window.addEventListener("storage", handleStorageChange);
-    window.addEventListener("chatMessageReceived", handleStorageChange);
+    window.addEventListener("chatMessageReceived", handleNewMessage);
+
+    // Poll for new messages every 3 seconds
+    const interval = setInterval(handleNewMessage, 3000);
 
     return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      window.removeEventListener("chatMessageReceived", handleStorageChange);
+      window.removeEventListener("chatMessageReceived", handleNewMessage);
+      clearInterval(interval);
     };
-  }, []);
+  }, [userId, userEmail]);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (inputMessage.trim() === "") return;
 
     const userId = localStorage.getItem("userId");
     const userEmail = localStorage.getItem("email");
 
-    // Add user message
-    const userMessage = {
-      id: Date.now(),
-      text: inputMessage,
-      sender: "user",
-      userId: userId,
-      userEmail: userEmail,
-      timestamp: new Date().toISOString(),
-      read: false,
-    };
-
-    const updatedMessages = [...messages, userMessage];
-    setMessages(updatedMessages);
-    setInputMessage("");
-
-    // Also save to a global chat queue for admin to see
-    const chatQueue = JSON.parse(
-      localStorage.getItem("adminChatQueue") || "[]"
-    );
-    const existingChatIndex = chatQueue.findIndex(
-      (chat) => chat.userId === userId
-    );
-
-    if (existingChatIndex !== -1) {
-      // Update existing chat
-      chatQueue[existingChatIndex].messages = updatedMessages;
-      chatQueue[existingChatIndex].lastMessage = inputMessage;
-      chatQueue[existingChatIndex].lastMessageTime = new Date().toISOString();
-      chatQueue[existingChatIndex].unreadCount =
-        (chatQueue[existingChatIndex].unreadCount || 0) + 1;
-      chatQueue[existingChatIndex].userName = userName || userEmail;
-    } else {
-      // Add new chat to queue
-      chatQueue.push({
-        userId: userId,
-        userEmail: userEmail,
-        userName: userName || userEmail,
-        messages: updatedMessages,
-        lastMessage: inputMessage,
-        lastMessageTime: new Date().toISOString(),
-        unreadCount: 1,
+    try {
+      // Send message to backend
+      const response = await fetch("http://localhost:8080/api/chat/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: parseInt(userId),
+          sender: "user",
+          message: inputMessage,
+          userName: userName || userEmail,
+          userEmail: userEmail,
+        }),
       });
-    }
 
-    localStorage.setItem("adminChatQueue", JSON.stringify(chatQueue));
-    window.dispatchEvent(new Event("newChatMessage"));
+      if (response.ok) {
+        const savedMessage = await response.json();
+
+        // Add to local state for immediate display
+        const userMessage = {
+          id: savedMessage.id,
+          text: savedMessage.messageText,
+          sender: "user",
+          userId: parseInt(userId),
+          userEmail: userEmail,
+          timestamp: savedMessage.timestamp,
+          read: false,
+        };
+
+        setMessages((prev) => [...prev, userMessage]);
+        setInputMessage("");
+
+        // Notify admin of new message
+        window.dispatchEvent(
+          new CustomEvent("newChatMessage", {
+            detail: {
+              userId,
+              userName: userName || userEmail,
+              message: inputMessage,
+            },
+          })
+        );
+      } else {
+        console.error("Failed to send message");
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
   };
 
   const handleKeyPress = (e) => {
@@ -127,45 +169,49 @@ const ChatWidget = () => {
       {/* Floating Chat Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#c64c00] hover:bg-[#a33d00] text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-12 h-12 sm:w-14 sm:h-14 bg-[#c64c00] hover:bg-[#a33d00] text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
         aria-label="Chat with us"
       >
         {isOpen ? (
-          <i className="fas fa-times text-xl"></i>
+          <i className="fas fa-times text-lg sm:text-xl"></i>
         ) : (
-          <i className="fas fa-comment-dots text-xl"></i>
+          <i className="fas fa-comment-dots text-lg sm:text-xl"></i>
         )}
       </button>
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-50 w-96 h-[500px] bg-white rounded-lg shadow-2xl flex flex-col overflow-hidden border border-gray-200">
+        <div className="fixed inset-x-4 bottom-20 sm:bottom-24 sm:right-6 sm:left-auto z-50 w-auto sm:w-96 h-[calc(100vh-120px)] sm:h-[500px] max-h-[600px] bg-white rounded-lg shadow-2xl flex flex-col overflow-hidden border border-gray-200">
           {/* Chat Header */}
-          <div className="bg-gradient-to-r from-[#c64c00] to-[#a33d00] text-white p-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                <i className="fas fa-headset text-[#c64c00] text-lg"></i>
+          <div className="bg-linear-to-r from-[#c64c00] to-[#a33d00] text-white p-3 sm:p-4 flex items-center justify-between">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center shrink-0">
+                <i className="fas fa-headset text-[#c64c00] text-base sm:text-lg"></i>
               </div>
               <div>
-                <h3 className="font-semibold text-lg">PNC Support</h3>
+                <h3 className="font-semibold text-base sm:text-lg">
+                  PNC Support
+                </h3>
                 <p className="text-xs text-white/90">We're here to help</p>
               </div>
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className="hover:bg-white/20 rounded-full w-8 h-8 flex items-center justify-center transition-colors"
+              className="hover:bg-white/20 rounded-full w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center transition-colors shrink-0"
             >
-              <i className="fas fa-minus"></i>
+              <i className="fas fa-minus text-sm sm:text-base"></i>
             </button>
           </div>
 
           {/* Messages Container */}
-          <div className="flex-1 overflow-y-auto p-4 bg-gray-50 space-y-4">
+          <div className="flex-1 overflow-y-auto p-3 sm:p-4 bg-gray-50 space-y-3 sm:space-y-4">
             {messages.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-gray-500">
-                <i className="fas fa-comments text-4xl mb-3 text-gray-300"></i>
-                <p className="text-sm">No messages yet</p>
-                <p className="text-xs">
+              <div className="flex flex-col items-center justify-center h-full text-gray-500 px-4">
+                <i className="fas fa-comments text-3xl sm:text-4xl mb-2 sm:mb-3 text-gray-300"></i>
+                <p className="text-xs sm:text-sm text-center">
+                  No messages yet
+                </p>
+                <p className="text-[10px] sm:text-xs text-center">
                   Send a message to start chatting with support
                 </p>
               </div>
@@ -178,15 +224,17 @@ const ChatWidget = () => {
                   }`}
                 >
                   <div
-                    className={`max-w-[80%] rounded-2xl px-4 py-2 ${
+                    className={`max-w-[85%] sm:max-w-[80%] rounded-2xl px-3 py-2 sm:px-4 ${
                       message.sender === "user"
                         ? "bg-[#c64c00] text-white rounded-br-none"
                         : "bg-white text-gray-800 rounded-bl-none shadow-sm"
                     }`}
                   >
-                    <p className="text-sm">{message.text}</p>
+                    <p className="text-xs sm:text-sm break-words">
+                      {message.text}
+                    </p>
                     <p
-                      className={`text-xs mt-1 ${
+                      className={`text-[10px] sm:text-xs mt-1 ${
                         message.sender === "user"
                           ? "text-white/70"
                           : "text-gray-500"
@@ -205,7 +253,7 @@ const ChatWidget = () => {
           </div>
 
           {/* Input Area */}
-          <div className="p-4 bg-white border-t border-gray-200">
+          <div className="p-3 sm:p-4 bg-white border-t border-gray-200">
             <div className="flex gap-2">
               <input
                 type="text"
@@ -213,14 +261,14 @@ const ChatWidget = () => {
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Type your message..."
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:border-[#c64c00] focus:ring-1 focus:ring-[#c64c00] text-sm"
+                className="flex-1 px-3 py-2 sm:px-4 border border-gray-300 rounded-full focus:outline-none focus:border-[#c64c00] focus:ring-1 focus:ring-[#c64c00] text-xs sm:text-sm"
               />
               <button
                 onClick={handleSendMessage}
                 disabled={inputMessage.trim() === ""}
-                className="w-10 h-10 bg-[#c64c00] hover:bg-[#a33d00] disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-full flex items-center justify-center transition-colors"
+                className="w-9 h-9 sm:w-10 sm:h-10 bg-[#c64c00] hover:bg-[#a33d00] disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-full flex items-center justify-center transition-colors shrink-0"
               >
-                <i className="fas fa-paper-plane"></i>
+                <i className="fas fa-paper-plane text-xs sm:text-sm"></i>
               </button>
             </div>
           </div>

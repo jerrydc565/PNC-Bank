@@ -186,9 +186,9 @@ function Cards() {
                         {cards.map((card) => {
                           const bgClass =
                             card.design === "sunset"
-                              ? "bg-gradient-to-r from-orange-400 to-pink-500"
+                              ? "bg-linear-to-r from-orange-400 to-pink-500"
                               : card.design === "ocean"
-                              ? "bg-gradient-to-r from-blue-400 to-cyan-500"
+                              ? "bg-linear-to-r from-blue-400 to-cyan-500"
                               : card.design === "mono"
                               ? "bg-[#111]"
                               : "bg-[#6600cb]";
@@ -406,9 +406,9 @@ function Cards() {
                         design === "default"
                           ? "bg-[#6600cb]"
                           : design === "sunset"
-                          ? "bg-gradient-to-r from-orange-400 to-pink-500"
+                          ? "bg-linear-to-r from-orange-400 to-pink-500"
                           : design === "ocean"
-                          ? "bg-gradient-to-r from-blue-400 to-cyan-500"
+                          ? "bg-linear-to-r from-blue-400 to-cyan-500"
                           : "bg-[#111]";
                       return (
                         <div
@@ -432,8 +432,8 @@ function Cards() {
                           </h4>
                           <p className="text-sm text-[#595959] mb-4">
                             {design === "default" && "Classic purple design"}
-                            {design === "sunset" && "Warm gradient theme"}
-                            {design === "ocean" && "Cool blue gradient"}
+                            {design === "sunset" && "Warm linear theme"}
+                            {design === "ocean" && "Cool blue linear"}
                             {design === "mono" && "Sleek black design"}
                           </p>
                           <button

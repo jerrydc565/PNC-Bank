@@ -1,5 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -53,7 +59,13 @@ function ForgotPassword() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-[#cb8400] via-[#ffa82d]  to-[#ffedcd]  p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={fadeInUp}
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8"
+      >
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">
@@ -215,7 +227,7 @@ function ForgotPassword() {
             Sign up for a new account
           </Link>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
