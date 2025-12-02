@@ -17,7 +17,9 @@ function Cards() {
 
     const fetchUserProfile = async () => {
       try {
-        const response = await fetch(`https://pnc-bank-backend-2.onrender.com/api/user/${email}`);
+        const response = await fetch(
+          `https://pnc-bank-backend-2.onrender.com/api/user/${email}`
+        );
         const data = await response.json();
         if (data.success) {
           setUserProfile(data);

@@ -84,7 +84,9 @@ function Settings() {
           }
         }
 
-        const response = await fetch(`https://pnc-bank-backend-2.onrender.com/api/user/${email}`);
+        const response = await fetch(
+          `https://pnc-bank-backend-2.onrender.com/api/user/${email}`
+        );
         const data = await response.json();
         if (data.success) {
           setUserProfile(data);
@@ -196,19 +198,25 @@ function Settings() {
       }
 
       // Try PUT /api/user/{email} first
-      let resp = await fetch(`https://pnc-bank-backend-2.onrender.com/api/user/${targetEmail}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      let resp = await fetch(
+        `https://pnc-bank-backend-2.onrender.com/api/user/${targetEmail}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
 
       // If endpoint not available, try fallback POST
       if (resp.status === 404) {
-        resp = await fetch("https://pnc-bank-backend-2.onrender.com/api/user/update", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        });
+        resp = await fetch(
+          "https://pnc-bank-backend-2.onrender.com/api/user/update",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
+          }
+        );
       }
 
       const data = await resp.json();

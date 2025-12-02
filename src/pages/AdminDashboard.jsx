@@ -49,18 +49,24 @@ const AdminDashboard = () => {
       const token = localStorage.getItem("adminToken");
 
       // Fetch statistics
-      const statsRes = await fetch("https://pnc-bank-backend-2.onrender.com/api/admin/stats", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const statsRes = await fetch(
+        "https://pnc-bank-backend-2.onrender.com/api/admin/stats",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       if (statsRes.ok) {
         const data = await statsRes.json();
         setStats(data);
       }
 
       // Fetch users
-      const usersRes = await fetch("https://pnc-bank-backend-2.onrender.com/api/admin/users", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const usersRes = await fetch(
+        "https://pnc-bank-backend-2.onrender.com/api/admin/users",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       if (usersRes.ok) {
         const data = await usersRes.json();
         setUsers(data);

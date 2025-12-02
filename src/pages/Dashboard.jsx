@@ -199,7 +199,9 @@ function Dashboard() {
       try {
         console.log("🔍 Fetching profile for:", email); // Check what we're fetching
 
-        const response = await fetch(`https://pnc-bank-backend-2.onrender.com/api/user/${email}`);
+        const response = await fetch(
+          `https://pnc-bank-backend-2.onrender.com/api/user/${email}`
+        );
         const data = await response.json();
 
         console.log("📦 Backend response:", data); // Check what backend returns

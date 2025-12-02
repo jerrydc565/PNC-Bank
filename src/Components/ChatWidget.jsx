@@ -109,19 +109,22 @@ const ChatWidget = () => {
 
     try {
       // Send message to backend
-      const response = await fetch("https://pnc-bank-backend-2.onrender.com/api/chat/send", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: parseInt(userId),
-          sender: "user",
-          message: inputMessage,
-          userName: userName || userEmail,
-          userEmail: userEmail,
-        }),
-      });
+      const response = await fetch(
+        "https://pnc-bank-backend-2.onrender.com/api/chat/send",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: parseInt(userId),
+            sender: "user",
+            message: inputMessage,
+            userName: userName || userEmail,
+            userEmail: userEmail,
+          }),
+        }
+      );
 
       if (response.ok) {
         const savedMessage = await response.json();

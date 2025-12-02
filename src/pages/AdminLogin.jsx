@@ -16,13 +16,16 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("https://pnc-bank-backend-2.onrender.com/api/admin/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credentials),
-      });
+      const response = await fetch(
+        "https://pnc-bank-backend-2.onrender.com/api/admin/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(credentials),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Invalid credentials");

@@ -37,7 +37,9 @@ function AdminChat() {
 
   const loadChatQueue = async () => {
     try {
-      const response = await fetch("https://pnc-bank-backend-2.onrender.com/api/chat/sessions");
+      const response = await fetch(
+        "https://pnc-bank-backend-2.onrender.com/api/chat/sessions"
+      );
       const sessions = await response.json();
 
       console.log("📥 Loading chat queue:", sessions.length, "chats");
@@ -97,9 +99,12 @@ function AdminChat() {
 
     // Mark as read in backend
     try {
-      await fetch(`https://pnc-bank-backend-2.onrender.com/api/chat/markRead/${chat.userId}`, {
-        method: "POST",
-      });
+      await fetch(
+        `https://pnc-bank-backend-2.onrender.com/api/chat/markRead/${chat.userId}`,
+        {
+          method: "POST",
+        }
+      );
 
       // Update local state
       const updatedQueue = chatQueue.map((c) =>
@@ -120,19 +125,22 @@ function AdminChat() {
 
     try {
       // Send message to backend
-      const response = await fetch("https://pnc-bank-backend-2.onrender.com/api/chat/send", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: selectedChat.userId,
-          sender: "admin",
-          message: replyMessage,
-          userName: selectedChat.userName,
-          userEmail: selectedChat.userEmail,
-        }),
-      });
+      const response = await fetch(
+        "https://pnc-bank-backend-2.onrender.com/api/chat/send",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: selectedChat.userId,
+            sender: "admin",
+            message: replyMessage,
+            userName: selectedChat.userName,
+            userEmail: selectedChat.userEmail,
+          }),
+        }
+      );
 
       if (response.ok) {
         const savedMessage = await response.json();
@@ -173,9 +181,12 @@ function AdminChat() {
 
   const deleteChat = async (userId) => {
     try {
-      await fetch(`https://pnc-bank-backend-2.onrender.com/api/chat/session/${userId}`, {
-        method: "DELETE",
-      });
+      await fetch(
+        `https://pnc-bank-backend-2.onrender.com/api/chat/session/${userId}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       // Update local state
       const queue = chatQueue.filter((chat) => chat.userId !== userId);

@@ -48,13 +48,16 @@ function Signup() {
     setMessage("");
     // Perform form validation here if needed
     try {
-      const response = await fetch("https://pnc-bank-backend-2.onrender.com/api/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "https://pnc-bank-backend-2.onrender.com/api/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
       const data = await response.json();
 
       if (data.success) {
@@ -63,11 +66,14 @@ function Signup() {
         // Attempt auto-login so the user lands in their new account immediately
         try {
           const creds = { email: formData.email, password: formData.password };
-          const loginResponse = await fetch("https://pnc-bank-backend-2.onrender.com/api/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(creds),
-          });
+          const loginResponse = await fetch(
+            "https://pnc-bank-backend-2.onrender.com/api/login",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(creds),
+            }
+          );
           const loginData = await loginResponse.json();
 
           if (loginData.success) {
