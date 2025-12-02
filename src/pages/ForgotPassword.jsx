@@ -23,7 +23,7 @@ function ForgotPassword() {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/api/forgot-password",
+        "https://pnc-bank-backend-2.onrender.com/api/forgot-password",
         {
           method: "POST",
           headers: {

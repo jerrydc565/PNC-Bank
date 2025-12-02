@@ -32,7 +32,7 @@ function Login() {
     try {
       console.log("📧 Logging in with:", formData.email); // ✅ Debug
 
-      const response = await fetch("http://localhost:8080/api/login", {
+      const response = await fetch("https://pnc-bank-backend-2.onrender.com/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

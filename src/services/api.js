@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = "https://pnc-bank-backend-2.onrender.com/api";
 
 // Get userId from localStorage (you'll need to store this during login)
 const getUserId = () => {

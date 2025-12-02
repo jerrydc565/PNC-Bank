@@ -37,7 +37,7 @@ function AdminChat() {
 
   const loadChatQueue = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/chat/sessions");
+      const response = await fetch("https://pnc-bank-backend-2.onrender.com/api/chat/sessions");
       const sessions = await response.json();
 
       console.log("📥 Loading chat queue:", sessions.length, "chats");
@@ -71,7 +71,7 @@ function AdminChat() {
   const loadChatMessages = async (userId) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/chat/messages/${userId}`
+        `https://pnc-bank-backend-2.onrender.com/api/chat/messages/${userId}`
       );
       const messages = await response.json();
 
@@ -97,7 +97,7 @@ function AdminChat() {
 
     // Mark as read in backend
     try {
-      await fetch(`http://localhost:8080/api/chat/markRead/${chat.userId}`, {
+      await fetch(`https://pnc-bank-backend-2.onrender.com/api/chat/markRead/${chat.userId}`, {
         method: "POST",
       });
 
@@ -120,7 +120,7 @@ function AdminChat() {
 
     try {
       // Send message to backend
-      const response = await fetch("http://localhost:8080/api/chat/send", {
+      const response = await fetch("https://pnc-bank-backend-2.onrender.com/api/chat/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -173,7 +173,7 @@ function AdminChat() {
 
   const deleteChat = async (userId) => {
     try {
-      await fetch(`http://localhost:8080/api/chat/session/${userId}`, {
+      await fetch(`https://pnc-bank-backend-2.onrender.com/api/chat/session/${userId}`, {
         method: "DELETE",
       });
 

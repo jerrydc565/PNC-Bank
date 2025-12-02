@@ -28,7 +28,7 @@ function Header2() {
     const fetchUserProfile = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/api/user/${storedEmail}`
+          `https://pnc-bank-backend-2.onrender.com/api/user/${storedEmail}`
         );
         const data = await response.json();
         if (data.success) {

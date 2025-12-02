@@ -382,7 +382,7 @@ function Payment() {
 
         if (!userAccountNumber && userId) {
           const response = await fetch(
-            `http://localhost:8080/api/user/${userId}/account`
+            `https://pnc-bank-backend-2.onrender.com/api/user/${userId}/account`
           );
           const data = await response.json();
           if (data.accountNumber) {
@@ -427,7 +427,7 @@ function Payment() {
     const pollInterval = setInterval(async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/api/transactions/single/${pendingTransactionId}`,
+          `https://pnc-bank-backend-2.onrender.com/api/transactions/single/${pendingTransactionId}`,
           {
             headers: { "Content-Type": "application/json" },
           }
@@ -499,7 +499,7 @@ function Payment() {
       try {
         // First, try API lookup for real account (supports worldwide accounts)
         const response = await fetch(
-          `http://localhost:8080/api/account/lookup/${number}?bank=${encodeURIComponent(
+          `https://pnc-bank-backend-2.onrender.com/api/account/lookup/${number}?bank=${encodeURIComponent(
             bankName
           )}`,
           {
@@ -762,7 +762,7 @@ function Payment() {
 
       // Send transaction for admin approval
       const response = await fetch(
-        "http://localhost:8080/api/transactions/pending",
+        "https://pnc-bank-backend-2.onrender.com/api/transactions/pending",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -833,7 +833,7 @@ function Payment() {
 
       // Send transaction for admin approval
       const response = await fetch(
-        "http://localhost:8080/api/transactions/pending",
+        "https://pnc-bank-backend-2.onrender.com/api/transactions/pending",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -973,33 +973,121 @@ function Payment() {
                   aria-label="Bank name"
                 >
                   <option value="">-- Select Bank --</option>
-                  <option value="GT Bank Nigeria">GT Bank Nigeria</option>
-                  <option value="Access Bank Nigeria">
-                    Access Bank Nigeria
+                  {/* United States Banks */}
+                  <option value="Ally Bank">Ally Bank</option>
+                  <option value="American Express Bank">
+                    American Express Bank
                   </option>
-                  <option value="First Bank Nigeria">First Bank Nigeria</option>
-                  <option value="Zenith Bank Nigeria">
-                    Zenith Bank Nigeria
+                  <option value="Bank of America">Bank of America</option>
+                  <option value="Bank of the West">Bank of the West</option>
+                  <option value="BB&T">BB&T</option>
+                  <option value="BMO Harris Bank">BMO Harris Bank</option>
+                  <option value="Capital One">Capital One</option>
+                  <option value="Charles Schwab Bank">
+                    Charles Schwab Bank
                   </option>
-                  <option value="UBA Nigeria">UBA Nigeria</option>
-                  <option value="Standard Bank South Africa">
-                    Standard Bank South Africa
+                  <option value="Chase Bank">Chase Bank</option>
+                  <option value="Citibank">Citibank</option>
+                  <option value="Citizens Bank">Citizens Bank</option>
+                  <option value="Comerica Bank">Comerica Bank</option>
+                  <option value="Discover Bank">Discover Bank</option>
+                  <option value="Fifth Third Bank">Fifth Third Bank</option>
+                  <option value="First Citizens Bank">
+                    First Citizens Bank
                   </option>
-                  <option value="FNB South Africa">FNB South Africa</option>
-                  <option value="Absa South Africa">Absa South Africa</option>
-                  <option value="KCB Bank Kenya">KCB Bank Kenya</option>
-                  <option value="Equity Bank Kenya">Equity Bank Kenya</option>
-                  <option value="GCB Bank Ghana">GCB Bank Ghana</option>
-                  <option value="Ecobank Ghana">Ecobank Ghana</option>
-                  <option value="Barclays UK">Barclays UK</option>
-                  <option value="HSBC UK">HSBC UK</option>
-                  <option value="Lloyds Bank UK">Lloyds Bank UK</option>
-                  <option value="Bank of America USA">
-                    Bank of America USA
+                  <option value="Goldman Sachs Bank">Goldman Sachs Bank</option>
+                  <option value="HSBC Bank USA">HSBC Bank USA</option>
+                  <option value="Huntington National Bank">
+                    Huntington National Bank
                   </option>
-                  <option value="Chase Bank USA">Chase Bank USA</option>
-                  <option value="Wells Fargo USA">Wells Fargo USA</option>
-                  <option value="Citibank USA">Citibank USA</option>
+                  <option value="KeyBank">KeyBank</option>
+                  <option value="M&T Bank">M&T Bank</option>
+                  <option value="Morgan Stanley Bank">
+                    Morgan Stanley Bank
+                  </option>
+                  <option value="PNC Bank">PNC Bank</option>
+                  <option value="Regions Bank">Regions Bank</option>
+                  <option value="SunTrust Bank">SunTrust Bank</option>
+                  <option value="TD Bank">TD Bank</option>
+                  <option value="Truist Bank">Truist Bank</option>
+                  <option value="U.S. Bank">U.S. Bank</option>
+                  <option value="Union Bank">Union Bank</option>
+                  <option value="USAA">USAA</option>
+                  <option value="Wells Fargo">Wells Fargo</option>
+
+                  {/* International Banks */}
+                  <option value="Absa Bank (South Africa)">
+                    Absa Bank (South Africa)
+                  </option>
+                  <option value="Access Bank (Nigeria)">
+                    Access Bank (Nigeria)
+                  </option>
+                  <option value="ANZ Bank (Australia)">
+                    ANZ Bank (Australia)
+                  </option>
+                  <option value="Banco Santander (Spain)">
+                    Banco Santander (Spain)
+                  </option>
+                  <option value="Bank of China">Bank of China</option>
+                  <option value="Barclays (UK)">Barclays (UK)</option>
+                  <option value="BBVA (Spain)">BBVA (Spain)</option>
+                  <option value="BNP Paribas (France)">
+                    BNP Paribas (France)
+                  </option>
+                  <option value="CIBC (Canada)">CIBC (Canada)</option>
+                  <option value="Commonwealth Bank (Australia)">
+                    Commonwealth Bank (Australia)
+                  </option>
+                  <option value="Credit Suisse (Switzerland)">
+                    Credit Suisse (Switzerland)
+                  </option>
+                  <option value="Deutsche Bank (Germany)">
+                    Deutsche Bank (Germany)
+                  </option>
+                  <option value="Ecobank (Ghana)">Ecobank (Ghana)</option>
+                  <option value="Equity Bank (Kenya)">
+                    Equity Bank (Kenya)
+                  </option>
+                  <option value="First Bank (Nigeria)">
+                    First Bank (Nigeria)
+                  </option>
+                  <option value="FNB (South Africa)">FNB (South Africa)</option>
+                  <option value="GCB Bank (Ghana)">GCB Bank (Ghana)</option>
+                  <option value="GT Bank (Nigeria)">GT Bank (Nigeria)</option>
+                  <option value="HSBC (UK)">HSBC (UK)</option>
+                  <option value="ICBC (China)">ICBC (China)</option>
+                  <option value="ING Bank (Netherlands)">
+                    ING Bank (Netherlands)
+                  </option>
+                  <option value="KCB Bank (Kenya)">KCB Bank (Kenya)</option>
+                  <option value="Lloyds Bank (UK)">Lloyds Bank (UK)</option>
+                  <option value="Mitsubishi UFJ (Japan)">
+                    Mitsubishi UFJ (Japan)
+                  </option>
+                  <option value="National Bank of Canada">
+                    National Bank of Canada
+                  </option>
+                  <option value="NatWest (UK)">NatWest (UK)</option>
+                  <option value="RBC (Canada)">RBC (Canada)</option>
+                  <option value="Scotiabank (Canada)">
+                    Scotiabank (Canada)
+                  </option>
+                  <option value="Standard Bank (South Africa)">
+                    Standard Bank (South Africa)
+                  </option>
+                  <option value="Standard Chartered (UK)">
+                    Standard Chartered (UK)
+                  </option>
+                  <option value="TD Bank (Canada)">TD Bank (Canada)</option>
+                  <option value="UBA (Nigeria)">UBA (Nigeria)</option>
+                  <option value="UBS (Switzerland)">UBS (Switzerland)</option>
+                  <option value="UniCredit (Italy)">UniCredit (Italy)</option>
+                  <option value="Westpac (Australia)">
+                    Westpac (Australia)
+                  </option>
+                  <option value="Zenith Bank (Nigeria)">
+                    Zenith Bank (Nigeria)
+                  </option>
                 </select>
               </div>
 

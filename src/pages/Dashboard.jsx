@@ -101,7 +101,7 @@ function Dashboard() {
           if (userId) {
             try {
               const response = await fetch(
-                `http://localhost:8080/api/user/${userId}/account`
+                `https://pnc-bank-backend-2.onrender.com/api/user/${userId}/account`
               );
               const data = await response.json();
               if (data.accountNumber) {
@@ -199,7 +199,7 @@ function Dashboard() {
       try {
         console.log("🔍 Fetching profile for:", email); // Check what we're fetching
 
-        const response = await fetch(`http://localhost:8080/api/user/${email}`);
+        const response = await fetch(`https://pnc-bank-backend-2.onrender.com/api/user/${email}`);
         const data = await response.json();
 
         console.log("📦 Backend response:", data); // Check what backend returns

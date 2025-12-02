@@ -49,7 +49,7 @@ const AdminDashboard = () => {
       const token = localStorage.getItem("adminToken");
 
       // Fetch statistics
-      const statsRes = await fetch("http://localhost:8080/api/admin/stats", {
+      const statsRes = await fetch("https://pnc-bank-backend-2.onrender.com/api/admin/stats", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (statsRes.ok) {
@@ -58,7 +58,7 @@ const AdminDashboard = () => {
       }
 
       // Fetch users
-      const usersRes = await fetch("http://localhost:8080/api/admin/users", {
+      const usersRes = await fetch("https://pnc-bank-backend-2.onrender.com/api/admin/users", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (usersRes.ok) {
@@ -68,7 +68,7 @@ const AdminDashboard = () => {
 
       // Fetch pending transactions
       const pendingRes = await fetch(
-        "http://localhost:8080/api/admin/transactions/pending",
+        "https://pnc-bank-backend-2.onrender.com/api/admin/transactions/pending",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -80,7 +80,7 @@ const AdminDashboard = () => {
 
       // Fetch recent transactions
       const recentRes = await fetch(
-        "http://localhost:8080/api/admin/transactions/recent",
+        "https://pnc-bank-backend-2.onrender.com/api/admin/transactions/recent",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -106,7 +106,7 @@ const AdminDashboard = () => {
     try {
       const token = localStorage.getItem("adminToken");
       const response = await fetch(
-        `http://localhost:8080/api/admin/transactions/${transactionId}/${action}`,
+        `https://pnc-bank-backend-2.onrender.com/api/admin/transactions/${transactionId}/${action}`,
         {
           method: "POST",
           headers: {

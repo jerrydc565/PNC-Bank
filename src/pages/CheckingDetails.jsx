@@ -28,7 +28,7 @@ function CheckingDetails() {
           const userId = localStorage.getItem("userId");
           if (userId) {
             const response = await fetch(
-              `http://localhost:8080/api/user/${userId}/account`
+              `https://pnc-bank-backend-2.onrender.com/api/user/${userId}/account`
             );
             const data = await response.json();
             if (data.accountNumber) {
@@ -81,7 +81,7 @@ function CheckingDetails() {
     // Fetch user profile
     const email = localStorage.getItem("email");
     if (email) {
-      fetch(`http://localhost:8080/api/user/${email}`)
+      fetch(`https://pnc-bank-backend-2.onrender.com/api/user/${email}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.success) {

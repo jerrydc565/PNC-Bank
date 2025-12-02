@@ -18,7 +18,7 @@ function Account() {
           const userId = localStorage.getItem("userId");
           if (userId) {
             const response = await fetch(
-              `http://localhost:8080/api/user/${userId}/account`
+              `https://pnc-bank-backend-2.onrender.com/api/user/${userId}/account`
             );
             const data = await response.json();
             if (data.accountNumber) {

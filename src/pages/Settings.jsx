@@ -74,7 +74,7 @@ function Settings() {
           const userId = localStorage.getItem("userId");
           if (userId) {
             const accountResponse = await fetch(
-              `http://localhost:8080/api/user/${userId}/account`
+              `https://pnc-bank-backend-2.onrender.com/api/user/${userId}/account`
             );
             const accountData = await accountResponse.json();
             if (accountData.accountNumber) {
@@ -84,7 +84,7 @@ function Settings() {
           }
         }
 
-        const response = await fetch(`http://localhost:8080/api/user/${email}`);
+        const response = await fetch(`https://pnc-bank-backend-2.onrender.com/api/user/${email}`);
         const data = await response.json();
         if (data.success) {
           setUserProfile(data);
@@ -196,7 +196,7 @@ function Settings() {
       }
 
       // Try PUT /api/user/{email} first
-      let resp = await fetch(`http://localhost:8080/api/user/${targetEmail}`, {
+      let resp = await fetch(`https://pnc-bank-backend-2.onrender.com/api/user/${targetEmail}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -204,7 +204,7 @@ function Settings() {
 
       // If endpoint not available, try fallback POST
       if (resp.status === 404) {
-        resp = await fetch("http://localhost:8080/api/user/update", {
+        resp = await fetch("https://pnc-bank-backend-2.onrender.com/api/user/update", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
