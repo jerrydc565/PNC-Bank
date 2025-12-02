@@ -139,9 +139,10 @@ function Header2() {
                       localStorage.removeItem("firstName");
                       localStorage.removeItem("secondName");
                       localStorage.removeItem("email");
+                      localStorage.removeItem("userId");
                       setOpen(false);
                       setUserProfile(null);
-                      navigate("/login");
+                      window.location.href = "/login";
                     }}
                   >
                     <i className="fa-solid fa-right-from-bracket mr-2"></i>

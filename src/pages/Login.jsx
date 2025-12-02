@@ -73,7 +73,7 @@ function Login() {
         );
 
         setTimeout(() => {
-          navigate("/user-home");
+          window.location.href = "/user-home";
         }, 1000);
       } else {
         setMessage(data.message);
