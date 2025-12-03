@@ -923,11 +923,17 @@ const AdminDashboard = () => {
               <select
                 className="w-full border p-2 rounded mb-3 mt-1"
                 value={depositUserId}
-                onChange={(e) => setDepositUserId(e.target.value)}
+                onChange={(e) => {
+                  console.log("Selected value:", e.target.value);
+                  setDepositUserId(e.target.value);
+                }}
               >
                 <option value="">-- Select User --</option>
                 {users.map((user) => (
-                  <option key={user.id} value={user.id}>
+                  <option
+                    key={user.id || user.userId}
+                    value={user.id || user.userId}
+                  >
                     {user.firstName} {user.secondName} ({user.email})
                   </option>
                 ))}
