@@ -224,9 +224,9 @@ const AdminDashboard = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            userId: depositUserId,
+            userId: parseInt(depositUserId),
             transactionType: "DEPOSIT",
-            amount: Number(depositAmount),
+            amount: parseFloat(depositAmount),
             description: description,
           }),
         }
@@ -245,10 +245,12 @@ const AdminDashboard = () => {
         // Show success message
         alert("Deposit successful!");
       } else {
-        const errorData = await response.json();
-        setDepositError(errorData.message || "Deposit failed");
+        const errorText = await response.text();
+        console.error("Deposit error:", errorText);
+        setDepositError(errorText || "Deposit failed");
       }
     } catch (error) {
+      console.error("Deposit exception:", error);
       setDepositError(error.message || "Deposit failed");
     }
   };
