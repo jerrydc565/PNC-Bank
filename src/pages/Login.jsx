@@ -29,7 +29,10 @@ function Login() {
 
     setIsLoading(true);
     try {
-      const response = await fetch(
+      console.log("🔐 Verifying OTP for:", formData.email);
+      
+      // First verify the OTP
+      const otpResponse = await fetch(
         "https://pnc-bank-backend-2.onrender.com/api/verify-otp",
         {
           method: "POST",
@@ -43,28 +46,51 @@ function Login() {
         }
       );
 
-      const data = await response.json();
+      const otpData = await otpResponse.json();
+      console.log("🔑 OTP verification result:", otpData);
 
-      if (data.success) {
-        // OTP verified - now save user data and navigate
-        localStorage.clear();
-        localStorage.setItem("firstName", userDataTemp.firstName);
-        localStorage.setItem("userId", userDataTemp.userId);
-        localStorage.setItem("secondName", userDataTemp.secondName);
-        localStorage.setItem("email", userDataTemp.email);
-        if (userDataTemp.accountNumber) {
-          localStorage.setItem("accountNumber", userDataTemp.accountNumber);
+      if (otpData.success) {
+        console.log("✅ OTP verified! Now logging in...");
+        
+        // NOW verify the credentials and log in
+        const loginResponse = await fetch(
+          "https://pnc-bank-backend-2.onrender.com/api/login",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userDataTemp),
+          }
+        );
+
+        const loginData = await loginResponse.json();
+        console.log("📦 Login response:", loginData);
+
+        if (loginData.success) {
+          // Save user data to localStorage
+          localStorage.clear();
+          localStorage.setItem("firstName", loginData.firstName);
+          localStorage.setItem("userId", loginData.userId);
+          localStorage.setItem("secondName", loginData.secondName);
+          localStorage.setItem("email", loginData.email);
+          if (loginData.accountNumber) {
+            localStorage.setItem("accountNumber", loginData.accountNumber);
+          }
+
+          setShowOtpModal(false);
+          setMessage("Login successful!");
+          setMessageType("success");
+
+          console.log("🎉 Login complete! Redirecting to dashboard...");
+          setTimeout(() => {
+            window.location.href = "/user-home";
+          }, 1000);
+        } else {
+          setOtpError("Invalid credentials");
         }
-
-        setShowOtpModal(false);
-        setMessage("Login successful!");
-        setMessageType("success");
-
-        setTimeout(() => {
-          window.location.href = "/user-home";
-        }, 1000);
       } else {
-        setOtpError(data.message || "Invalid OTP");
+        setOtpError(otpData.message || "Invalid OTP");
       }
     } catch (error) {
       console.error("Verify OTP Error:", error);
@@ -87,68 +113,38 @@ function Login() {
     setMessage("");
     setMessageType("");
     try {
-      console.log("📧 Logging in with:", formData.email);
+      console.log("📧 Sending OTP to:", formData.email);
 
-      const response = await fetch(
-        "https://pnc-bank-backend-2.onrender.com/api/login",
+      // First, send OTP to user's email (don't validate credentials yet)
+      const otpResponse = await fetch(
+        "https://pnc-bank-backend-2.onrender.com/api/send-otp",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify({ email: formData.email }),
         }
       );
 
-      const data = await response.json();
+      const otpData = await otpResponse.json();
+      console.log("📨 OTP Response:", otpData);
 
-      console.log("📦 Login response:", data);
-
-      if (data.success) {
-        console.log("✅ Login successful, now sending OTP...");
-        // Store user data temporarily
-        setUserDataTemp(data);
-
-        // Send OTP to user's email
-        try {
-          console.log("📤 Calling /api/send-otp for:", formData.email);
-          const otpResponse = await fetch(
-            "https://pnc-bank-backend-2.onrender.com/api/send-otp",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ email: formData.email }),
-            }
-          );
-
-          const otpData = await otpResponse.json();
-          console.log("📨 OTP Response:", otpData);
-
-          if (otpData.success) {
-            console.log("🎉 OTP sent successfully, showing modal");
-            setMessage("OTP sent to your email!");
-            setMessageType("success");
-            setShowOtpModal(true);
-          } else {
-            console.log("❌ OTP send failed:", otpData.message);
-            setMessage(otpData.message || "Failed to send OTP");
-            setMessageType("error");
-          }
-        } catch (error) {
-          console.error("❌ OTP Error:", error);
-          setMessage("Error sending OTP: " + error.message);
-          setMessageType("error");
-        }
+      if (otpData.success) {
+        console.log("🎉 OTP sent successfully, showing modal");
+        // Store the credentials temporarily (don't log in yet!)
+        setUserDataTemp(formData);
+        setMessage("OTP sent to your email!");
+        setMessageType("success");
+        setShowOtpModal(true);
       } else {
-        console.log("❌ Login failed:", data.message);
-        setMessage(data.message);
+        console.log("❌ OTP send failed:", otpData.message);
+        setMessage(otpData.message || "Failed to send OTP");
         setMessageType("error");
       }
     } catch (error) {
-      console.error("❌ Login Error:", error);
-      setMessage("Error connecting to server: " + error.message);
+      console.error("❌ OTP Error:", error);
+      setMessage("Error sending OTP: " + error.message);
       setMessageType("error");
     } finally {
       setIsLoading(false);
