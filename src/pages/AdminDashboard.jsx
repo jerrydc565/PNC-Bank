@@ -74,6 +74,7 @@ const AdminDashboard = () => {
       );
       if (usersRes.ok) {
         const data = await usersRes.json();
+        console.log("Fetched users:", data);
         setUsers(data);
       }
 
@@ -203,6 +204,10 @@ const AdminDashboard = () => {
   const handleDeposit = async () => {
     setDepositError("");
 
+    console.log("Selected depositUserId:", depositUserId);
+    console.log("Type of depositUserId:", typeof depositUserId);
+    console.log("All users:", users);
+
     // Validate user selection
     if (!depositUserId || depositUserId === "") {
       setDepositError("Please select a user");
@@ -227,23 +232,28 @@ const AdminDashboard = () => {
         "Robert Anderson",
         "Lisa Martinez",
         "William Garcia",
-        "Maria Rodriguez"
+        "Maria Rodriguez",
       ];
-      const randomSender = senderNames[Math.floor(Math.random() * senderNames.length)];
+      const randomSender =
+        senderNames[Math.floor(Math.random() * senderNames.length)];
       const randomAccountNum = Math.floor(1000 + Math.random() * 9000);
-      
-      const description = depositMemo 
+
+      const description = depositMemo
         ? `Incoming Transfer from ${randomSender} (****${randomAccountNum}) - ${depositMemo}`
         : `Incoming Transfer from ${randomSender} (****${randomAccountNum})`;
 
+      const userIdInt = parseInt(depositUserId, 10);
+      console.log("Parsed userId as integer:", userIdInt);
+
       const payload = {
-        userId: parseInt(depositUserId, 10),
+        userId: userIdInt,
         transactionType: "DEPOSIT",
         amount: parseFloat(depositAmount),
         description: description,
       };
 
       console.log("Sending deposit request:", payload);
+      console.log("Payload JSON:", JSON.stringify(payload));
 
       const response = await fetch(
         `https://pnc-bank-backend-2.onrender.com/api/transactions`,
@@ -255,6 +265,8 @@ const AdminDashboard = () => {
           body: JSON.stringify(payload),
         }
       );
+
+      console.log("Response status:", response.status);
 
       if (response.ok) {
         // Refresh dashboard data
