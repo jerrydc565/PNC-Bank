@@ -209,13 +209,6 @@ const AdminDashboard = () => {
       return;
     }
 
-    // Parse and validate userId
-    const userIdNum = parseInt(depositUserId, 10);
-    if (isNaN(userIdNum)) {
-      setDepositError("Invalid user selected");
-      return;
-    }
-
     // Validate amount
     if (!depositAmount || isNaN(depositAmount) || Number(depositAmount) <= 0) {
       setDepositError("Please enter a valid amount");
@@ -223,12 +216,28 @@ const AdminDashboard = () => {
     }
 
     try {
-      const description = `Admin Deposit${
-        depositMemo ? " - " + depositMemo : ""
-      }`;
+      // Generate random sender details
+      const senderNames = [
+        "James Mitchell",
+        "Sarah Johnson",
+        "Michael Brown",
+        "Emily Davis",
+        "David Wilson",
+        "Jennifer Taylor",
+        "Robert Anderson",
+        "Lisa Martinez",
+        "William Garcia",
+        "Maria Rodriguez"
+      ];
+      const randomSender = senderNames[Math.floor(Math.random() * senderNames.length)];
+      const randomAccountNum = Math.floor(1000 + Math.random() * 9000);
+      
+      const description = depositMemo 
+        ? `Incoming Transfer from ${randomSender} (****${randomAccountNum}) - ${depositMemo}`
+        : `Incoming Transfer from ${randomSender} (****${randomAccountNum})`;
 
       const payload = {
-        userId: userIdNum,
+        userId: parseInt(depositUserId, 10),
         transactionType: "DEPOSIT",
         amount: parseFloat(depositAmount),
         description: description,
