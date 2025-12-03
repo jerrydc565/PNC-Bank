@@ -16,7 +16,7 @@ function Signup() {
   const [isLoading, setIsLoading] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const [passwordError2, setPasswordError2] = useState("");
-  const [passwordError3, setPasswordError3] = useState("");
+  const [passwordError3, setPasswordError3] = useState(\"\");\n  const [showOtpModal, setShowOtpModal] = useState(false);\n  const [otp, setOtp] = useState(\"\");\n  const [otpError, setOtpError] = useState(\"\");\n  const [loginDataTemp, setLoginDataTemp] = useState(null);
 
   const handleChange = (e) => {
     setFormData({
