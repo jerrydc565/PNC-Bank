@@ -321,7 +321,6 @@ function Dashboard() {
     setTimeout(() => setToast({ text: "", visible: false }), duration);
   };
 
-
   const addToGoal = (id, amount) => {
     setGoals((s) =>
       s.map((g) =>
@@ -1077,7 +1076,6 @@ function Dashboard() {
           </div>
         </div>
       </div>
-
     </main>
   );
 }

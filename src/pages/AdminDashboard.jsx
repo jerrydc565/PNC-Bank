@@ -213,14 +213,16 @@ const AdminDashboard = () => {
 
     try {
       const token = localStorage.getItem("adminToken");
-      const description = `Admin Deposit${depositMemo ? " - " + depositMemo : ""}`;
-      
+      const description = `Admin Deposit${
+        depositMemo ? " - " + depositMemo : ""
+      }`;
+
       const response = await fetch(
         `https://pnc-bank-backend-2.onrender.com/api/admin/deposit`,
         {
           method: "POST",
           headers: {
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -234,13 +236,13 @@ const AdminDashboard = () => {
       if (response.ok) {
         // Refresh dashboard data
         fetchDashboardData();
-        
+
         // Close modal and reset form
         setShowDepositModal(false);
         setDepositUserId("");
         setDepositAmount("");
         setDepositMemo("");
-        
+
         // Show success message
         alert("Deposit successful!");
       } else {
@@ -705,7 +707,7 @@ const AdminDashboard = () => {
                             <i className="fas fa-eye mr-1"></i>
                             View
                           </button>
-                          <button 
+                          <button
                             onClick={() => {
                               setDepositUserId(user.id);
                               setShowDepositModal(true);
