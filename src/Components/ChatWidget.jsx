@@ -34,7 +34,7 @@ const ChatWidget = () => {
     const fetchMessages = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/api/chat/messages/${userId}`
+          `https://pnc-bank-backend-2.onrender.com/api/chat/messages/${userId}`
         );
         const data = await response.json();
 
@@ -70,7 +70,7 @@ const ChatWidget = () => {
     const handleNewMessage = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/api/chat/messages/${userId}`
+          `https://pnc-bank-backend-2.onrender.com/api/chat/messages/${userId}`
         );
         const data = await response.json();
 
