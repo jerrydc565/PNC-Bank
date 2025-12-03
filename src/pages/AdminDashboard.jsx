@@ -202,20 +202,20 @@ const AdminDashboard = () => {
 
   const handleDeposit = async () => {
     setDepositError("");
-    
+
     // Validate user selection
     if (!depositUserId || depositUserId === "") {
       setDepositError("Please select a user");
       return;
     }
-    
+
     // Parse and validate userId
     const userIdNum = parseInt(depositUserId, 10);
     if (isNaN(userIdNum)) {
       setDepositError("Invalid user selected");
       return;
     }
-    
+
     // Validate amount
     if (!depositAmount || isNaN(depositAmount) || Number(depositAmount) <= 0) {
       setDepositError("Please enter a valid amount");
@@ -226,14 +226,14 @@ const AdminDashboard = () => {
       const description = `Admin Deposit${
         depositMemo ? " - " + depositMemo : ""
       }`;
-      
+
       const payload = {
         userId: userIdNum,
         transactionType: "DEPOSIT",
         amount: parseFloat(depositAmount),
         description: description,
       };
-      
+
       console.log("Sending deposit request:", payload);
 
       const response = await fetch(
