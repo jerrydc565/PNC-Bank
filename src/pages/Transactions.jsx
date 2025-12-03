@@ -160,6 +160,7 @@ export default function Transactions() {
             balance: tx.balanceAfter || 0,
             icon: icon,
             iconColor: iconColor,
+            status: tx.status || "APPROVED",
           };
         });
         setTransactions(formatted);
@@ -325,9 +326,19 @@ export default function Transactions() {
                     >
                       {formatCurrency(t.amount)}
                     </p>
-                    <button className="rounded-2xl px-2 py-1 bg-[#2ec7003d] text-[#2ec700] text-xs">
-                      Completed
-                    </button>
+                    {t.status === "PENDING" ? (
+                      <span className="rounded-2xl px-2 py-1 bg-[#ff880033] text-[#ff8800] text-xs">
+                        Pending
+                      </span>
+                    ) : t.status === "REJECTED" ? (
+                      <span className="rounded-2xl px-2 py-1 bg-[#ff000033] text-[#ff0000] text-xs">
+                        Rejected
+                      </span>
+                    ) : (
+                      <span className="rounded-2xl px-2 py-1 bg-[#2ec7003d] text-[#2ec700] text-xs">
+                        Completed
+                      </span>
+                    )}
                   </div>
                 </div>
               </section>
@@ -363,6 +374,13 @@ export default function Transactions() {
               </p>
               <p className="text-sm text-[#595959] mt-2">
                 Category: {selectedTx.category}
+              </p>
+              <p className="text-sm text-[#595959] mt-2">
+                Status: <span className={`font-semibold ${
+                  selectedTx.status === "PENDING" ? "text-[#ff8800]" :
+                  selectedTx.status === "REJECTED" ? "text-[#ff0000]" :
+                  "text-[#2ec700]"
+                }`}>{selectedTx.status || "APPROVED"}</span>
               </p>
               <p className="text-sm text-[#595959] mt-2">
                 Balance after: {formatCurrency(selectedTx.balance)}

@@ -426,6 +426,7 @@ function Dashboard() {
           note: tx.description,
           icon: icon,
           iconColor: iconColor,
+          status: tx.status || "APPROVED",
         };
       });
       setRecentTransactions(formatted);
@@ -834,6 +835,11 @@ function Dashboard() {
                   <p className="text-[#595959] text-[12px] md:hidden">
                     {tx.date}
                   </p>
+                  {tx.status === "PENDING" && (
+                    <span className="text-[10px] bg-[#ff880033] text-[#ff8800] px-2 py-0.5 rounded-full">
+                      Pending
+                    </span>
+                  )}
                 </div>
                 <h5
                   className={`font-semibold text-[14px] sm:text-[15px] md:hidden ${
@@ -846,7 +852,7 @@ function Dashboard() {
               <div className="hidden md:block">
                 <p className="text-[#595959] text-[13px]">{tx.date}</p>
               </div>
-              <div className="hidden md:flex items-center justify-end">
+              <div className="hidden md:flex items-center justify-end gap-2">
                 <h5
                   className={`font-semibold text-[15px] ${
                     tx.type === "received" ? "text-[#00dc3b]" : "text-[#dc0000]"
@@ -854,6 +860,11 @@ function Dashboard() {
                 >
                   {tx.amount}
                 </h5>
+                {tx.status === "PENDING" && (
+                  <span className="text-[10px] bg-[#ff880033] text-[#ff8800] px-2 py-1 rounded-full">
+                    Pending
+                  </span>
+                )}
               </div>
             </div>
           ))}
