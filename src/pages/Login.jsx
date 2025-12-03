@@ -19,9 +19,9 @@ function Login() {
   const [otpError, setOtpError] = useState("");
   const [userDataTemp, setUserDataTemp] = useState(null);
 
-  const handleSubmit = async (e) => { () => {
+  const handleVerifyOtp = async () => {
     setOtpError("");
-    
+
     if (!otp || otp.length !== 6) {
       setOtpError("Please enter a valid 6-digit OTP");
       return;
@@ -36,9 +36,9 @@ function Login() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ 
-            email: formData.email, 
-            otp: otp 
+          body: JSON.stringify({
+            email: formData.email,
+            otp: otp,
           }),
         }
       );
@@ -59,7 +59,7 @@ function Login() {
         setShowOtpModal(false);
         setMessage("Login successful!");
         setMessageType("success");
-        
+
         setTimeout(() => {
           window.location.href = "/user-home";
         }, 1000);
@@ -107,7 +107,7 @@ function Login() {
       if (data.success) {
         // Store user data temporarily
         setUserDataTemp(data);
-        
+
         // Send OTP to user's email
         try {
           const otpResponse = await fetch(
@@ -265,9 +265,10 @@ function Login() {
                 <i className="fas fa-times"></i>
               </button>
             </div>
-            
+
             <p className="text-sm text-gray-600 mb-4">
-              We've sent a 6-digit verification code to <strong>{formData.email}</strong>
+              We've sent a 6-digit verification code to{" "}
+              <strong>{formData.email}</strong>
             </p>
 
             <div className="mb-4">
@@ -278,7 +279,7 @@ function Login() {
                 type="text"
                 maxLength="6"
                 value={otp}
-                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
                 placeholder="000000"
                 className="w-full p-3 border border-gray-300 rounded text-center text-2xl tracking-widest"
               />
