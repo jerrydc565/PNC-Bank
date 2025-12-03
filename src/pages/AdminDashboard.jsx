@@ -1004,10 +1004,14 @@ const AdminDashboard = () => {
               <i className="fas fa-check text-green-600 text-lg"></i>
             </div>
             <div>
-              <h4 className="font-semibold text-gray-800">Deposit Successful!</h4>
-              <p className="text-sm text-gray-600">The funds have been added to the user's account.</p>
+              <h4 className="font-semibold text-gray-800">
+                Deposit Successful!
+              </h4>
+              <p className="text-sm text-gray-600">
+                The funds have been added to the user's account.
+              </p>
             </div>
-            <button 
+            <button
               onClick={() => setShowDepositToast(false)}
               className="ml-auto text-gray-400 hover:text-gray-600"
             >

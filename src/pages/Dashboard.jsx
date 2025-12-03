@@ -394,7 +394,11 @@ function Dashboard() {
 
         // Update description if it's a plain deposit to show as incoming transfer
         let displayDescription = tx.description;
-        if (tx.transactionType === "DEPOSIT" && !desc.includes("incoming transfer") && !desc.includes("from")) {
+        if (
+          tx.transactionType === "DEPOSIT" &&
+          !desc.includes("incoming transfer") &&
+          !desc.includes("from")
+        ) {
           const senderNames = [
             "James Mitchell",
             "Sarah Johnson",
@@ -405,9 +409,10 @@ function Dashboard() {
             "Robert Anderson",
             "Lisa Martinez",
             "William Garcia",
-            "Maria Rodriguez"
+            "Maria Rodriguez",
           ];
-          const randomSender = senderNames[Math.floor(Math.random() * senderNames.length)];
+          const randomSender =
+            senderNames[Math.floor(Math.random() * senderNames.length)];
           const randomAccountNum = Math.floor(1000 + Math.random() * 9000);
           displayDescription = `Incoming Transfer from ${randomSender} (****${randomAccountNum})`;
         }
