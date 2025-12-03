@@ -23,6 +23,7 @@ const AdminDashboard = () => {
   const [depositAmount, setDepositAmount] = useState("");
   const [depositMemo, setDepositMemo] = useState("");
   const [depositError, setDepositError] = useState("");
+  const [showDepositToast, setShowDepositToast] = useState(false);
 
   useEffect(() => {
     fetchDashboardData();
@@ -278,8 +279,9 @@ const AdminDashboard = () => {
         setDepositAmount("");
         setDepositMemo("");
 
-        // Show success message
-        alert("Deposit successful!");
+        // Show success toast
+        setShowDepositToast(true);
+        setTimeout(() => setShowDepositToast(false), 3000);
       } else {
         const errorText = await response.text();
         console.error("Deposit error:", errorText);
@@ -990,6 +992,27 @@ const AdminDashboard = () => {
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Toast Notification */}
+      {showDepositToast && (
+        <div className="fixed top-5 right-5 z-50 animate-slide-in">
+          <div className="bg-white rounded-lg shadow-lg p-4 border-l-4 border-green-600 flex items-center gap-3 min-w-[300px]">
+            <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+              <i className="fas fa-check text-green-600 text-lg"></i>
+            </div>
+            <div>
+              <h4 className="font-semibold text-gray-800">Deposit Successful!</h4>
+              <p className="text-sm text-gray-600">The funds have been added to the user's account.</p>
+            </div>
+            <button 
+              onClick={() => setShowDepositToast(false)}
+              className="ml-auto text-gray-400 hover:text-gray-600"
+            >
+              <i className="fas fa-times"></i>
+            </button>
           </div>
         </div>
       )}

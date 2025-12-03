@@ -130,6 +130,31 @@ export default function Transactions() {
           let iconColor = "#0064de";
           const desc = (tx.description || "").toLowerCase();
 
+          // Update description if it's a plain deposit to show as incoming transfer
+          let displayDescription = tx.description || "Transaction";
+          if (
+            tx.transactionType === "DEPOSIT" &&
+            !desc.includes("incoming transfer") &&
+            !desc.includes("from")
+          ) {
+            const senderNames = [
+              "James Mitchell",
+              "Sarah Johnson",
+              "Michael Brown",
+              "Emily Davis",
+              "David Wilson",
+              "Jennifer Taylor",
+              "Robert Anderson",
+              "Lisa Martinez",
+              "William Garcia",
+              "Maria Rodriguez",
+            ];
+            const randomSender =
+              senderNames[Math.floor(Math.random() * senderNames.length)];
+            const randomAccountNum = Math.floor(1000 + Math.random() * 9000);
+            displayDescription = `Incoming Transfer from ${randomSender} (****${randomAccountNum})`;
+          }
+
           if (tx.transactionType === "DEPOSIT") {
             icon = "fa-solid fa-arrow-down";
             iconColor = "#00dc3b";
@@ -154,7 +179,7 @@ export default function Transactions() {
           return {
             id: tx.id.toString(),
             date: dateStr,
-            description: tx.description || "Transaction",
+            description: displayDescription,
             category: tx.transactionType,
             amount: tx.transactionType === "DEPOSIT" ? tx.amount : -tx.amount,
             balance: tx.balanceAfter || 0,
