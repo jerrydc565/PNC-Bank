@@ -212,21 +212,20 @@ const AdminDashboard = () => {
     }
 
     try {
-      const token = localStorage.getItem("adminToken");
       const description = `Admin Deposit${
         depositMemo ? " - " + depositMemo : ""
       }`;
 
       const response = await fetch(
-        `https://pnc-bank-backend-2.onrender.com/api/admin/deposit`,
+        `https://pnc-bank-backend-2.onrender.com/api/transactions`,
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
             userId: depositUserId,
+            transactionType: "DEPOSIT",
             amount: Number(depositAmount),
             description: description,
           }),
