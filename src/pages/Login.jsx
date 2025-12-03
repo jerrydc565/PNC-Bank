@@ -14,8 +14,65 @@ function Login() {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [messageType, setMessageType] = useState("");
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [otpError, setOtpError] = useState("");
+  const [userDataTemp, setUserDataTemp] = useState(null);
 
-  // no automatic fetch on mount
+  const handleSubmit = async (e) => { () => {
+    setOtpError("");
+    
+    if (!otp || otp.length !== 6) {
+      setOtpError("Please enter a valid 6-digit OTP");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        "https://pnc-bank-backend-2.onrender.com/api/verify-otp",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ 
+            email: formData.email, 
+            otp: otp 
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        // OTP verified - now save user data and navigate
+        localStorage.clear();
+        localStorage.setItem("firstName", userDataTemp.firstName);
+        localStorage.setItem("userId", userDataTemp.userId);
+        localStorage.setItem("secondName", userDataTemp.secondName);
+        localStorage.setItem("email", userDataTemp.email);
+        if (userDataTemp.accountNumber) {
+          localStorage.setItem("accountNumber", userDataTemp.accountNumber);
+        }
+
+        setShowOtpModal(false);
+        setMessage("Login successful!");
+        setMessageType("success");
+        
+        setTimeout(() => {
+          window.location.href = "/user-home";
+        }, 1000);
+      } else {
+        setOtpError(data.message || "Invalid OTP");
+      }
+    } catch (error) {
+      console.error("Verify OTP Error:", error);
+      setOtpError("Error verifying OTP: " + error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -30,7 +87,7 @@ function Login() {
     setMessage("");
     setMessageType("");
     try {
-      console.log("📧 Logging in with:", formData.email); // ✅ Debug
+      console.log("📧 Logging in with:", formData.email);
 
       const response = await fetch(
         "https://pnc-bank-backend-2.onrender.com/api/login",
@@ -46,41 +103,39 @@ function Login() {
       const data = await response.json();
 
       console.log("📦 Login response:", data);
-      console.log("🔍 Full backend response:", data);
-      console.log("🔍 data.success:", data.success);
-      console.log("🔍 data.firstName:", data.firstName);
-      console.log("🔍 data.secondName:", data.secondName);
-      // backend follows same shape as signup: { success: boolean, message: string, ... }
+
       if (data.success) {
-        setMessage(data.message);
-        setMessageType("success");
+        // Store user data temporarily
+        setUserDataTemp(data);
+        
+        // Send OTP to user's email
+        try {
+          const otpResponse = await fetch(
+            "https://pnc-bank-backend-2.onrender.com/api/send-otp",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email: formData.email }),
+            }
+          );
 
-        localStorage.clear();
-        console.log("userId:", localStorage.getItem("userId"));
-        console.log("💾 Storing firstName:", data.firstName); // ✅ Debug
-        console.log("💾 Storing secondName:", data.secondName); // ✅ Debug
-        console.log("💾 Storing email:", data.email); // ✅ Debug
-        localStorage.setItem("firstName", data.firstName);
-        localStorage.setItem("userId", data.userId);
-        localStorage.setItem("secondName", data.secondName);
-        localStorage.setItem("email", data.email);
-        if (data.accountNumber) {
-          localStorage.setItem("accountNumber", data.accountNumber);
+          const otpData = await otpResponse.json();
+
+          if (otpData.success) {
+            setMessage("OTP sent to your email!");
+            setMessageType("success");
+            setShowOtpModal(true);
+          } else {
+            setMessage(otpData.message || "Failed to send OTP");
+            setMessageType("error");
+          }
+        } catch (error) {
+          console.error("OTP Error:", error);
+          setMessage("Error sending OTP: " + error.message);
+          setMessageType("error");
         }
-
-        console.log("✅ Stored in localStorage");
-        console.log(
-          "📖 Verify - firstName:",
-          localStorage.getItem("firstName")
-        );
-        console.log(
-          "📖 Verify - secondName:",
-          localStorage.getItem("secondName")
-        );
-
-        setTimeout(() => {
-          window.location.href = "/user-home";
-        }, 1000);
       } else {
         setMessage(data.message);
         setMessageType("error");
@@ -192,6 +247,69 @@ function Login() {
           className="absolute bottom-0 right-0 opacity-25 w-70 z-0"
         />
       </section>
+
+      {/* OTP Verification Modal */}
+      {showOtpModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-[#5d2700]">Verify OTP</h3>
+              <button
+                onClick={() => {
+                  setShowOtpModal(false);
+                  setOtp("");
+                  setOtpError("");
+                }}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            
+            <p className="text-sm text-gray-600 mb-4">
+              We've sent a 6-digit verification code to <strong>{formData.email}</strong>
+            </p>
+
+            <div className="mb-4">
+              <label className="font-bold text-[#453926] mb-2 block">
+                Enter OTP Code
+              </label>
+              <input
+                type="text"
+                maxLength="6"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                placeholder="000000"
+                className="w-full p-3 border border-gray-300 rounded text-center text-2xl tracking-widest"
+              />
+            </div>
+
+            {otpError && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-600 text-sm">
+                {otpError}
+              </div>
+            )}
+
+            <button
+              onClick={handleVerifyOtp}
+              disabled={isLoading || otp.length !== 6}
+              className="w-full bg-[#cb8400] text-white font-bold p-3 rounded hover:bg-[#b36e00] disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? "Verifying..." : "Verify OTP"}
+            </button>
+
+            <p className="text-center text-sm text-gray-600 mt-4">
+              Didn't receive the code?{" "}
+              <button
+                onClick={handleSubmit}
+                className="text-[#cb8400] font-bold hover:text-[#996300]"
+              >
+                Resend OTP
+              </button>
+            </p>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
