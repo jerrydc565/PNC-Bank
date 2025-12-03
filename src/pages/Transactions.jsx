@@ -376,11 +376,18 @@ export default function Transactions() {
                 Category: {selectedTx.category}
               </p>
               <p className="text-sm text-[#595959] mt-2">
-                Status: <span className={`font-semibold ${
-                  selectedTx.status === "PENDING" ? "text-[#ff8800]" :
-                  selectedTx.status === "REJECTED" ? "text-[#ff0000]" :
-                  "text-[#2ec700]"
-                }`}>{selectedTx.status || "APPROVED"}</span>
+                Status:{" "}
+                <span
+                  className={`font-semibold ${
+                    selectedTx.status === "PENDING"
+                      ? "text-[#ff8800]"
+                      : selectedTx.status === "REJECTED"
+                      ? "text-[#ff0000]"
+                      : "text-[#2ec700]"
+                  }`}
+                >
+                  {selectedTx.status || "APPROVED"}
+                </span>
               </p>
               <p className="text-sm text-[#595959] mt-2">
                 Balance after: {formatCurrency(selectedTx.balance)}
