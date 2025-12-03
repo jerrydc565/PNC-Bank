@@ -18,6 +18,11 @@ const AdminDashboard = () => {
   const [selectedChat, setSelectedChat] = useState(null);
   const [chatMessage, setChatMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [showDepositModal, setShowDepositModal] = useState(false);
+  const [depositUserId, setDepositUserId] = useState("");
+  const [depositAmount, setDepositAmount] = useState("");
+  const [depositMemo, setDepositMemo] = useState("");
+  const [depositError, setDepositError] = useState("");
 
   useEffect(() => {
     fetchDashboardData();
@@ -195,6 +200,58 @@ const AdminDashboard = () => {
     window.dispatchEvent(new Event("chatMessageReceived"));
   };
 
+  const handleDeposit = async () => {
+    setDepositError("");
+    if (!depositUserId) {
+      setDepositError("Please select a user");
+      return;
+    }
+    if (!depositAmount || isNaN(depositAmount) || Number(depositAmount) <= 0) {
+      setDepositError("Please enter a valid amount");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("adminToken");
+      const description = `Admin Deposit${depositMemo ? " - " + depositMemo : ""}`;
+      
+      const response = await fetch(
+        `https://pnc-bank-backend-2.onrender.com/api/admin/deposit`,
+        {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: depositUserId,
+            amount: Number(depositAmount),
+            description: description,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        // Refresh dashboard data
+        fetchDashboardData();
+        
+        // Close modal and reset form
+        setShowDepositModal(false);
+        setDepositUserId("");
+        setDepositAmount("");
+        setDepositMemo("");
+        
+        // Show success message
+        alert("Deposit successful!");
+      } else {
+        const errorData = await response.json();
+        setDepositError(errorData.message || "Deposit failed");
+      }
+    } catch (error) {
+      setDepositError(error.message || "Deposit failed");
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("adminToken");
     localStorage.removeItem("adminId");
@@ -272,6 +329,13 @@ const AdminDashboard = () => {
                 {localStorage.getItem("adminUsername")}
               </p>
             </div>
+            <button
+              onClick={() => setShowDepositModal(true)}
+              className="px-3 sm:px-4 py-1.5 sm:py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2 text-sm sm:text-base"
+            >
+              <i className="fas fa-dollar-sign"></i>
+              <span className="hidden sm:inline">Deposit</span>
+            </button>
             <button
               onClick={handleLogout}
               className="px-3 sm:px-4 py-1.5 sm:py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2 text-sm sm:text-base"
@@ -636,10 +700,22 @@ const AdminDashboard = () => {
                         </span>
                       </td>
                       <td className="px-4 py-3 text-sm">
-                        <button className="text-[#c64c00] hover:text-[#a33d00] font-medium">
-                          <i className="fas fa-eye mr-1"></i>
-                          View
-                        </button>
+                        <div className="flex gap-2">
+                          <button className="text-[#c64c00] hover:text-[#a33d00] font-medium">
+                            <i className="fas fa-eye mr-1"></i>
+                            View
+                          </button>
+                          <button 
+                            onClick={() => {
+                              setDepositUserId(user.id);
+                              setShowDepositModal(true);
+                            }}
+                            className="text-green-600 hover:text-green-700 font-medium"
+                          >
+                            <i className="fas fa-dollar-sign mr-1"></i>
+                            Deposit
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -782,6 +858,96 @@ const AdminDashboard = () => {
           </div>
         )}
       </div>
+
+      {/* Deposit Modal */}
+      {showDepositModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-[90%] max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h4 className="font-semibold text-lg">Deposit to User Account</h4>
+              <button
+                className="text-[#595959]"
+                onClick={() => {
+                  setShowDepositModal(false);
+                  setDepositError("");
+                  setDepositUserId("");
+                  setDepositAmount("");
+                  setDepositMemo("");
+                }}
+              >
+                <i className="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <div className="mt-4">
+              <label className="text-sm font-medium">Select User</label>
+              <select
+                className="w-full border p-2 rounded mb-3 mt-1"
+                value={depositUserId}
+                onChange={(e) => setDepositUserId(e.target.value)}
+              >
+                <option value="">-- Select User --</option>
+                {users.map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.firstName} {user.secondName} ({user.email})
+                  </option>
+                ))}
+              </select>
+
+              <label className="text-sm font-medium">Amount</label>
+              <div className="w-full border p-2 rounded mb-3 mt-1">
+                <input
+                  className="w-full outline-none"
+                  value={depositAmount}
+                  onChange={(e) => setDepositAmount(e.target.value)}
+                  placeholder="0.00"
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                />
+              </div>
+
+              <label className="text-sm font-medium">Memo (optional)</label>
+              <div className="w-full border p-2 rounded mb-4 mt-1">
+                <input
+                  className="w-full outline-none"
+                  value={depositMemo}
+                  onChange={(e) => setDepositMemo(e.target.value)}
+                  placeholder="Add a note"
+                />
+              </div>
+
+              {depositError && (
+                <div className="text-red-600 text-sm mb-3 bg-red-50 p-2 rounded">
+                  {depositError}
+                </div>
+              )}
+
+              <div className="flex justify-end gap-3">
+                <button
+                  className="px-4 py-2 border rounded hover:bg-gray-50"
+                  onClick={() => {
+                    setShowDepositModal(false);
+                    setDepositError("");
+                    setDepositUserId("");
+                    setDepositAmount("");
+                    setDepositMemo("");
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                  onClick={handleDeposit}
+                >
+                  <i className="fas fa-dollar-sign mr-2"></i>
+                  Deposit
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

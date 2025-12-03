@@ -22,10 +22,6 @@ function Dashboard() {
   const [showDetails, setShowDetails] = useState(false);
   const [selectedTx, setSelectedTx] = useState(null);
   const [hideValue, setHideValue] = useState("Show");
-  const [showDepositModal, setShowDepositModal] = useState(false);
-  const [depositAmount, setDepositAmount] = useState("");
-  const [depositMemo, setDepositMemo] = useState("");
-  const [depositError, setDepositError] = useState("");
 
   const filteredTransactions = useMemo(() => {
     let list = recentTransactions.slice();
@@ -325,88 +321,7 @@ function Dashboard() {
     setTimeout(() => setToast({ text: "", visible: false }), duration);
   };
 
-  const handleDeposit = async () => {
-    setDepositError("");
-    if (!depositAmount || isNaN(depositAmount) || Number(depositAmount) <= 0) {
-      setDepositError("Please enter a valid amount");
-      return;
-    }
 
-    try {
-      const description = `Deposit${depositMemo ? " - " + depositMemo : ""}`;
-      await transactionAPI.createTransaction(
-        "DEPOSIT",
-        Number(depositAmount),
-        description
-      );
-
-      // Refresh balance and transactions after deposit
-      const newBalance = await transactionAPI.getBalance();
-      setBalance(newBalance);
-
-      // Refresh recent transactions
-      const allTransactions = await transactionAPI.getTransactions();
-      const formatted = allTransactions.slice(0, 4).map((tx) => {
-        let dateStr;
-        try {
-          dateStr = tx.createdAt
-            ? new Date(tx.createdAt).toISOString().split("T")[0]
-            : new Date().toISOString().split("T")[0];
-        } catch (e) {
-          dateStr = new Date().toISOString().split("T")[0];
-        }
-
-        // Determine icon based on transaction type and description
-        let icon = "fa-solid fa-money-bill-transfer";
-        let iconColor = "#0064de";
-        const desc = (tx.description || "").toLowerCase();
-
-        if (tx.transactionType === "DEPOSIT") {
-          icon = "fa-solid fa-arrow-down";
-          iconColor = "#00dc3b";
-        } else if (desc.includes("bill")) {
-          icon = "fa-regular fa-file";
-          iconColor = "#ff6600";
-        } else if (desc.includes("transfer")) {
-          icon = "fa-solid fa-arrow-right-arrow-left";
-          iconColor = "#0064de";
-        } else if (
-          desc.includes("goal") ||
-          desc.includes("contribution") ||
-          desc.includes("savings")
-        ) {
-          icon = "fa-solid fa-piggy-bank";
-          iconColor = "#ff0000";
-        } else {
-          icon = "fa-solid fa-arrow-up";
-          iconColor = "#dc0000";
-        }
-
-        return {
-          id: tx.id.toString(),
-          title: tx.description || "Transaction",
-          date: dateStr,
-          amount:
-            tx.transactionType === "DEPOSIT"
-              ? `+$${tx.amount.toFixed(2)}`
-              : `-$${tx.amount.toFixed(2)}`,
-          type: tx.transactionType === "DEPOSIT" ? "received" : "debit",
-          category: tx.transactionType,
-          note: tx.description,
-          icon: icon,
-          iconColor: iconColor,
-        };
-      });
-      setRecentTransactions(formatted);
-
-      showToast("Deposit successful");
-      setShowDepositModal(false);
-      setDepositAmount("");
-      setDepositMemo("");
-    } catch (error) {
-      setDepositError(error.message || "Deposit failed");
-    }
-  };
   const addToGoal = (id, amount) => {
     setGoals((s) =>
       s.map((g) =>
@@ -669,19 +584,6 @@ function Dashboard() {
                 </p>
               </section>
             </Link>
-
-            <section
-              className="w-full p-2 sm:p-4 flex flex-col items-center justify-center rounded-lg hover:bg-[#bababa73] cursor-pointer"
-              onClick={() => setShowDepositModal(true)}
-            >
-              <button className="w-9 sm:w-11 cursor-pointer h-9 sm:h-11 rounded-full bg-[#04ff0043] mb-1 sm:mb-2">
-                {" "}
-                <i className="fa-solid fa-dollar-sign text-lg sm:text-xl text-[#04ff00]"></i>
-              </button>
-              <p className="text-[9px] sm:text-[10px] text-[#595959]">
-                Deposit
-              </p>
-            </section>
             <Link to={"/account"}>
               <section className="w-full p-2 sm:p-4 flex flex-col items-center justify-center rounded-lg hover:bg-[#bababa73] cursor-pointer">
                 <button className="w-9 sm:w-11 cursor-pointer h-9 sm:h-11 rounded-full bg-[#ff000043] mb-1 sm:mb-2">
@@ -1176,72 +1078,6 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* Deposit Modal */}
-      {showDepositModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-[90%] max-w-md">
-            <div className="flex justify-between items-center mb-4">
-              <h4 className="font-semibold text-lg">Make a Deposit</h4>
-              <button
-                className="text-[#595959]"
-                onClick={() => {
-                  setShowDepositModal(false);
-                  setDepositError("");
-                }}
-              >
-                <i className="fa-solid fa-xmark"></i>
-              </button>
-            </div>
-
-            <div className="mt-4">
-              <label className="text-sm">Amount</label>
-              <div className="w-full border p-2 rounded mb-3">
-                <input
-                  className="w-full outline-none"
-                  value={depositAmount}
-                  onChange={(e) => setDepositAmount(e.target.value)}
-                  placeholder="0.00"
-                  type="number"
-                  min="0.01"
-                  step="0.01"
-                />
-              </div>
-
-              <label className="text-sm">Memo (optional)</label>
-              <div className="w-full border p-2 rounded mb-4">
-                <input
-                  className="w-full outline-none"
-                  value={depositMemo}
-                  onChange={(e) => setDepositMemo(e.target.value)}
-                  placeholder="Add a note"
-                />
-              </div>
-
-              {depositError && (
-                <div className="text-red-600 text-sm mb-3">{depositError}</div>
-              )}
-
-              <div className="flex justify-end gap-3">
-                <button
-                  className="px-4 py-2 border rounded"
-                  onClick={() => {
-                    setShowDepositModal(false);
-                    setDepositError("");
-                  }}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="px-4 py-2 bg-[#c64c00] text-white rounded"
-                  onClick={handleDeposit}
-                >
-                  Deposit
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </main>
   );
 }
