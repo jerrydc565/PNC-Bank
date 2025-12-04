@@ -586,6 +586,18 @@ function Dashboard() {
               </section>
             </Link>
 
+            <Link to={"/deposit"}>
+              {" "}
+              <section className="w-full p-2 sm:p-4 flex flex-col items-center justify-center rounded-lg hover:bg-[#bababa73] cursor-pointer">
+                <button className="w-9 sm:w-11 cursor-pointer h-9 sm:h-11 rounded-full bg-[#00ff0043] mb-1 sm:mb-2">
+                  <i className="fa-solid fa-money-bill-wave text-lg sm:text-xl text-[#00aa00]"></i>
+                </button>
+                <p className="text-[9px] sm:text-[10px] text-[#595959]">
+                  Deposit
+                </p>
+              </section>
+            </Link>
+
             <Link to={"/payment"}>
               {" "}
               <section className="w-full p-2 sm:p-4 flex flex-col items-center justify-center rounded-lg hover:bg-[#bababa73] cursor-pointer">

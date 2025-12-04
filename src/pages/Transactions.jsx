@@ -77,27 +77,54 @@ export default function Transactions() {
           // Determine if it's a deposit or debit
           const isDeposit = tx.transactionType === "DEPOSIT";
 
-          // Generate description for deposits
+          // Generate realistic bank and account names
+          const banks = [
+            "Banco de Venezuela",
+            "BCA Bank Central Asia",
+            "Banco de bogota",
+            "Bank of Venezuela",
+            "NEOUI/VIVIANA Bank",
+            "ITAU UNIBANCO",
+            "SAVINGS BANK/PUNYAWEE",
+            "BCA/RIKA HERAWATI"
+          ];
+          
+          const names = [
+            "Leydi Pérez",
+            "Eka Rizki Saputri",
+            "Lina marcela arrieta pacheco",
+            "Jessica Sierra",
+            "Viviana Rodriguez",
+            "Maria Santos",
+            "Punyawee Chen",
+            "Rika Herawati"
+          ];
+          
+          const randomIndex = Math.floor(Math.random() * banks.length);
+          const transferBank = banks[randomIndex];
+          const transferName = names[randomIndex];
+
+          // Generate description with bank and name details
           let description = tx.description || "Transaction";
-          if (isDeposit && !description.toLowerCase().includes("deposit")) {
-            // Randomly choose between card or bitcoin deposit
-            const depositMethods = ["Card", "Bitcoin"];
-            const method =
-              depositMethods[Math.floor(Math.random() * depositMethods.length)];
-            description = `Deposit via ${method}`;
+          let fullDescription = description;
+          
+          if (isDeposit) {
+            fullDescription = `Direct TF: ${transferBank}/${transferName}`;
+          } else {
+            fullDescription = `Direct TF: ${transferBank}/${transferName}`;
           }
 
           return {
             id: tx.id.toString(),
             date: tx.createdAt,
-            description: description,
+            description: fullDescription,
             amount: isDeposit ? tx.amount : -tx.amount,
             balance: tx.balanceAfter || 0,
             type: isDeposit ? "CREDIT" : "DEBIT",
             isDeposit: isDeposit,
             status: tx.status || "APPROVED",
-            bankName: "London EconomicalBank",
-            accountName: accountName,
+            bankName: transferBank,
+            accountName: transferName,
             accountNumber: accountNumber,
             beneficiaryPhone: "447045531099",
             refId: generateRefId(),
@@ -176,13 +203,14 @@ export default function Transactions() {
                     ></i>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <p className="font-semibold text-sm">
-                          {tx.description}
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="flex-1">
+                        <p className="text-lg font-semibold">
+                          {formatCurrency(tx.amount)}{" "}
+                          <span className="text-sm text-gray-600">USD</span>
                         </p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          Balance: {formatCurrency(tx.balance)}
+                        <p className="text-sm text-gray-600">
+                          {tx.description}
                         </p>
                       </div>
                       <p
@@ -193,7 +221,10 @@ export default function Transactions() {
                         {tx.type}
                       </p>
                     </div>
-                    <p className="text-xs text-gray-400 mt-2">
+                    <p className="text-xs text-gray-500">
+                      Balance: {formatCurrency(tx.balance)}
+                    </p>
+                    <p className="text-xs text-gray-400 mt-1">
                       {formatDate(tx.date)}
                     </p>
                   </div>
