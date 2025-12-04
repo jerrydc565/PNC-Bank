@@ -114,7 +114,7 @@ function Header2() {
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-9999">
                 <nav className="flex flex-col py-1">
                   <NavLink
-                    to="/user-home"
+                    to="/profile"
                     className="px-4 py-3 text-sm text-gray-700 hover:bg-[#f5f5f5] border-b transition-colors"
                     role="menuitem"
                     onClick={() => setOpen(false)}

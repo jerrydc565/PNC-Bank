@@ -6,6 +6,7 @@ export default function Transactions() {
   const [showReceipt, setShowReceipt] = useState(false);
   const [selectedTx, setSelectedTx] = useState(null);
   const receiptRef = useRef(null);
+  const [activeTab, setActiveTab] = useState("transactions");
 
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -165,17 +166,74 @@ export default function Transactions() {
       {/* Tabs */}
       <div className="bg-white rounded-lg shadow-sm mb-4">
         <div className="flex border-b">
-          <button className="flex-1 py-3 text-center font-medium text-black border-b-2 border-black">
+          <button
+            onClick={() => setActiveTab("transactions")}
+            className={`flex-1 py-3 text-center font-medium ${
+              activeTab === "transactions"
+                ? "text-black border-b-2 border-black"
+                : "text-gray-500"
+            }`}
+          >
             Recent transactions
           </button>
-          <button className="flex-1 py-3 text-center font-medium text-gray-500">
-            Recent Transfer
+          <button
+            onClick={() => setActiveTab("transfers")}
+            className={`flex-1 py-3 text-center font-medium ${
+              activeTab === "transfers"
+                ? "text-black border-b-2 border-black"
+                : "text-gray-500"
+            }`}
+          >
+            Transfer History
           </button>
         </div>
 
         {/* Transaction List */}
         <div className="p-4 space-y-3">
-          {transactions.length === 0 ? (
+          {activeTab === "transfers" ? (
+            transactions.length === 0 ? (
+              <div className="text-center py-8 text-gray-500">
+                No transfers found
+              </div>
+            ) : (
+              transactions.map((tx) => (
+                <div
+                  key={tx.id}
+                  className="bg-white border border-gray-200 rounded-lg p-4"
+                >
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <p className="text-lg font-semibold">
+                        {formatCurrency(tx.amount)}{" "}
+                        <span className="text-sm text-gray-600">USD</span>
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        DIRECT FUNDS TRANSFER
+                      </p>
+                    </div>
+                    {tx.status === "APPROVED" && (
+                      <span className="bg-green-500 text-white text-xs px-3 py-1 rounded-full">
+                        Approved
+                      </span>
+                    )}
+                    {tx.status === "PENDING" && (
+                      <span className="bg-orange-500 text-white text-xs px-3 py-1 rounded-full">
+                        Pending
+                      </span>
+                    )}
+                    {tx.status === "REJECTED" && (
+                      <span className="bg-red-500 text-white text-xs px-3 py-1 rounded-full">
+                        Denied
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-gray-500 text-right">
+                    {formatDate(tx.date)}
+                  </p>
+                </div>
+              ))
+            )
+          ) : transactions.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
               No transactions found
             </div>
@@ -320,20 +378,16 @@ export default function Transactions() {
             <div ref={receiptRef} className="print-content">
               {/* Receipt Header */}
               <div className="text-center mb-6">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <div className="w-10 h-10 bg-blue-600 rounded-full"></div>
-                  <div className="text-left">
-                    <h1 className="text-2xl font-bold text-gray-800">LONDON</h1>
-                    <p className="text-xs text-blue-800">ECONOMICAL BANK</p>
-                  </div>
-                </div>
+                <h1 className="text-3xl font-bold text-blue-800 mb-4">
+                  PNC BANK
+                </h1>
               </div>
 
               <h2 className="text-center text-xl font-bold mb-2">
                 Transaction Receipt
               </h2>
               <p className="text-center text-sm text-blue-700 font-semibold mb-1">
-                Thank You For Using London EconomicalBank
+                Thank You For Using PNC Bank
               </p>
               <p className="text-center text-xs text-gray-600 mb-4">
                 Here Is Your Transaction Receipt.
@@ -417,7 +471,7 @@ export default function Transactions() {
                   Thanks for banking with us
                 </p>
                 <p className="text-xs text-gray-500 mb-3">
-                  Receipt generated from https://londoneconomicalb.online/
+                  Receipt generated from PNC Bank Online
                 </p>
                 <div className="flex justify-center">
                   <div className="p-2 bg-white">
