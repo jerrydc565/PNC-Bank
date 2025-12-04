@@ -38,7 +38,7 @@ function Career() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
         variants={fadeInUp}
-        className="bg-white rounded shadow max-w-5xl mx-auto p-6 sm:p-10 my-6 sm:my-10 mx-4"
+        className="bg-white rounded shadow max-w-5xl mx-auto p-6 sm:p-10 my-6 sm:my-10"
       >
         <h2 className="font-bold text-2xl sm:text-3xl lg:text-4xl mb-2 sm:mb-3">
           Why Work at PNC Bank?

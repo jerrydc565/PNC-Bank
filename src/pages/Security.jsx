@@ -47,7 +47,7 @@ function Security() {
             How We Protect You
           </h2>
           <div className="flex gap-4 sm:gap-6 lg:gap-7 items-center mb-6 sm:mb-7">
-            <button className="w-12 h-12 sm:w-13 sm:h-13 rounded-xl p-2 bg-[#00860036] flex-shrink-0">
+            <button className="w-12 h-12 sm:w-13 sm:h-13 rounded-xl p-2 bg-[#00860036] shrink-0">
               <i className="fa-solid fa-lock text-lg sm:text-xl text-[#008600]"></i>
             </button>
             <p className="flex flex-col gap-2 sm:gap-3">
@@ -61,7 +61,7 @@ function Security() {
             </p>
           </div>
           <div className="flex gap-4 sm:gap-6 lg:gap-7 items-center mb-6 sm:mb-7">
-            <button className="w-12 h-12 sm:w-13 sm:h-13 rounded-xl p-2 bg-[#00860036] flex-shrink-0">
+            <button className="w-12 h-12 sm:w-13 sm:h-13 rounded-xl p-2 bg-[#00860036] shrink-0">
               {" "}
               <i className="fa-regular fa-eye text-lg sm:text-xl text-[#008600]"></i>
             </button>
@@ -76,7 +76,7 @@ function Security() {
             </p>
           </div>
           <div className="flex gap-4 sm:gap-6 lg:gap-7 items-center mb-6 sm:mb-7">
-            <button className="w-12 h-12 sm:w-13 sm:h-13 rounded-xl p-2 bg-[#00860036] flex-shrink-0">
+            <button className="w-12 h-12 sm:w-13 sm:h-13 rounded-xl p-2 bg-[#00860036] shrink-0">
               {" "}
               <i className="fa-solid fa-key text-lg sm:text-xl text-[#008600]"></i>
             </button>
@@ -91,7 +91,7 @@ function Security() {
             </p>
           </div>
           <div className="flex gap-4 sm:gap-6 lg:gap-7 items-center mb-6 sm:mb-7">
-            <button className="w-12 h-12 sm:w-13 sm:h-13 rounded-xl p-2 bg-[#00860036] flex-shrink-0">
+            <button className="w-12 h-12 sm:w-13 sm:h-13 rounded-xl p-2 bg-[#00860036] shrink-0">
               {" "}
               <i className="fa-regular fa-circle-check text-lg sm:text-xl text-[#008600]"></i>
             </button>
