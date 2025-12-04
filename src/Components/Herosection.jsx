@@ -18,19 +18,19 @@ function Herosection() {
       title: "Smart Banking Solutions",
       description:
         "Manage your money with confidence. Access powerful tools and insights to help you reach your financial goals.",
-      image: "/image/hero-section-img.jpg",
+      image: "/image/image1.png",
     },
     {
       title: "Bank Anytime, Anywhere",
       description:
         "Mobile banking that moves with you. Transfer money, pay bills, and track spending from any device.",
-      image: "/image/hero-section-img.jpg",
+      image: "/image/image2.png",
     },
     {
       title: "Your Financial Partner",
       description:
         "More than just a bank. Get personalized support and expert guidance to make smarter financial decisions.",
-      image: "/image/hero-section-img.jpg",
+      image: "/image/image3.png",
     },
   ];
 
@@ -43,7 +43,10 @@ function Herosection() {
   }, []);
 
   return (
-    <main className="w-full flex justify-left min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] h-[60vh] sm:h-[70vh] lg:h-[80vh] bg-blend-overlay bg-[#000000d3] bg-[url('/image/hero-section-img.jpg')] bg-cover bg-top px-4 sm:px-8 md:px-12 lg:px-20 relative overflow-hidden">
+    <main
+      className="w-full flex justify-left min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] h-[60vh] sm:h-[70vh] lg:h-[80vh] bg-blend-overlay bg-[#000000d3] bg-cover bg-top px-4 sm:px-8 md:px-12 lg:px-20 relative overflow-hidden transition-all duration-700 ease-in-out"
+      style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
+    >
       <div className="text-white flex flex-col justify-center sm:justify-left mt-10 sm:mt-20 md:mt-32 lg:mt-40 w-full sm:w-[80%] md:w-[70%] lg:w-[50%] ml-0 sm:ml-4 md:ml-8 lg:ml-20 gap-4 sm:gap-5 lg:gap-6">
         <h1 className="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl transition-all duration-700 ease-in-out">
           {slides[currentSlide].title}
