@@ -41,6 +41,10 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminChat from "./pages/AdminChat";
 import AdminProtectedRoute from "./Components/AdminProtectedRoute";
 import Notifications from "./pages/Notifications";
+import TransferHistory from "./pages/TransferHistory";
+import Deposit from "./pages/Deposit";
+import DepositCard from "./pages/DepositCard";
+import Profile from "./pages/Profile";
 
 function AppContent() {
   const location = useLocation();
@@ -66,6 +70,10 @@ function AppContent() {
     "/admin/login",
     "/admin/dashboard",
     "/admin/chat",
+    "/transfer-history",
+    "/deposit",
+    "/deposit/card",
+    "/profile",
   ];
   const shouldShowHeader = !hideHeaderOnPages.includes(normalizedPath);
 
@@ -86,6 +94,10 @@ function AppContent() {
     "/admin/login",
     "/admin/dashboard",
     "/admin/chat",
+    "/transfer-history",
+    "/deposit",
+    "/deposit/card",
+    "/profile",
   ];
   const shouldShowFooter = !hideFooterOnPages.includes(normalizedPath);
 
@@ -173,6 +185,38 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <Notifications />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/transfer-history"
+          element={
+            <ProtectedRoute>
+              <TransferHistory />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/deposit"
+          element={
+            <ProtectedRoute>
+              <Deposit />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/deposit/card"
+          element={
+            <ProtectedRoute>
+              <DepositCard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
             </ProtectedRoute>
           }
         />
