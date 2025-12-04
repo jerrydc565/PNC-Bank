@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { transactionAPI } from "../services/api";
+import logo from "../assets/image/logo.png";
 
 export default function Transactions() {
   const [showDetails, setShowDetails] = useState(false);
@@ -378,8 +379,12 @@ export default function Transactions() {
             <div ref={receiptRef} className="print-content">
               {/* Receipt Header */}
               <div className="text-center mb-6">
-                <div className="flex items-center justify-center mb-4">
-                  <img src="/image/image.png" alt="PNC Bank" className="h-16" />
+                {/* PNC Logo centered at top */}
+                <div className="flex flex-col items-center justify-center mb-6">
+                  <img src={logo} alt="PNC Bank" className="h-20 mb-3" />
+                  <h1 className="text-2xl font-bold text-blue-800">
+                    PNC Online Banking
+                  </h1>
                 </div>
               </div>
 
@@ -459,7 +464,7 @@ export default function Transactions() {
                 </div>
               </div>
 
-              {/* QR Code with watermark */}
+              {/* QR Code */}
               <div className="relative mb-4">
                 <div className="text-center">
                   <p className="text-xs text-gray-600 mb-3">
@@ -469,16 +474,458 @@ export default function Transactions() {
                     Receipt generated from PNC Bank Online
                   </p>
                   <div className="relative inline-block">
-                    {/* QR Code */}
-                    <div className="w-32 h-32 bg-white border-2 border-gray-300 flex items-center justify-center relative">
-                      <i className="fa-solid fa-qrcode text-6xl text-gray-800"></i>
-                      {/* PNC Logo watermark overlay in center */}
-                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-30">
-                        <img
-                          src="/image/image.png"
-                          alt="PNC"
-                          className="w-16 h-16 object-contain"
-                        />
+                    {/* Actual QR Code image */}
+                    <div className="w-32 h-32 bg-white border-2 border-gray-300 flex items-center justify-center p-2">
+                      <div className="w-full h-full bg-white">
+                        {/* QR Code pattern - using a grid to simulate QR code */}
+                        <svg viewBox="0 0 100 100" className="w-full h-full">
+                          <rect width="100" height="100" fill="white" />
+                          {/* Top-left finder pattern */}
+                          <rect
+                            x="5"
+                            y="5"
+                            width="25"
+                            height="25"
+                            fill="black"
+                          />
+                          <rect
+                            x="10"
+                            y="10"
+                            width="15"
+                            height="15"
+                            fill="white"
+                          />
+                          <rect
+                            x="12.5"
+                            y="12.5"
+                            width="10"
+                            height="10"
+                            fill="black"
+                          />
+                          {/* Top-right finder pattern */}
+                          <rect
+                            x="70"
+                            y="5"
+                            width="25"
+                            height="25"
+                            fill="black"
+                          />
+                          <rect
+                            x="75"
+                            y="10"
+                            width="15"
+                            height="15"
+                            fill="white"
+                          />
+                          <rect
+                            x="77.5"
+                            y="12.5"
+                            width="10"
+                            height="10"
+                            fill="black"
+                          />
+                          {/* Bottom-left finder pattern */}
+                          <rect
+                            x="5"
+                            y="70"
+                            width="25"
+                            height="25"
+                            fill="black"
+                          />
+                          <rect
+                            x="10"
+                            y="75"
+                            width="15"
+                            height="15"
+                            fill="white"
+                          />
+                          <rect
+                            x="12.5"
+                            y="77.5"
+                            width="10"
+                            height="10"
+                            fill="black"
+                          />
+                          {/* Random data pattern simulation */}
+                          <rect
+                            x="35"
+                            y="5"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="45"
+                            y="5"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="55"
+                            y="5"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="40"
+                            y="10"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="50"
+                            y="10"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="35"
+                            y="15"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="45"
+                            y="15"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="60"
+                            y="15"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="5"
+                            y="35"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="15"
+                            y="35"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="25"
+                            y="35"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="10"
+                            y="40"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="20"
+                            y="40"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="35"
+                            y="35"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="45"
+                            y="35"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="55"
+                            y="35"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="70"
+                            y="35"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="80"
+                            y="35"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="90"
+                            y="35"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="40"
+                            y="40"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="50"
+                            y="40"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="75"
+                            y="40"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="85"
+                            y="40"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="35"
+                            y="45"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="60"
+                            y="45"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="70"
+                            y="45"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="90"
+                            y="45"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="35"
+                            y="55"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="45"
+                            y="55"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="70"
+                            y="55"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="80"
+                            y="55"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="40"
+                            y="60"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="50"
+                            y="60"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="75"
+                            y="60"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="90"
+                            y="60"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="35"
+                            y="70"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="45"
+                            y="70"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="55"
+                            y="70"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="70"
+                            y="70"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="90"
+                            y="70"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="40"
+                            y="75"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="60"
+                            y="75"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="80"
+                            y="75"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="35"
+                            y="80"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="50"
+                            y="80"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="70"
+                            y="80"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="85"
+                            y="80"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="45"
+                            y="85"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="75"
+                            y="85"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="90"
+                            y="85"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="35"
+                            y="90"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="55"
+                            y="90"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="65"
+                            y="90"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                          <rect
+                            x="85"
+                            y="90"
+                            width="5"
+                            height="5"
+                            fill="black"
+                          />
+                        </svg>
                       </div>
                     </div>
                     {/* Green curved highlight around QR */}
