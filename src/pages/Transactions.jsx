@@ -74,13 +74,27 @@ export default function Transactions() {
           const accountNumber =
             localStorage.getItem("accountNumber") || "3005397405";
 
+          // Determine if it's a deposit or debit
+          const isDeposit = tx.transactionType === "DEPOSIT";
+
+          // Generate description for deposits
+          let description = tx.description || "Transaction";
+          if (isDeposit && !description.toLowerCase().includes("deposit")) {
+            // Randomly choose between card or bitcoin deposit
+            const depositMethods = ["Card", "Bitcoin"];
+            const method =
+              depositMethods[Math.floor(Math.random() * depositMethods.length)];
+            description = `Deposit via ${method}`;
+          }
+
           return {
             id: tx.id.toString(),
             date: tx.createdAt,
-            description: tx.description || "Transaction",
-            amount: tx.transactionType === "DEPOSIT" ? tx.amount : -tx.amount,
+            description: description,
+            amount: isDeposit ? tx.amount : -tx.amount,
             balance: tx.balanceAfter || 0,
-            type: tx.transactionType === "DEPOSIT" ? "DEBIT" : "DEBIT",
+            type: isDeposit ? "CREDIT" : "DEBIT",
+            isDeposit: isDeposit,
             status: tx.status || "APPROVED",
             bankName: "London EconomicalBank",
             accountName: accountName,
@@ -150,8 +164,16 @@ export default function Transactions() {
                 className="bg-white border border-gray-200 rounded-lg p-4 cursor-pointer hover:shadow-md transition"
               >
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
-                    <i className="fa-solid fa-arrow-down text-red-600"></i>
+                  <div
+                    className={`w-10 h-10 rounded-full ${
+                      tx.isDeposit ? "bg-green-100" : "bg-red-100"
+                    } flex items-center justify-center flex-shrink-0`}
+                  >
+                    <i
+                      className={`fa-solid fa-arrow-down ${
+                        tx.isDeposit ? "text-green-600" : "text-red-600"
+                      }`}
+                    ></i>
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start">
@@ -163,7 +185,11 @@ export default function Transactions() {
                           Balance: {formatCurrency(tx.balance)}
                         </p>
                       </div>
-                      <p className="text-red-600 font-semibold text-sm whitespace-nowrap ml-2">
+                      <p
+                        className={`${
+                          tx.isDeposit ? "text-green-600" : "text-red-600"
+                        } font-semibold text-sm whitespace-nowrap ml-2`}
+                      >
                         {tx.type}
                       </p>
                     </div>
@@ -198,8 +224,16 @@ export default function Transactions() {
 
             <div className="space-y-3 mb-6">
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                  <i className="fa-solid fa-arrow-down text-blue-600"></i>
+                <div
+                  className={`w-10 h-10 rounded-full ${
+                    selectedTx.isDeposit ? "bg-green-100" : "bg-blue-100"
+                  } flex items-center justify-center flex-shrink-0`}
+                >
+                  <i
+                    className={`fa-solid fa-arrow-down ${
+                      selectedTx.isDeposit ? "text-green-600" : "text-blue-600"
+                    }`}
+                  ></i>
                 </div>
                 <div className="flex-1">
                   <p className="text-lg font-semibold">
@@ -216,7 +250,11 @@ export default function Transactions() {
                     {formatDate(selectedTx.date)}
                   </p>
                 </div>
-                <span className="bg-blue-500 text-white text-xs px-3 py-1 rounded">
+                <span
+                  className={`${
+                    selectedTx.isDeposit ? "bg-green-500" : "bg-blue-500"
+                  } text-white text-xs px-3 py-1 rounded`}
+                >
                   {selectedTx.type}
                 </span>
               </div>
