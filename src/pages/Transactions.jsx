@@ -378,21 +378,8 @@ export default function Transactions() {
             <div ref={receiptRef} className="print-content">
               {/* Receipt Header */}
               <div className="text-center mb-6">
-                <div className="flex items-center justify-center gap-3 mb-4">
-                  <div className="relative">
-                    <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg transform rotate-12 absolute"></div>
-                    <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg transform -rotate-6 relative flex items-center justify-center">
-                      <div className="w-8 h-8 bg-green-500 rounded"></div>
-                    </div>
-                  </div>
-                  <div className="text-left">
-                    <h1 className="text-2xl font-bold text-gray-800 leading-tight">
-                      LONDON
-                    </h1>
-                    <p className="text-xs font-semibold text-blue-800 uppercase">
-                      ECONOMICAL BANK
-                    </p>
-                  </div>
+                <div className="flex items-center justify-center mb-4">
+                  <img src="/image/image.png" alt="PNC Bank" className="h-16" />
                 </div>
               </div>
 
@@ -400,7 +387,7 @@ export default function Transactions() {
                 Transaction Receipt
               </h2>
               <p className="text-center text-sm text-blue-600 font-semibold mb-1">
-                Thank You For Using London EconomicalBank
+                Thank You For Using PNC Bank
               </p>
               <p className="text-center text-xs text-gray-600 mb-4">
                 Here Is Your Transfer Receipt.
@@ -479,32 +466,23 @@ export default function Transactions() {
                     Thanks for banking with us
                   </p>
                   <p className="text-xs text-gray-500 mb-3">
-                    Receipt generated from https://londoneconomicalb.online/
+                    Receipt generated from PNC Bank Online
                   </p>
                   <div className="relative inline-block">
                     {/* QR Code */}
-                    <div className="w-32 h-32 bg-white border-2 border-gray-300 flex items-center justify-center">
+                    <div className="w-32 h-32 bg-white border-2 border-gray-300 flex items-center justify-center relative">
                       <i className="fa-solid fa-qrcode text-6xl text-gray-800"></i>
+                      {/* PNC Logo watermark overlay in center */}
+                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-30">
+                        <img
+                          src="/image/image.png"
+                          alt="PNC"
+                          className="w-16 h-16 object-contain"
+                        />
+                      </div>
                     </div>
                     {/* Green curved highlight around QR */}
                     <div className="absolute -bottom-4 -right-4 w-40 h-40 border-4 border-green-400 rounded-full opacity-50 pointer-events-none"></div>
-                    {/* Watermark logo overlay */}
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-20">
-                      <div className="flex items-center gap-1">
-                        <div className="relative">
-                          <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-800 rounded transform rotate-12 absolute"></div>
-                          <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded transform -rotate-6 relative"></div>
-                        </div>
-                        <div className="text-left">
-                          <p className="text-xs font-bold text-gray-600 leading-none">
-                            LONDON
-                          </p>
-                          <p className="text-[8px] font-semibold text-blue-600 uppercase">
-                            ECONOMICAL BANK
-                          </p>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>

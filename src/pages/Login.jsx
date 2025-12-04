@@ -270,22 +270,7 @@ function Login() {
 
             {/* Logo */}
             <div className="flex justify-center mb-6">
-              <div className="flex items-center gap-3">
-                <div className="relative">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg transform rotate-12 absolute"></div>
-                  <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg transform -rotate-6 relative flex items-center justify-center">
-                    <div className="w-8 h-8 bg-green-500 rounded"></div>
-                  </div>
-                </div>
-                <div className="text-left">
-                  <h1 className="text-xl font-bold text-gray-800 leading-tight">
-                    LONDON
-                  </h1>
-                  <p className="text-xs font-semibold text-blue-800 uppercase">
-                    ECONOMICAL BANK
-                  </p>
-                </div>
-              </div>
+              <img src="/image/image.png" alt="PNC Bank" className="h-20" />
             </div>
 
             {/* Title */}
