@@ -12,19 +12,41 @@ const DepositCard = () => {
     expiryDate: "",
   });
 
+  const formatAmount = (value) => {
+    // Remove non-numeric characters
+    const numericValue = value.replace(/[^0-9.]/g, "");
+    // Format with commas
+    const parts = numericValue.split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+  };
+
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    if (name === "amount") {
+      // Remove commas for storage but display formatted
+      const formatted = formatAmount(value);
+      setFormData({
+        ...formData,
+        [name]: formatted,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      // Remove commas before parsing
+      const numericAmount = formData.amount.replace(/,/g, "");
       // Create deposit transaction
-      await transactionAPI.createDeposit(parseFloat(formData.amount));
+      await transactionAPI.createDeposit(parseFloat(numericAmount));
 
       // Show success modal
       setShowSuccess(true);
@@ -57,11 +79,11 @@ const DepositCard = () => {
                 USD
               </span>
               <input
-                type="number"
+                type="text"
                 name="amount"
                 value={formData.amount}
                 onChange={handleChange}
-                placeholder="100"
+                placeholder="1,000"
                 className="flex-1 px-4 py-3 outline-none"
                 required
               />

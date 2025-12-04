@@ -105,7 +105,13 @@ const Profile = () => {
 
           <div>
             <p className="font-semibold">Email:</p>
-            <p className="text-gray-700 py-2">{profileData.email}</p>
+            <input
+              type="email"
+              name="email"
+              value={profileData.email}
+              onChange={handleChange}
+              className="w-full border-b border-gray-300 py-2 outline-none focus:border-blue-500"
+            />
           </div>
 
           <div>

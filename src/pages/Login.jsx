@@ -255,63 +255,77 @@ function Login() {
       {/* OTP Verification Modal */}
       {showOtpModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold text-[#5d2700]">Verify OTP</h3>
-              <button
-                onClick={() => {
-                  setShowOtpModal(false);
-                  setOtp("");
-                  setOtpError("");
-                }}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <i className="fas fa-times"></i>
-              </button>
+          <div className="bg-white rounded-lg p-8 w-full max-w-md">
+            {/* Close button */}
+            <button
+              onClick={() => {
+                setShowOtpModal(false);
+                setOtp("");
+                setOtpError("");
+              }}
+              className="absolute top-4 right-4 text-white bg-purple-600 hover:bg-purple-700 w-10 h-10 rounded-full flex items-center justify-center"
+            >
+              <i className="fas fa-times"></i>
+            </button>
+
+            {/* Logo */}
+            <div className="flex justify-center mb-6">
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg transform rotate-12 absolute"></div>
+                  <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg transform -rotate-6 relative flex items-center justify-center">
+                    <div className="w-8 h-8 bg-green-500 rounded"></div>
+                  </div>
+                </div>
+                <div className="text-left">
+                  <h1 className="text-xl font-bold text-gray-800 leading-tight">
+                    LONDON
+                  </h1>
+                  <p className="text-xs font-semibold text-blue-800 uppercase">
+                    ECONOMICAL BANK
+                  </p>
+                </div>
+              </div>
             </div>
 
-            <p className="text-sm text-gray-600 mb-4">
-              We've sent a 6-digit verification code to{" "}
-              <strong>{formData.email}</strong>
+            {/* Title */}
+            <h2 className="text-center text-2xl font-bold text-purple-600 mb-4">
+              OTP Security Verification
+            </h2>
+
+            {/* Description */}
+            <p className="text-center text-gray-600 mb-6">
+              We have sent a verification code to –
+              <br />
+              <span className="font-medium">{formData.email}</span>
             </p>
 
-            <div className="mb-4">
-              <label className="font-bold text-[#453926] mb-2 block">
-                Enter OTP Code
-              </label>
+            {/* OTP Input */}
+            <div className="mb-6">
               <input
                 type="text"
                 maxLength="6"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-                placeholder="000000"
-                className="w-full p-3 border border-gray-300 rounded text-center text-2xl tracking-widest"
+                placeholder="Enter OTP..."
+                className="w-full p-4 border-2 border-gray-300 rounded-lg text-lg focus:border-purple-500 focus:outline-none"
               />
             </div>
 
             {otpError && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-600 text-sm">
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-600 text-sm text-center">
                 {otpError}
               </div>
             )}
 
+            {/* Submit Button */}
             <button
               onClick={handleVerifyOtp}
               disabled={isLoading || otp.length !== 6}
-              className="w-full bg-[#cb8400] text-white font-bold p-3 rounded hover:bg-[#b36e00] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-purple-600 text-white font-bold text-lg p-4 rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
             >
-              {isLoading ? "Verifying..." : "Verify OTP"}
+              {isLoading ? "Verifying..." : "Submit"}
             </button>
-
-            <p className="text-center text-sm text-gray-600 mt-4">
-              Didn't receive the code?{" "}
-              <button
-                onClick={handleSubmit}
-                className="text-[#cb8400] font-bold hover:text-[#996300]"
-              >
-                Resend OTP
-              </button>
-            </p>
           </div>
         </div>
       )}

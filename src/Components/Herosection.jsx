@@ -1,19 +1,55 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import profile1 from "../assets/image/image1.jpg";
 import profile2 from "../assets/image/image2.jpg";
 import profile3 from "../assets/image/image3.jpg";
 import { Link } from "react-router-dom";
 
 function Herosection() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slides = [
+    {
+      title: "Checking & Savings. Together.",
+      description:
+        "Experience the next generation of banking with PNC. Secure, intuitive, and designed around your needs.",
+      image: "/image/hero-section-img.jpg",
+    },
+    {
+      title: "Smart Banking Solutions",
+      description:
+        "Manage your money with confidence. Access powerful tools and insights to help you reach your financial goals.",
+      image: "/image/hero-section-img.jpg",
+    },
+    {
+      title: "Bank Anytime, Anywhere",
+      description:
+        "Mobile banking that moves with you. Transfer money, pay bills, and track spending from any device.",
+      image: "/image/hero-section-img.jpg",
+    },
+    {
+      title: "Your Financial Partner",
+      description:
+        "More than just a bank. Get personalized support and expert guidance to make smarter financial decisions.",
+      image: "/image/hero-section-img.jpg",
+    },
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000); // Change slide every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <main className="w-full flex justify-left min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] h-[60vh] sm:h-[70vh] lg:h-[80vh] bg-blend-overlay bg-[#000000d3] bg-[url('/image/hero-section-img.jpg')] bg-cover bg-top px-4 sm:px-8 md:px-12 lg:px-20">
+    <main className="w-full flex justify-left min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] h-[60vh] sm:h-[70vh] lg:h-[80vh] bg-blend-overlay bg-[#000000d3] bg-[url('/image/hero-section-img.jpg')] bg-cover bg-top px-4 sm:px-8 md:px-12 lg:px-20 relative overflow-hidden">
       <div className="text-white flex flex-col justify-center sm:justify-left mt-10 sm:mt-20 md:mt-32 lg:mt-40 w-full sm:w-[80%] md:w-[70%] lg:w-[50%] ml-0 sm:ml-4 md:ml-8 lg:ml-20 gap-4 sm:gap-5 lg:gap-6">
-        <h1 className="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
-          Checking & Savings. Together.
+        <h1 className="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl transition-all duration-700 ease-in-out">
+          {slides[currentSlide].title}
         </h1>
-        <p className="text-sm sm:text-base lg:text-lg">
-          Experience the next generation of banking with PNC. Secure, intuitive,
-          and designed around your needs.
+        <p className="text-sm sm:text-base lg:text-lg transition-all duration-700 ease-in-out">
+          {slides[currentSlide].description}
         </p>
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-5">
           <Link to={"/signup"}>
@@ -58,6 +94,19 @@ function Herosection() {
             </p>
           </div>
         </section>
+      </div>
+
+      {/* Carousel Indicators */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentSlide(index)}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              currentSlide === index ? "bg-white w-8" : "bg-white/50"
+            }`}
+          />
+        ))}
       </div>
     </main>
   );

@@ -373,33 +373,50 @@ export default function Transactions() {
 
       {/* Transaction Receipt Modal */}
       {showDetails && selectedTx && showReceipt && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-          <div className="bg-white rounded-lg p-8 w-full max-w-md my-8">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center z-50 p-4 overflow-y-auto pt-8">
+          <div className="bg-white rounded-lg p-8 w-full max-w-md mb-8">
             <div ref={receiptRef} className="print-content">
               {/* Receipt Header */}
               <div className="text-center mb-6">
-                <h1 className="text-3xl font-bold text-blue-800 mb-4">
-                  PNC BANK
-                </h1>
+                <div className="flex items-center justify-center gap-3 mb-4">
+                  <div className="relative">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg transform rotate-12 absolute"></div>
+                    <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg transform -rotate-6 relative flex items-center justify-center">
+                      <div className="w-8 h-8 bg-green-500 rounded"></div>
+                    </div>
+                  </div>
+                  <div className="text-left">
+                    <h1 className="text-2xl font-bold text-gray-800 leading-tight">
+                      LONDON
+                    </h1>
+                    <p className="text-xs font-semibold text-blue-800 uppercase">
+                      ECONOMICAL BANK
+                    </p>
+                  </div>
+                </div>
               </div>
 
               <h2 className="text-center text-xl font-bold mb-2">
                 Transaction Receipt
               </h2>
-              <p className="text-center text-sm text-blue-700 font-semibold mb-1">
-                Thank You For Using PNC Bank
+              <p className="text-center text-sm text-blue-600 font-semibold mb-1">
+                Thank You For Using London EconomicalBank
               </p>
               <p className="text-center text-xs text-gray-600 mb-4">
-                Here Is Your Transaction Receipt.
-                <br />
-                See Transfer Transaction Below.
+                Here Is Your Transfer Receipt.
               </p>
 
               {/* Receipt Details */}
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between text-sm">
                   <span className="font-semibold">Reference ID:</span>
-                  <span>{selectedTx.refId}</span>
+                  <span className="text-green-600">{selectedTx.refId}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="font-semibold">Date:</span>
+                  <span>
+                    {formatDate(selectedTx.date).replace("Date: ", "")}
+                  </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="font-semibold">Remark:</span>
@@ -413,25 +430,21 @@ export default function Transactions() {
                 </div>
               </div>
 
-              <div className="bg-blue-50 p-4 rounded mb-4">
+              <div className="bg-blue-50 p-4 rounded mb-6">
                 <h3 className="font-bold text-sm mb-3 text-blue-900">
-                  Transaction Details
+                  Transfer Details
                 </h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-700">Debit Account:</span>
-                    <span className="font-semibold">0102030235000611703</span>
-                  </div>
-                  <div className="flex justify-between">
                     <span className="text-gray-700">Amount:</span>
-                    <span className="font-semibold">
+                    <span className="font-semibold text-green-600">
                       USD {formatCurrency(selectedTx.amount)}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-700">Description</span>
-                    <span className="font-semibold">
-                      {selectedTx.description}...
+                    <span className="font-semibold text-green-600">
+                      DIRECT FUNDS TRANSFER
                     </span>
                   </div>
                   <div className="flex justify-between">
@@ -456,28 +469,41 @@ export default function Transactions() {
                       {selectedTx.beneficiaryPhone}
                     </span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-700">Transaction Date:</span>
-                    <span className="font-semibold">
-                      {formatDate(selectedTx.date).replace("Date: ", "")}
-                    </span>
-                  </div>
                 </div>
               </div>
 
-              {/* QR Code */}
-              <div className="text-center mb-4">
-                <p className="text-xs text-gray-600 mb-2">
-                  Thanks for banking with us
-                </p>
-                <p className="text-xs text-gray-500 mb-3">
-                  Receipt generated from PNC Bank Online
-                </p>
-                <div className="flex justify-center">
-                  <div className="p-2 bg-white">
-                    {/* QR Code placeholder - you'll need to install react-qr-code */}
-                    <div className="w-32 h-32 bg-gray-200 flex items-center justify-center">
-                      <i className="fa-solid fa-qrcode text-4xl text-gray-400"></i>
+              {/* QR Code with watermark */}
+              <div className="relative mb-4">
+                <div className="text-center">
+                  <p className="text-xs text-gray-600 mb-3">
+                    Thanks for banking with us
+                  </p>
+                  <p className="text-xs text-gray-500 mb-3">
+                    Receipt generated from https://londoneconomicalb.online/
+                  </p>
+                  <div className="relative inline-block">
+                    {/* QR Code */}
+                    <div className="w-32 h-32 bg-white border-2 border-gray-300 flex items-center justify-center">
+                      <i className="fa-solid fa-qrcode text-6xl text-gray-800"></i>
+                    </div>
+                    {/* Green curved highlight around QR */}
+                    <div className="absolute -bottom-4 -right-4 w-40 h-40 border-4 border-green-400 rounded-full opacity-50 pointer-events-none"></div>
+                    {/* Watermark logo overlay */}
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-20">
+                      <div className="flex items-center gap-1">
+                        <div className="relative">
+                          <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-800 rounded transform rotate-12 absolute"></div>
+                          <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded transform -rotate-6 relative"></div>
+                        </div>
+                        <div className="text-left">
+                          <p className="text-xs font-bold text-gray-600 leading-none">
+                            LONDON
+                          </p>
+                          <p className="text-[8px] font-semibold text-blue-600 uppercase">
+                            ECONOMICAL BANK
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
