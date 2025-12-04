@@ -72,6 +72,30 @@ export const transactionAPI = {
     const data = await response.json();
     return data.balance;
   },
+
+  // Create a deposit
+  createDeposit: async (amount) => {
+    const userId = getUserId();
+    if (!userId) throw new Error("User not logged in");
+
+    const response = await fetch(`${API_BASE_URL}/transactions`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: parseInt(userId),
+        transactionType: "DEPOSIT",
+        amount: parseFloat(amount),
+        description: "Deposit via Card",
+      }),
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error || "Deposit failed");
+    }
+
+    return response.json();
+  },
 };
 
 export const userAPI = {

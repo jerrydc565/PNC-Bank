@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { transactionAPI } from "../services/api";
 
 const DepositCard = () => {
   const navigate = useNavigate();
+  const [showSuccess, setShowSuccess] = useState(false);
   const [formData, setFormData] = useState({
     amount: "",
     cardNumber: "",
@@ -17,18 +19,31 @@ const DepositCard = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Card deposit submitted! This feature is under development.");
-    navigate("/deposit");
+
+    try {
+      // Create deposit transaction
+      await transactionAPI.createDeposit(parseFloat(formData.amount));
+
+      // Show success modal
+      setShowSuccess(true);
+
+      // Redirect after 2 seconds
+      setTimeout(() => {
+        navigate("/user-home");
+      }, 2000);
+    } catch (error) {
+      console.error("Deposit failed:", error);
+      alert("Deposit failed. Please try again.");
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
-      {/* Header with Logo */}
+      {/* Header - Remove London Economical Bank branding */}
       <div className="bg-white rounded-lg shadow-sm p-4 mb-4 text-center">
-        <h1 className="text-2xl font-bold text-blue-800">LONDON</h1>
-        <h2 className="text-sm text-blue-800">ECONOMICAL BANK</h2>
+        <h1 className="text-2xl font-bold text-blue-800">PNC BANK</h1>
       </div>
 
       {/* Deposit Form */}
@@ -119,6 +134,25 @@ const DepositCard = () => {
           Cancel
         </button>
       </div>
+
+      {/* Success Modal */}
+      {showSuccess && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-8 max-w-sm w-full text-center animate-fadeIn">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i className="fa-solid fa-check text-green-600 text-3xl"></i>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">
+              Successful!
+            </h2>
+            <p className="text-gray-600 mb-4">
+              Your deposit of ${formData.amount} has been processed
+              successfully.
+            </p>
+            <p className="text-sm text-gray-500">Redirecting to dashboard...</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

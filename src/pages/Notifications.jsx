@@ -50,8 +50,7 @@ const Notifications = () => {
     <div className="min-h-screen bg-gray-50 p-4">
       {/* Header with Logo */}
       <div className="bg-white rounded-lg shadow-sm p-4 mb-4 text-center">
-        <h1 className="text-2xl font-bold text-blue-800">LONDON</h1>
-        <h2 className="text-sm text-blue-800">ECONOMICAL BANK</h2>
+        <h1 className="text-2xl font-bold text-blue-800">PNC BANK</h1>
       </div>
 
       {/* Notifications */}

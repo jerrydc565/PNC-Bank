@@ -86,9 +86,9 @@ export default function Transactions() {
             "NEOUI/VIVIANA Bank",
             "ITAU UNIBANCO",
             "SAVINGS BANK/PUNYAWEE",
-            "BCA/RIKA HERAWATI"
+            "BCA/RIKA HERAWATI",
           ];
-          
+
           const names = [
             "Leydi Pérez",
             "Eka Rizki Saputri",
@@ -97,9 +97,9 @@ export default function Transactions() {
             "Viviana Rodriguez",
             "Maria Santos",
             "Punyawee Chen",
-            "Rika Herawati"
+            "Rika Herawati",
           ];
-          
+
           const randomIndex = Math.floor(Math.random() * banks.length);
           const transferBank = banks[randomIndex];
           const transferName = names[randomIndex];
@@ -107,13 +107,12 @@ export default function Transactions() {
           // Generate description with bank and name details
           let description = tx.description || "Transaction";
           let fullDescription = description;
-          
+
           if (isDeposit) {
-            fullDescription = `Direct TF: ${transferBank}/${transferName}`;
+            fullDescription = `Incoming Transaction: ${transferBank}/${transferName}`;
           } else {
             fullDescription = `Direct TF: ${transferBank}/${transferName}`;
           }
-
           return {
             id: tx.id.toString(),
             date: tx.createdAt,
@@ -152,16 +151,13 @@ export default function Transactions() {
         <h1 className="text-2xl font-bold text-blue-600">
           Welcome, {localStorage.getItem("firstName") || "User"}
         </h1>
-        <div className="flex justify-between items-center mt-2">
+        <div className="mt-2">
           <p className="text-3xl font-bold">
             {balance.toLocaleString("en-US", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}
           </p>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded text-sm">
-            MENU ▼
-          </button>
         </div>
         <p className="text-green-600 text-sm">USD</p>
       </div>
@@ -173,7 +169,7 @@ export default function Transactions() {
             Recent transactions
           </button>
           <button className="flex-1 py-3 text-center font-medium text-gray-500">
-            Recent Withdrawals
+            Recent Transfer
           </button>
         </div>
 

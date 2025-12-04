@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { transactionAPI } from "../services/api";
 
 const Deposit = () => {
   const navigate = useNavigate();
+  const [balance, setBalance] = useState(0);
   const [depositHistory] = useState([
     {
       id: 1,
@@ -14,6 +16,18 @@ const Deposit = () => {
     },
   ]);
 
+  useEffect(() => {
+    const fetchBalance = async () => {
+      try {
+        const userBalance = await transactionAPI.getBalance();
+        setBalance(userBalance || 0);
+      } catch (error) {
+        console.error("Failed to fetch balance:", error);
+      }
+    };
+    fetchBalance();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       {/* Header */}
@@ -21,11 +35,13 @@ const Deposit = () => {
         <h1 className="text-2xl font-bold text-blue-600">
           Welcome, {localStorage.getItem("firstName") || "User"}
         </h1>
-        <div className="flex justify-between items-center mt-2">
-          <p className="text-3xl font-bold">0,070,200</p>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded text-sm">
-            MENU ▼
-          </button>
+        <div className="mt-2">
+          <p className="text-3xl font-bold">
+            {balance.toLocaleString("en-US", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </p>
         </div>
         <p className="text-green-600 text-sm">USD</p>
       </div>
