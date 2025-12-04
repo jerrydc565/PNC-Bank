@@ -934,11 +934,14 @@ export default function Transactions() {
 
               {/* Transparent Logo Watermark in Center of Receipt */}
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-                <img
-                  src={logo}
-                  alt="PNC"
-                  className="w-64 h-64 object-contain opacity-5"
-                />
+                <div className="flex items-center gap-4 opacity-10">
+                  <img
+                    src={logo}
+                    alt="PNC"
+                    className="w-64 h-64 object-contain"
+                  />
+                  <h1 className="text-9xl font-bold text-gray-800">PNC</h1>
+                </div>
               </div>
             </div>
 
