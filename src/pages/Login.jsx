@@ -1,5 +1,6 @@
 import React from "react";
 import addimg from "../assets/image/png1.png";
+import logo from "../assets/image/logo.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -269,8 +270,9 @@ function Login() {
             </button>
 
             {/* Logo */}
-            <div className="flex justify-center mb-6">
-              <img src="/image/image.png" alt="PNC Bank" className="h-20" />
+            <div className="flex justify-center items-center gap-3 mb-6">
+              <img src={logo} alt="PNC Bank" className="h-16" />
+              <h1 className="text-3xl font-bold text-gray-800">PNC</h1>
             </div>
 
             {/* Title */}

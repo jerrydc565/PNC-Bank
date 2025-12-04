@@ -928,10 +928,17 @@ export default function Transactions() {
                         </svg>
                       </div>
                     </div>
-                    {/* Green curved highlight around QR */}
-                    <div className="absolute -bottom-4 -right-4 w-40 h-40 border-4 border-green-400 rounded-full opacity-50 pointer-events-none"></div>
                   </div>
                 </div>
+              </div>
+
+              {/* Transparent Logo Watermark in Center of Receipt */}
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+                <img
+                  src={logo}
+                  alt="PNC"
+                  className="w-64 h-64 object-contain opacity-5"
+                />
               </div>
             </div>
 
