@@ -971,12 +971,12 @@ export default function Transactions() {
         @media print {
           @page {
             size: A4 portrait;
-            margin: 5mm;
+            margin: 0;
           }
 
           html,
           body {
-            height: auto;
+            height: 297mm;
             margin: 0;
             padding: 0;
             overflow: hidden;
@@ -991,22 +991,37 @@ export default function Transactions() {
           }
           .print-content {
             position: absolute !important;
-            left: 0 !important;
-            top: 0 !important;
-            width: 100% !important;
+            left: 5mm !important;
+            top: 5mm !important;
+            width: 200mm !important;
             height: auto !important;
-            max-height: none !important;
-            transform: scale(0.95) !important;
+            max-height: 287mm !important;
+            transform: scale(0.8) !important;
             transform-origin: top left !important;
             page-break-after: avoid !important;
             page-break-inside: avoid !important;
             page-break-before: avoid !important;
-            overflow: visible !important;
+            overflow: hidden !important;
           }
           .print-content * {
             page-break-inside: avoid !important;
             page-break-after: avoid !important;
             page-break-before: avoid !important;
+          }
+          .print-content img {
+            max-height: 60px !important;
+          }
+          .print-content h1 {
+            font-size: 20px !important;
+            margin: 8px 0 !important;
+          }
+          .print-content h2 {
+            font-size: 18px !important;
+            margin: 6px 0 !important;
+          }
+          .print-content p {
+            font-size: 12px !important;
+            margin: 4px 0 !important;
           }
         }
       `}</style>
