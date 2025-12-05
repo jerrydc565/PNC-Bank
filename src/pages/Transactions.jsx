@@ -970,16 +970,16 @@ export default function Transactions() {
       <style jsx>{`
         @media print {
           @page {
-            size: A4;
-            margin: 0mm;
+            size: A4 portrait;
+            margin: 5mm;
           }
 
           html,
           body {
-            width: 210mm;
-            height: 297mm;
+            height: auto;
             margin: 0;
             padding: 0;
+            overflow: hidden;
           }
 
           body * {
@@ -990,37 +990,23 @@ export default function Transactions() {
             visibility: visible;
           }
           .print-content {
-            position: fixed !important;
-            left: 50% !important;
-            top: 50% !important;
-            transform: translate(-50%, -50%) scale(0.6) !important;
-            transform-origin: center !important;
-            width: 800px;
-            max-height: 1200px !important;
-            overflow: hidden !important;
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 100% !important;
+            height: auto !important;
+            max-height: none !important;
+            transform: scale(0.95) !important;
+            transform-origin: top left !important;
             page-break-after: avoid !important;
             page-break-inside: avoid !important;
             page-break-before: avoid !important;
-          }
-          .print-content::after {
-            content: "";
-            display: block;
-            page-break-after: avoid !important;
+            overflow: visible !important;
           }
           .print-content * {
             page-break-inside: avoid !important;
             page-break-after: avoid !important;
             page-break-before: avoid !important;
-          }
-          .print-content div,
-          .print-content section {
-            break-inside: avoid !important;
-          }
-          .print-content img {
-            max-height: 70px !important;
-          }
-          .print-content svg {
-            max-height: 90px !important;
           }
         }
       `}</style>
