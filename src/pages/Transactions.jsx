@@ -382,9 +382,7 @@ export default function Transactions() {
                 {/* PNC Logo centered at top */}
                 <div className="flex flex-col items-center justify-center mb-6">
                   <img src={logo} alt="PNC Bank" className="h-20 mb-3" />
-                  <h1 className="text-2xl font-bold text-blue-800">
-                    PNC Online Banking
-                  </h1>
+                  <h1 className="text-2xl font-bold text-blue-800">PNC Bank</h1>
                 </div>
               </div>
 
@@ -971,6 +969,11 @@ export default function Transactions() {
 
       <style jsx>{`
         @media print {
+          @page {
+            size: A4;
+            margin: 10mm;
+          }
+
           body * {
             visibility: hidden;
           }
@@ -983,6 +986,11 @@ export default function Transactions() {
             left: 0;
             top: 0;
             width: 100%;
+            page-break-after: avoid;
+            page-break-inside: avoid;
+          }
+          .print-content * {
+            page-break-inside: avoid;
           }
         }
       `}</style>
