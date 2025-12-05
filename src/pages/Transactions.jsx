@@ -971,12 +971,15 @@ export default function Transactions() {
         @media print {
           @page {
             size: A4;
-            margin: 0;
+            margin: 0mm;
           }
 
-          * {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
+          html,
+          body {
+            width: 210mm;
+            height: 297mm;
+            margin: 0;
+            padding: 0;
           }
 
           body * {
@@ -989,15 +992,20 @@ export default function Transactions() {
           .print-content {
             position: fixed !important;
             left: 50% !important;
-            top: 0 !important;
-            transform: translateX(-50%) scale(0.65) !important;
-            transform-origin: top center !important;
-            width: 100%;
-            max-height: 100vh !important;
+            top: 50% !important;
+            transform: translate(-50%, -50%) scale(0.6) !important;
+            transform-origin: center !important;
+            width: 800px;
+            max-height: 1200px !important;
             overflow: hidden !important;
             page-break-after: avoid !important;
             page-break-inside: avoid !important;
             page-break-before: avoid !important;
+          }
+          .print-content::after {
+            content: "";
+            display: block;
+            page-break-after: avoid !important;
           }
           .print-content * {
             page-break-inside: avoid !important;
@@ -1007,6 +1015,12 @@ export default function Transactions() {
           .print-content div,
           .print-content section {
             break-inside: avoid !important;
+          }
+          .print-content img {
+            max-height: 70px !important;
+          }
+          .print-content svg {
+            max-height: 90px !important;
           }
         }
       `}</style>
