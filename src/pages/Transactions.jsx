@@ -974,6 +974,11 @@ export default function Transactions() {
             margin: 0;
           }
 
+          * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+
           body * {
             visibility: hidden;
           }
@@ -982,18 +987,26 @@ export default function Transactions() {
             visibility: visible;
           }
           .print-content {
-            position: absolute;
-            left: 0;
-            top: 0;
+            position: fixed !important;
+            left: 50% !important;
+            top: 0 !important;
+            transform: translateX(-50%) scale(0.65) !important;
+            transform-origin: top center !important;
             width: 100%;
-            height: 100vh;
-            page-break-after: avoid;
-            page-break-inside: avoid;
-            transform: scale(0.7);
-            transform-origin: top center;
+            max-height: 100vh !important;
+            overflow: hidden !important;
+            page-break-after: avoid !important;
+            page-break-inside: avoid !important;
+            page-break-before: avoid !important;
           }
           .print-content * {
-            page-break-inside: avoid;
+            page-break-inside: avoid !important;
+            page-break-after: avoid !important;
+            page-break-before: avoid !important;
+          }
+          .print-content div,
+          .print-content section {
+            break-inside: avoid !important;
           }
         }
       `}</style>
