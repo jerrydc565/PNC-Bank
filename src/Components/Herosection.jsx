@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import profile1 from "../assets/image/image1.jpg";
 import profile2 from "../assets/image/image2.jpg";
 import profile3 from "../assets/image/image3.jpg";
@@ -37,23 +38,47 @@ function Herosection() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000); // Change slide every 5 seconds
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <main
-      className="w-full flex justify-left min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] h-[60vh] sm:h-[70vh] lg:h-[80vh] bg-blend-overlay bg-[#000000d3] bg-cover bg-top px-4 sm:px-8 md:px-12 lg:px-20 relative overflow-hidden transition-all duration-700 ease-in-out"
-      style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
-    >
-      <div className="text-white flex flex-col justify-center sm:justify-left mt-10 sm:mt-20 md:mt-32 lg:mt-40 w-full sm:w-[80%] md:w-[70%] lg:w-[50%] ml-0 sm:ml-4 md:ml-8 lg:ml-20 gap-4 sm:gap-5 lg:gap-6">
-        <h1 className="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl transition-all duration-700 ease-in-out">
+    <main className="w-full flex justify-left min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] h-[60vh] sm:h-[70vh] lg:h-[80vh] relative overflow-hidden px-4 sm:px-8 md:px-12 lg:px-20">
+      {/* Background Image Carousel */}
+      <div className="absolute inset-0 w-full h-full">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentSlide}
+            initial={{ x: "100%", opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: "-100%", opacity: 0 }}
+            transition={{ duration: 0.7, ease: "easeInOut" }}
+            className="absolute inset-0 w-full h-full bg-blend-overlay bg-[#000000d3] bg-cover bg-top"
+            style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
+          />
+        </AnimatePresence>
+      </div>
+
+      <div className="text-white flex flex-col justify-center sm:justify-left mt-10 sm:mt-20 md:mt-32 lg:mt-40 w-full sm:w-[80%] md:w-[70%] lg:w-[50%] ml-0 sm:ml-4 md:ml-8 lg:ml-20 gap-4 sm:gap-5 lg:gap-6 relative z-10">
+        <motion.h1
+          key={`title-${currentSlide}`}
+          initial={{ x: -100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl"
+        >
           {slides[currentSlide].title}
-        </h1>
-        <p className="text-sm sm:text-base lg:text-lg transition-all duration-700 ease-in-out">
+        </motion.h1>
+        <motion.p
+          key={`desc-${currentSlide}`}
+          initial={{ x: -100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+          className="text-sm sm:text-base lg:text-lg"
+        >
           {slides[currentSlide].description}
-        </p>
+        </motion.p>
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-5">
           <Link to={"/signup"}>
             <button className="bg-[#c07d00] p-2 px-6 sm:px-8 rounded-xl text-white text-sm sm:text-base font-semibold hover:bg-[#935f00] cursor-pointer duration-300 transition-all w-full sm:w-auto">
@@ -100,7 +125,7 @@ function Herosection() {
       </div>
 
       {/* Carousel Indicators */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2">
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
         {slides.map((_, index) => (
           <button
             key={index}
