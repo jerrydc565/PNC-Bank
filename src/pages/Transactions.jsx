@@ -971,7 +971,7 @@ export default function Transactions() {
         @media print {
           @page {
             size: A4;
-            margin: 10mm;
+            margin: 0;
           }
 
           body * {
@@ -986,8 +986,11 @@ export default function Transactions() {
             left: 0;
             top: 0;
             width: 100%;
+            height: 100vh;
             page-break-after: avoid;
             page-break-inside: avoid;
+            transform: scale(0.7);
+            transform-origin: top center;
           }
           .print-content * {
             page-break-inside: avoid;
