@@ -970,8 +970,8 @@ export default function Transactions() {
       <style jsx>{`
         @media print {
           @page {
-            size: 210mm 250mm;
-            margin: 10mm;
+            size: A4 portrait;
+            margin: 0;
           }
 
           html,
@@ -988,35 +988,39 @@ export default function Transactions() {
             visibility: visible;
           }
           .print-content {
-            position: absolute !important;
+            position: fixed !important;
             left: 0 !important;
             top: 0 !important;
-            width: 100% !important;
-            page-break-after: avoid !important;
-            page-break-inside: avoid !important;
+            width: 210mm !important;
+            max-height: 297mm !important;
+            padding: 15mm !important;
+            box-sizing: border-box !important;
+            overflow: hidden !important;
+            transform: scale(0.7) !important;
+            transform-origin: top left !important;
           }
           .print-content img {
-            max-height: 70px !important;
+            max-height: 50px !important;
           }
           .print-content svg {
-            max-height: 110px !important;
+            max-height: 90px !important;
           }
           .print-content h1 {
-            font-size: 22px !important;
-            margin: 10px 0 !important;
+            font-size: 20px !important;
+            margin: 6px 0 !important;
             font-weight: bold !important;
           }
           .print-content h2 {
-            font-size: 18px !important;
-            margin: 8px 0 !important;
+            font-size: 17px !important;
+            margin: 5px 0 !important;
             font-weight: bold !important;
           }
           .print-content p {
-            font-size: 13px !important;
-            margin: 5px 0 !important;
+            font-size: 12px !important;
+            margin: 3px 0 !important;
           }
           .print-content div {
-            margin: 5px 0 !important;
+            margin: 3px 0 !important;
           }
         }
       `}</style>
