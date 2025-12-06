@@ -970,8 +970,8 @@ export default function Transactions() {
       <style jsx>{`
         @media print {
           @page {
-            size: A4 portrait;
-            margin: 0;
+            size: A6 portrait;
+            margin: 8mm;
           }
 
           html,
@@ -991,36 +991,32 @@ export default function Transactions() {
             position: fixed !important;
             left: 0 !important;
             top: 0 !important;
-            width: 210mm !important;
-            max-height: 297mm !important;
-            padding: 15mm !important;
-            box-sizing: border-box !important;
+            width: 100% !important;
+            max-width: 105mm !important;
             overflow: hidden !important;
-            transform: scale(0.7) !important;
-            transform-origin: top left !important;
           }
           .print-content img {
-            max-height: 50px !important;
+            max-height: 40px !important;
           }
           .print-content svg {
-            max-height: 90px !important;
+            max-height: 70px !important;
           }
           .print-content h1 {
-            font-size: 20px !important;
-            margin: 6px 0 !important;
+            font-size: 16px !important;
+            margin: 4px 0 !important;
             font-weight: bold !important;
           }
           .print-content h2 {
-            font-size: 17px !important;
-            margin: 5px 0 !important;
+            font-size: 14px !important;
+            margin: 3px 0 !important;
             font-weight: bold !important;
           }
           .print-content p {
-            font-size: 12px !important;
-            margin: 3px 0 !important;
+            font-size: 10px !important;
+            margin: 2px 0 !important;
           }
           .print-content div {
-            margin: 3px 0 !important;
+            margin: 2px 0 !important;
           }
         }
       `}</style>
