@@ -970,14 +970,12 @@ export default function Transactions() {
       <style jsx>{`
         @media print {
           @page {
-            size: A4 portrait;
-            margin: 5mm;
+            size: 210mm 250mm;
+            margin: 10mm;
           }
 
           html,
           body {
-            width: 100%;
-            height: 100%;
             margin: 0;
             padding: 0;
           }
@@ -994,36 +992,31 @@ export default function Transactions() {
             left: 0 !important;
             top: 0 !important;
             width: 100% !important;
-            height: auto !important;
-            transform: scale(0.85) !important;
-            transform-origin: top left !important;
             page-break-after: avoid !important;
-            page-break-inside: avoid !important;
-            overflow: visible !important;
-          }
-          .print-content * {
             page-break-inside: avoid !important;
           }
           .print-content img {
-            max-height: 60px !important;
+            max-height: 70px !important;
           }
           .print-content svg {
-            max-height: 100px !important;
+            max-height: 110px !important;
           }
           .print-content h1 {
-            font-size: 20px !important;
-            margin: 8px 0 !important;
+            font-size: 22px !important;
+            margin: 10px 0 !important;
+            font-weight: bold !important;
           }
           .print-content h2 {
-            font-size: 17px !important;
-            margin: 6px 0 !important;
+            font-size: 18px !important;
+            margin: 8px 0 !important;
+            font-weight: bold !important;
           }
           .print-content p {
-            font-size: 12px !important;
-            margin: 4px 0 !important;
+            font-size: 13px !important;
+            margin: 5px 0 !important;
           }
           .print-content div {
-            margin: 4px 0 !important;
+            margin: 5px 0 !important;
           }
         }
       `}</style>
