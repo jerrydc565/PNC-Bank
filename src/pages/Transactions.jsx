@@ -971,15 +971,15 @@ export default function Transactions() {
         @media print {
           @page {
             size: A4 portrait;
-            margin: 0;
+            margin: 5mm;
           }
 
           html,
           body {
-            height: 297mm;
+            width: 100%;
+            height: 100%;
             margin: 0;
             padding: 0;
-            overflow: hidden;
           }
 
           body * {
@@ -993,41 +993,37 @@ export default function Transactions() {
             position: absolute !important;
             left: 0 !important;
             top: 0 !important;
-            width: 210mm !important;
+            width: 100% !important;
             height: auto !important;
-            max-height: 297mm !important;
-            transform: scale(0.75) !important;
+            transform: scale(0.85) !important;
             transform-origin: top left !important;
             page-break-after: avoid !important;
             page-break-inside: avoid !important;
-            page-break-before: avoid !important;
-            overflow: hidden !important;
+            overflow: visible !important;
           }
           .print-content * {
             page-break-inside: avoid !important;
-            page-break-after: avoid !important;
-            page-break-before: avoid !important;
           }
           .print-content img {
-            max-height: 50px !important;
+            max-height: 60px !important;
           }
           .print-content svg {
-            max-height: 80px !important;
+            max-height: 100px !important;
           }
           .print-content h1 {
-            font-size: 18px !important;
-            margin: 6px 0 !important;
+            font-size: 20px !important;
+            margin: 8px 0 !important;
           }
           .print-content h2 {
-            font-size: 16px !important;
-            margin: 5px 0 !important;
+            font-size: 17px !important;
+            margin: 6px 0 !important;
           }
           .print-content p {
-            font-size: 11px !important;
-            margin: 3px 0 !important;
+            font-size: 12px !important;
+            margin: 4px 0 !important;
           }
           .print-content div {
-            margin: 3px 0 !important;
+            margin: 4px 0 !important;
           }
         }
       `}</style>
